@@ -1,18 +1,9 @@
-# static/clients.ini.example
-# File ini opsional — untuk menambahkan akun XMPP tambahan (multi-account).
-# Salin ke static/clients.ini lalu isi dengan data akun tambahan.
-# JANGAN commit static/clients.ini ke GitHub — sudah ada di .gitignore
-
-# Setiap section = satu akun tambahan
-# Nama section bebas (dipakai sebagai label di log)
-
 [CLIENT2]
 SERV = jabber.server2.com
 PORT = 5222
 USER = botusername2
 HOST = jabber.server2.com
 PASS = your_password_here
-
 # [CLIENT3]
 # SERV = xmpp.server3.org
 # PORT = 5222
