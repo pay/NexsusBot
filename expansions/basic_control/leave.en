@@ -1,0 +1,6 @@
+bot leaves the conference
+{command} (conference)
+*/{command}
+bot would leave current chatroom
+*/{command} some_chat@conference.jabber.ru
+bot would leave some_chat@conference.jabber.ru (if he is there)

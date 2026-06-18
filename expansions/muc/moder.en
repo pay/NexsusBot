@@ -1,0 +1,4 @@
+gives moderator rights
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot would make dude moderator of the conference

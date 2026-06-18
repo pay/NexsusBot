@@ -1,0 +1,10 @@
+control of wtf-bases
+{command} (globally) [name] [=] (definition)
+*/{command} google = Young Skynet
+bot would add "google" to the base of conference
+*/{command} google =
+bot would delete "google" from the base of conference
+*/{command} globally apple = Fruiterer
+bot would add "apple" to the global base (access 7)
+*/{command} globally apple =
+bot would delete "apple" from the global base (access 7)

@@ -1,0 +1,4 @@
+gives owner rights
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot would make dude owner of the conference

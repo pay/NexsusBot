@@ -1,0 +1,4 @@
+bot sends message in to jid of main admin
+{command} [text]
+*/{command} AAA!!
+bot would send "AAA!!" in to admin's jid

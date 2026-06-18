@@ -1,0 +1,6 @@
+expansions and functions unloader
+{command} [expansion] (function)
+*/{command} talkers
+bot would unload expansion "talkers"
+*/{command} talkers calculate_talkers
+bot would unload talkers calculator (unloader should use only users with experience)

@@ -1,0 +1,6 @@
+Game "Rock-paper-scissors-lizard-Spock" from the sitcom "The Big Bang Theory"
+{command} (rock/paper/scissors/lizard/spock)
+*/{command}
+bot would show rules
+*/{command} spock
+bot would play the game with you

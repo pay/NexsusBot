@@ -1,0 +1,10 @@
+controller of the commands
+{command} (command) (on/off)
+*/{command}
+bot would show the list of disabled commands
+*/{command} talkers
+bot would show the state of command "talkers"
+*/{command} talkers off
+bot would disable command "talkers"
+*/{command} talkers on
+bot would turn on command

@@ -1,0 +1,6 @@
+servers's uptime
+{command} (server)
+*/{command}
+bot would show uptime of it's current jid's server
+*/{command} jabr.com
+bot would show uptime of jabr.com

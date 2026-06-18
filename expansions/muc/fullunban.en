@@ -1,0 +1,4 @@
+global unban (take away affiliation)
+{command} [jid/nick]
+*/{command} dude
+bot would unban dude globally

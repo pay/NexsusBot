@@ -1,0 +1,8 @@
+control of the prohibition on the commands in the conference
+{command} (command)
+*/{command}
+bot would show the list of forbidden commands
+*/{command} bash
+bot would forbid command "bash"
+*/{command} bash
+bot would allow command "bash" (if it is forbidden, of course)

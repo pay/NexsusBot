@@ -1,0 +1,6 @@
+affiliation lists
+{command} [owner/admin/member/outcast]/[[search] [text]]
+*/{command} owner
+bot would show the list of conference's owners
+*/{command} search dude
+bot would search "dude" in chat's affiliation lists

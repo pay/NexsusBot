@@ -1,0 +1,6 @@
+bot's clients reconnect functoin
+{command} (jid)
+*/{command}
+bot would reconnect current jid
+*/{command} bot@jabber.ru
+bot would reconnect bot@jabber.ru

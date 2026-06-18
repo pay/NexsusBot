@@ -1,0 +1,6 @@
+bot shows your accecs or access of specified user
+{command} (jid/nick)
+*/{command}
+bot would show your access
+*/{command} Dude
+bot would show Dude's access

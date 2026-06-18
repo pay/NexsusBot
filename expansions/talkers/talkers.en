@@ -1,0 +1,18 @@
+statistic of talkers
+{command} [[top] [global/local] (number)]/[[global/local] [mine/nick/jid]]
+*/{command} local mine
+bot would show your statistic in current conference
+*/{command} global mine
+bot would show your statistic in all of the conferences where bot serves
+*/{command} top local
+bot would show talkers top of current conference
+*/{command} top local 50
+bot would show top 50 talkers of current conference
+*/{command} top global
+bot would show talkers top of all of the conferences where bot serves
+*/{command} top global 100
+bot would show top 100 talkers of all of the conferences where bot serves
+*/{command} local Dude
+bot would show Dude's statistic in current conference
+*/{command} global dude@jub.net
+bot would show statistic of dude@jub.net in all of the conferences where bot serves

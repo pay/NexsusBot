@@ -1,0 +1,29 @@
+# static/config.ini.example
+# Salin file ini ke static/config.ini lalu isi dengan data asli kamu.
+# JANGAN commit static/config.ini ke GitHub — sudah ada di .gitignore
+
+[STATES]
+TLS    = True       # True = STARTTLS (port 5222), False = plain TCP
+MSERVE = True       # True = layani pesan meski bot bukan moderator
+GETEXC = True       # True = kirim detail exception ke admin
+LANG   = EN         # Bahasa default (EN / RU / UA / ID)
+
+[CLIENT]
+SERV = jabber.server.com       # server XMPP (bisa beda dari HOST)
+PORT = 5222
+USER = botusername
+HOST = jabber.server.com
+PASS = your_password_here
+
+[CONFIG]
+RESOURCE = Nexsus
+STATUS   = Type "HELP" for help with commands
+NICK     = Nexsus
+ADMIN    = admin@jabber.server.com   # JID admin utama (access level 8)
+
+[LIMITS]
+MEMORY          = 64     # MB, 0 = unlimited
+INCOMING        = 10240  # batas karakter pesan masuk
+CHAT            = 1024   # batas karakter balasan ke room
+PRIVATE         = 2024   # batas karakter balasan ke private
+CHAT_LIST_LENGTH= 100

@@ -1,0 +1,30 @@
+# ──────────────────────────────────────────────────────────────
+#  Nexsus Safety — Python Dependencies
+#  Install: pip install -r requirements.txt
+#  (Windows: pip3 install -r requirements.txt --break-system-packages
+#   jika perlu, atau gunakan virtualenv)
+# ──────────────────────────────────────────────────────────────
+
+# XMPP client library (wajib) — core protokol XMPP, MUC, plugin XEP
+slixmpp>=1.15.0
+
+# Monitoring memori untuk 'botup'/'stat' (opsional)
+# Tanpa ini, di Windows pemakaian RAM tidak akan tampil.
+# Di Linux, fallback ke /proc/<pid>/status sehingga psutil opsional.
+psutil>=5.9.0
+
+# ──────────────────────────────────────────────────────────────
+# Dependency bawaan slixmpp (otomatis terinstall):
+#   aiodns, pyasn1, pyasn1-modules
+#
+# Semua modul lain (sqlite3, asyncio, configparser, threading, dll)
+# adalah Python standard library — tidak perlu instalasi tambahan.
+#
+# Library lokal (sudah disertakan di folder library/, tidak via pip):
+#   - library/itypes.py   (counter & tipe data util)
+#   - library/ithr.py     (thread helper)
+#   - library/fb2.py      (parser FictionBook, untuk expansion 'books')
+# ──────────────────────────────────────────────────────────────
+
+# Minimum Python version: 3.10+
+# Tested on: Python 3.10 (WSL Ubuntu), Python 3.13/3.14 (Windows)

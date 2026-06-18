@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.bak
+
+# Runtime / data files — jangan di-upload ke GitHub
+current/
+nexsus.log
+*.log
+
+# Credentials — JANGAN pernah di-upload
+static/config.ini
+static/clients.ini
+
+# Database runtime
+*.db
+*.cp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

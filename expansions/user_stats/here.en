@@ -1,0 +1,6 @@
+time specified user spent in the conference
+{command} (nick)
+*/{command} dude
+bot would show how much time dude spent in conference
+*/{command}
+bot would show how much time you spent in conference

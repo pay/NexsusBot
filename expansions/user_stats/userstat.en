@@ -1,0 +1,8 @@
+conferense users statistics
+{command} (nick/jid)
+*/{command} dude
+bot would show dude's statistics
+*/{command} dude@j.ru
+bot would show dude's statistics
+*/{command}
+bot would show your statistics

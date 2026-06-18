@@ -1,0 +1,8 @@
+shows/sets (for owners only) command prefix (list: !, @ , #, ., *)
+{command} (symbol/del)
+*/{command}
+bot would show current prefix
+*/{command} !
+bot would set command prefix - "!"
+*/{command} del
+bot would delete prefix

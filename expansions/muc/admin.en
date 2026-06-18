@@ -1,0 +1,4 @@
+gives admin rights
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot would make dude admin of the conference

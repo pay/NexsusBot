@@ -1,0 +1,4 @@
+set subject
+{command} [subject]
+*/{command} Hello everybody!
+bot would set conference subject - "Hello everybody!"

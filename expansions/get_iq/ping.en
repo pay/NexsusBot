@@ -1,0 +1,8 @@
+xmpp ping
+{command} (nick/jid)
+*/{command}
+bot would show your ping
+*/{command} Dude
+bot would show Dude's ping
+*/{command} dude@jabr.com
+bot would show the ping of dude@jabr.com

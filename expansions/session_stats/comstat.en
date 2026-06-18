@@ -1,0 +1,6 @@
+statistics of the commands
+{command} (command)
+*/{command}
+bot would show statistics of top 20 commands
+*/{command} help
+bot would show statistics of command "help"

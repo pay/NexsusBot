@@ -1,0 +1,12 @@
+configure local AI parameters (admin only)
+{command} (key=value ...)
+*/{command}
+show current AI configuration
+*/{command} tokens=300
+set max output tokens to 300
+*/{command} model=/path/to/model.gguf
+change model path
+*/{command} binary=/path/to/llama-cli
+change llama-cli binary path
+*/{command} threads=4 timeout=120
+set CPU threads and timeout

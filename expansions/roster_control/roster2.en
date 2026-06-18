@@ -1,0 +1,8 @@
+roster access controller
+{command} [on/off]
+*/{command}
+bot would show roster access state
+*/{command} off
+bot would block access to the roster (access free just for bot's admins)
+*/{command} on
+bot would open access to the roster (access free just for all users)

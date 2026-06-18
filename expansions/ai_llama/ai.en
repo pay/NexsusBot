@@ -1,0 +1,6 @@
+local AI (llama.cpp / tinyllama)
+{command} <question>
+*/{command} what is XMPP?
+bot answers using local AI model
+*/{command} translate: hello world
+AI will process and respond in chat

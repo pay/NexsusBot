@@ -1,0 +1,4 @@
+expansions loader (reloader)
+{command} [expansion]
+*/{command} help
+bot would load expansion "help"

@@ -1,0 +1,6 @@
+executes shell command
+{command} [command]
+*/{command} TASKLIST /FI "IMAGENAME eq python.exe
+bot would show (windows) python task list & used ram
+*/{command} ps -o rss -p 12154
+bot would show (unix) how much memory use prosess with pid 12154

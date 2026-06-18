@@ -1,0 +1,8 @@
+xmpp ping statistics
+{command} (nick/jid)
+*/{command}
+bot would show your statistics
+*/{command} Dude
+bot would show Dude's statistics
+*/{command} dude@jabr.com
+bot would show the statistics of dude@jabr.com

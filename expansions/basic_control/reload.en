@@ -1,0 +1,8 @@
+bot reloads
+{command} (reason/silent)
+*/{command}
+bot would reload
+*/{command} silent
+bot would reload silently
+*/{command} diagnostics
+bot would reload with status "diagnostics"

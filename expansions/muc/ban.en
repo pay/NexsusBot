@@ -1,0 +1,6 @@
+add to outcast
+{command} [jid/nick] ([/] [reason])
+*/{command} manbearpig
+bot would ban manbearpig
+*/{command} manbearpig@xmpp.ru/Al Gore was right! I'm serial!
+bot would ban manbearpig with reason that confirms Al Gore was right - Excelsior!

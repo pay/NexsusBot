@@ -1,0 +1,12 @@
+your personal notepade with 16 lines
+{command} ([+/-/*/clear] (line_number/text))
+*/{command}
+bot would show all of your notes
+*/{command} + something important
+bot would add new note
+*/{command} - 13
+bot would delete note in line 13
+*/{command} * 7
+bot would show note from line 7
+*/{command} clear
+bot would delete all your records from notepade
