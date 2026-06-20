@@ -12,7 +12,6 @@ class expansion_temp(expansion):
 	RosterFile = dynamic % "roster.db"
 
 	def _get_roster(self, name):
-		"""Kembalikan roster object slixmpp dari client, atau None."""
 		client = Clients.get(name)
 		if client and hasattr(client, "client_roster"):
 			return client.client_roster
@@ -41,13 +40,12 @@ class expansion_temp(expansion):
 							roster = self._get_roster(Name)
 							if roster is not None:
 								if action == "+":
-									# Subscribe + auto-authorize
 									Clients[Name].send_presence(pto=jid, ptype="subscribe")
 									Clients[Name].send_presence(pto=jid, ptype="subscribed")
-									nick = body.pop(0) if body else jid.split("@")[0]
+									nick  = body.pop(0) if body else jid.split("@")[0]
 									group = "Admins" if body and body.pop(0).lower() in ("admin", "админ") else "Users"
 									try:
-										roster[jid]["name"]  = nick
+										roster[jid]["name"]   = nick
 										roster[jid]["groups"] = [group]
 									except Exception:
 										pass
@@ -72,26 +70,24 @@ class expansion_temp(expansion):
 					else:
 						answer = AnsBase[2]
 				else:
-					# Tampilkan roster
 					roster = self._get_roster(Name)
 					if roster is not None:
-						jids = [j for j in roster.keys()
-						        if "@conference." not in j]
+						jids = [j for j in roster.keys() if "@conference." not in j]
 						if jids:
 							Groups = {None: []}
 							for jid in jids:
 								try:
-									nick  = roster[jid]["name"] or None
-									grps  = roster[jid]["groups"]
-									gp    = sorted(grps)[0] if grps else None
+									nick = roster[jid]["name"] or None
+									grps = roster[jid]["groups"]
+									gp   = sorted(grps)[0] if grps else None
 								except Exception:
 									nick, gp = None, None
 								if gp and gp not in Groups:
 									Groups[gp] = []
 								Groups.setdefault(gp, []).append((jid, nick))
-							ls   = ["[Group] [#] [JID] (Nick)"]
+							ls    = ["[Group] [#] [JID] (Nick)"]
 							nogrp = Groups.pop(None, [])
-							ctr  = [0]
+							ctr   = [0]
 							def _num():
 								ctr[0] += 1
 								return ctr[0]
