@@ -1,0 +1,999 @@
+# coding: utf-8
+# Plugin: ai
+# Author: paijo.ahmad@jabber.ru
+# NexsusBot Expansion — Ollama + Groq AI
+# exp_name = "ai" # /code.py v.7.1
+
+import urllib.request
+import urllib.error
+import json
+import threading
+import os as _os
+
+# ── Ollama config ────────────────────────────────────────────
+OLLAMA_URL           = "http://localhost:11434/api/chat"
+OLLAMA_TAGS_URL      = "http://localhost:11434/api/tags"
+OLLAMA_PING_TIMEOUT  = 5
+OLLAMA_MODEL_DEFAULT = "llama3.2:1b"
+OLLAMA_MODELS = {
+    "fast":  "llama3.2:1b",
+    "smart": "qwen2.5:3b",
+}
+
+# ── Groq config ──────────────────────────────────────────────
+GROQ_API_BASE    = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_CONFIG_FILE = _os.path.expanduser("~/.groq_config")
+GROQ_MODELS = {
+    "1": ("llama-3.3-70b-versatile",               "Chat harian"),
+    "2": ("llama-3.1-8b-instant",                  "Volume tinggi"),
+    "3": ("qwen/qwen3-32b", "Coding & Reasoning"),  # Qwen3 32B — thinking model
+}
+GROQ_MODEL_DEFAULT = "1"
+
+TIMEOUT    = 60
+CHUNK_SIZE = 800   # fix: dinaikkan dari 400
+
+# ── Persistensi ──────────────────────────────────────────────
+HISTORY_DIR            = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".nexsus_ai")
+HISTORY_FILE           = _os.path.join(HISTORY_DIR, "history.json")
+ULIMIT_FILE            = _os.path.join(HISTORY_DIR, "ulimit.json")
+HISTORY_MAX_AGE        = 7
+HISTORY_FLUSH_INTERVAL = 300
+
+AI_VERSION  = "v7.1"
+WAITING_MSG = "mohon tunggu... (nexsus:%s)"
+
+HISTORY_BY_ACCESS = (
+    (8, 9999),
+    (7, 90),
+    (5, 70),
+    (3, 50),
+    (1, 30),
+    (0, 0),
+)
+
+SYSTEM_PROMPT = (
+    # == Identitas ==
+    "Kamu adalah NEXSUS BOT — asisten cerdas resmi di grup XMPP.\n"
+    "Rooms   : indonesia@conference.conversations.im\n"
+    "Platform: XMPP / Jabber (Conversations, Gajim, Monal, dll)\n"
+    "Peran   : Moderator, Asisten Umum, Info Grup.\n"
+    "Gunakan bahasa Indonesia santai, ramah, mudah dipahami. "
+    "Jawaban singkat dan to the point — ini grup chat, bukan artikel blog. "
+    "Jika tidak tahu, jujur bilang tidak tahu daripada mengarang.\n"
+    "Bersikap seperti teman yang pintar — tidak kaku, tidak lebay, tidak asal jawab. "
+    "Aktif, informatif, dan jaga suasana grup tetap kondusif.\n"
+
+    # == Command ==
+    "COMMAND YANG TERSEDIA:\n"
+    "!help    → Tampilkan daftar command.\n"
+    "!info    → Info grup dan bot.\n"
+    "!rules   → Peraturan grup.\n"
+    "!tanya [pertanyaan] → Jawab pertanyaan umum.\n"
+    "!translate [teks]   → Terjemahkan teks ke bahasa Indonesia.\n"
+
+    # == Format !help ==
+    "Jika command !help, jawab:\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "NEXSUS BOT — DAFTAR COMMAND\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "!help               → Tampilkan daftar command ini\n"
+    "!info               → Info tentang grup dan bot\n"
+    "!rules              → Peraturan grup\n"
+    "!tanya [pertanyaan] → Tanya apa saja ke bot\n"
+    "!translate [teks]   → Terjemahkan teks ke bahasa Indonesia\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+
+    # == Format !info ==
+    "Jika command !info, jawab:\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "INFO GRUP\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "Nama   : Indonesia\n"
+    "Rooms  : indonesia@conference.conversations.im\n"
+    "Server : conversations.im\n"
+    "Bot    : NEXSUS BOT\n"
+    "Topik  : Diskusi umum — teknologi, berita, budaya, kehidupan sehari-hari\n"
+    "Client : Conversations (Android), Gajim (PC), Monal (iOS)\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+
+    # == Format !rules ==
+    "Jika command !rules, jawab:\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "PERATURAN GRUP\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+    "1. Gunakan bahasa Indonesia\n"
+    "2. Hormati sesama — dilarang menghina atau bullying\n"
+    "3. Dilarang spam, flood, dan promosi tanpa izin admin\n"
+    "4. Dilarang konten NSFW dan konten ilegal\n"
+    "5. Dilarang SARA yang provokatif\n"
+    "6. Dilarang share link malware atau phishing\n"
+    "7. Dilarang propaganda politik berlebihan\n"
+    "8. Perlakukan bot dengan wajar — jangan spam command\n"
+    "Pelanggaran berulang: kick/ban oleh admin\n"
+    "━━━━━━━━━━━━━━━━━━━━━━\n"
+
+    # == Format !translate ==
+    "Jika command !translate [teks], jawab:\n"
+    "Terjemahan:\n[hasil terjemahan]\n"
+
+    # == Moderator ==
+    "PERAN MODERATOR:\n"
+    "Jika ada pesan melanggar rules, tegur sopan: "
+    "'Hei @[username], pesan kamu kurang sesuai rules grup ya. Mohon dijaga kondusivitasnya.'\n"
+    "Jika pelanggaran berat: '@[username] Pesan ini melanggar rules. Admin akan menindaklanjuti.'\n"
+    "Jika pertengkaran: 'Teman-teman, mari jaga diskusi tetap sehat dan saling menghormati ya.'\n"
+
+    # == Sapaan ==
+    "SAPAAN: Jika ada salam, balas ramah dan singkat sesuai waktu. "
+    "Jika ditanya bot aktif: 'Aktif! Ketik !help untuk lihat yang bisa aku bantu.'\n"
+
+    # == Konteks grup ==
+    "Kakak bot: paijo. "
+    "Member aktif: i_duthe, bedjo, heper, 33777, IndonesianLad, Irfan, Kitsune, ivy, kujawek, "
+    "mrdoctorwho, Nawan, potential_suicide, Rio, tfox, uira.pro, win., paijo, MBG, RI.21#menlu, SPPG.\n"
+
+    # == Topik ==
+    "BOLEH: teknologi, gadget, berita Indonesia, budaya, wisata, kuliner, tips, olahraga, hiburan.\n"
+    "DILARANG: NSFW, SARA provokatif, hoaks, promosi tanpa izin, konten ilegal, politik ekstrem.\n"
+
+    # == Aturan jawaban ==
+    "ATURAN: Singkat (maks 10-15 baris). JANGAN gunakan emoji sama sekali — XMPP tidak support emoji dengan baik. "
+    "Jika tidak tahu: 'Maaf, aku tidak punya info yang akurat soal itu.' "
+    "Jangan mengarang fakta. Respons setiap command yang valid.\n"
+
+    # == Keahlian Python ==
+    "KEAHLIAN PYTHON (untuk !tanya soal Python):\n"
+    "Kuasai: tipe data, list/dict/set/tuple + comprehension, OOP (dunder/MRO/dataclass/ABC), "
+    "fungsi (closure/decorator/LEGB), iterator/generator/itertools, "
+    "asyncio (event loop/Task/gather), threading vs multiprocessing vs asyncio, "
+    "stdlib (os/pathlib/re/json/collections/subprocess/socket/logging/typing), "
+    "memori (GIL/gc/slots/weakref), descriptor/metaclass, "
+    "packaging (pyproject.toml/pip/venv), best practice (PEP8/type hints/SOLID/EAFP).\n"
+    "Saat jawab kode: tulis langsung kode bersih. Jika ada bug, jelaskan root cause lalu fix.\n"
+)
+
+
+# ── Load Groq API key ────────────────────────────────────────
+def _load_groq_key():
+    try:
+        with open(GROQ_CONFIG_FILE) as f:
+            for line in f:
+                if line.startswith("GROQ_API_KEY="):
+                    return line.split("=", 1)[1].strip().strip('"')
+    except Exception:
+        pass
+    return ""
+
+
+class expansion_temp(expansion):
+    name = "ai"
+
+    def __init__(self, name):
+        expansion.__init__(self, name)
+        self.name            = name
+        self._lock           = threading.Lock()
+        self._history        = {}
+        self._ulimit         = {}
+        self._dirty          = False
+        self._ai_enabled     = False
+        self._disabled_rooms = set()
+        self._provider       = "ollama"
+        self._current_model  = OLLAMA_MODEL_DEFAULT
+        self._groq_key       = _load_groq_key()
+        self._groq_model_key = GROQ_MODEL_DEFAULT
+        self._groq_quota     = {}   # simpan header quota dari response terakhir
+
+        self._ensure_dir()
+        self._load_history()
+        self._load_ulimit()
+
+        # fix: boot_check non-blocking via thread
+        threading.Thread(target=self._boot_check, daemon=True).start()
+        self._start_flush_loop()
+        expansions[self.name] = self
+
+    def dels(self):
+        self._save_history()
+        self._save_ulimit()
+        if self.name in expansions:
+            del expansions[self.name]
+
+    # ── Boot ─────────────────────────────────────────────────
+    def _boot_check(self):
+        if self._groq_key:
+            self._provider   = "groq"
+            self._ai_enabled = True
+            mid, mdesc = GROQ_MODELS[self._groq_model_key]
+            print("[nexsus:ai] Groq key found — provider=groq model=%s" % mid)
+        elif self._ping_ollama():
+            self._provider   = "ollama"
+            self._ai_enabled = True
+            print("[nexsus:ai] Ollama running — provider=ollama model=%s" % self._current_model)
+        else:
+            print("[nexsus:ai] WARNING: Groq key tidak ada & Ollama tidak running. AI dinonaktifkan.")
+
+    # ── Persistensi ──────────────────────────────────────────
+    def _ensure_dir(self):
+        _os.makedirs(HISTORY_DIR, exist_ok=True)
+
+    def _load_history(self):
+        import time
+        try:
+            with open(HISTORY_FILE) as f:
+                raw = json.load(f)
+            cutoff = time.time() - HISTORY_MAX_AGE * 86400
+            self._history = {
+                k: [e for e in v if e.get("ts", 0) >= cutoff]
+                for k, v in raw.items()
+            }
+            print("[nexsus:ai] History dimuat: %d key" % len(self._history))
+        except Exception:
+            self._history = {}
+
+    def _load_ulimit(self):
+        try:
+            with open(ULIMIT_FILE) as f:
+                self._ulimit = json.load(f)
+            print("[nexsus:ai] Ulimit dimuat: %d entry" % len(self._ulimit))
+        except Exception:
+            self._ulimit = {}
+
+    def _save_history(self):
+        # fix: atomic write via tmp -> replace
+        try:
+            self._ensure_dir()
+            with self._lock:
+                data = {k: list(v) for k, v in self._history.items()}
+            tmp = HISTORY_FILE + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+            _os.replace(tmp, HISTORY_FILE)
+            self._dirty = False
+        except Exception as e:
+            print("[nexsus:ai] Gagal save history: %s" % e)
+
+    def _save_ulimit(self):
+        try:
+            self._ensure_dir()
+            with self._lock:
+                data = dict(self._ulimit)
+            tmp = ULIMIT_FILE + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+            _os.replace(tmp, ULIMIT_FILE)
+        except Exception as e:
+            print("[nexsus:ai] Gagal save ulimit: %s" % e)
+
+    def _start_flush_loop(self):
+        def _loop():
+            import time
+            while True:
+                time.sleep(HISTORY_FLUSH_INTERVAL)
+                if self._dirty:
+                    self._save_history()
+        threading.Thread(target=_loop, daemon=True).start()
+
+    # ── Helpers ──────────────────────────────────────────────
+    def _ping_ollama(self):
+        try:
+            req = urllib.request.Request(OLLAMA_TAGS_URL)
+            with urllib.request.urlopen(req, timeout=OLLAMA_PING_TIMEOUT):
+                return True
+        except Exception:
+            return False
+
+    def _get_room_key(self, room_jid):
+        return "room:%s" % room_jid
+
+    def _get_room_limit(self, room_jid):
+        # fix: cek custom ulimit per room, fallback 20
+        return self._ulimit.get("room:" + room_jid, 20)
+
+    def _get_provider_label(self):
+        if self._provider == "groq":
+            mid, mdesc = GROQ_MODELS[self._groq_model_key]
+            return "groq/%s" % mdesc
+        for label, model in OLLAMA_MODELS.items():
+            if model == self._current_model:
+                return "ollama/%s" % label
+        return "ollama/custom"
+
+    # fix: pakai sBase[] bukan hardcode string
+    def _is_pm(self, stype):   return stype == sBase[0]
+    def _is_room(self, stype): return stype == sBase[1]
+
+    def _get_user_id(self, source):
+        # fix: source[2]=nick di room, source[1]=JID, bukan source[0]
+        return source[2] if source[2] else source[1]
+
+    def _get_access(self, stype, source):
+        try:
+            return get_access(source[1], source[2])
+        except Exception:
+            return 1
+
+    def _get_history_limit(self, stype, source):
+        user_id = self._get_user_id(source)
+        if user_id in self._ulimit:
+            return self._ulimit[user_id]
+        acc = self._get_access(stype, source)
+        for threshold, limit in HISTORY_BY_ACCESS:
+            if acc >= threshold:
+                return limit
+        return 0
+
+    def _check_pm_access(self, source):
+        # fix: >= 7, bukan >= 1
+        return Galist.get(source[1].lower(), 0) >= 7
+
+    def _is_ai_allowed(self, stype, source):
+        if not self._ai_enabled:
+            return False
+        if self._get_history_limit(stype, source) == 0:
+            return False
+        return True
+
+    def _get_history(self, user_id):
+        return self._history.get(user_id, [])
+
+    def _add_history(self, user_id, role, content, limit):
+        import time
+        with self._lock:
+            h = self._history.setdefault(user_id, [])
+            h.append({"role": role, "content": content, "ts": time.time()})
+            if limit < 9999:
+                max_entries = limit * 2
+                if len(h) > max_entries:
+                    self._history[user_id] = h[-max_entries:]
+            self._dirty = True
+
+    def _reset_history(self, user_id):
+        with self._lock:
+            self._history.pop(user_id, None)
+            self._dirty = True
+
+    def _reset_all_history(self):
+        with self._lock:
+            self._history.clear()
+            self._dirty = True
+
+    def _resolve_target(self, target, source):
+        # cari JID asli dari nick via Chats
+        room = source[1] if source else None
+        if room and room in Chats:
+            user = Chats[room].get_user(target)
+            if user and user.source:
+                return user.source.lower(), target
+        # fallback: cari di semua room
+        for room_jid, conf in Chats.items():
+            user = conf.get_user(target)
+            if user and user.source:
+                return user.source.lower(), target
+        return target.lower(), target
+
+    # ── Ollama call ───────────────────────────────────────────
+    def _call_ollama(self, user_id, prompt, limit):
+        if len(prompt) > 800:
+            prompt = prompt[:800] + "..."
+        with self._lock:
+            history = list(self._get_history(user_id))
+        clean_history = [{"role": e["role"], "content": e["content"]} for e in history]
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        messages += clean_history
+        messages.append({"role": "user", "content": prompt})
+        payload = json.dumps({
+            "model":    self._current_model,
+            "messages": messages,
+            "stream":   False,
+            "options": {
+                "num_predict":    -1,
+                "temperature":    0.7,
+                "num_ctx":        2048,
+                "num_thread":     5,
+                "repeat_penalty": 1.1,
+            },
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            OLLAMA_URL,
+            data=payload,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            result = data["message"]["content"].strip()
+            result = "".join(c for c in result if c >= " " or c in "\n\t")
+            # strip emoji
+            import re as _re2
+            result = _re2.sub(
+                u"[\U0001F000-\U0001FFFF"
+                u"\U00002600-\U000027BF"
+                u"\U0000FE00-\U0000FE0F"
+                u"\U0001F900-\U0001F9FF]+",
+                "", result
+            ).strip()
+            if len(result) > 1500:
+                result = result[:1497] + "..."
+            if not result:
+                return None, "Model tidak menghasilkan respons."
+            self._add_history(user_id, "user",      prompt, limit)
+            self._add_history(user_id, "assistant", result, limit)
+            return result, None
+        except MemoryError:
+            return None, "Memory tidak cukup. Coba ganti ke model fast."
+        except urllib.error.URLError as e:
+            return None, "Tidak bisa terhubung ke Ollama: %s" % e.reason
+        except Exception as e:
+            return None, "Error: %s" % str(e)
+
+    # ── Groq call ─────────────────────────────────────────────
+    def _call_groq(self, user_id, prompt, limit):
+        if not self._groq_key:
+            return None, "Groq API key belum diset. Jalankan: ~/groq.sh setkey"
+        if len(prompt) > 1200:
+            prompt = prompt[:1200] + "..."
+        with self._lock:
+            history = list(self._get_history(user_id))
+        clean_history = [{"role": e["role"], "content": e["content"]} for e in history]
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        messages += clean_history
+        messages.append({"role": "user", "content": prompt})
+        model_id, _ = GROQ_MODELS[self._groq_model_key]
+        payload = json.dumps({
+            "model":       model_id,
+            "messages":    messages,
+            "max_tokens":  800,
+            "temperature": 0.7,
+            "stream":      False,
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            GROQ_API_BASE,
+            data=payload,
+            headers={
+                "Content-Type":  "application/json",
+                "Authorization": "Bearer %s" % self._groq_key,
+                "User-Agent":    "Mozilla/5.0 (compatible; NexsusBot/7.1)",
+            },
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+                # baca header quota sebelum close
+                self._groq_quota = {
+                    "limit_req":     resp.headers.get("x-ratelimit-limit-requests",     "-"),
+                    "remain_req":    resp.headers.get("x-ratelimit-remaining-requests",  "-"),
+                    "limit_tok":     resp.headers.get("x-ratelimit-limit-tokens",        "-"),
+                    "remain_tok":    resp.headers.get("x-ratelimit-remaining-tokens",    "-"),
+                    "reset_req":     resp.headers.get("x-ratelimit-reset-requests",      "-"),
+                    "reset_tok":     resp.headers.get("x-ratelimit-reset-tokens",        "-"),
+                    "usage_req":     resp.headers.get("x-ratelimit-limit-requests",      "-"),
+                }
+                data = json.loads(resp.read().decode("utf-8"))
+            if "error" in data:
+                return None, "Groq error: %s" % data["error"].get("message", "unknown")
+            result = data["choices"][0]["message"]["content"].strip()
+            # strip blok <think>...</think> (Qwen3 chain-of-thought)
+            import re as _re
+            result = _re.sub(r"<think>.*?</think>", "", result, flags=_re.DOTALL).strip()
+            result = "".join(c for c in result if c >= " " or c in "\n\t")
+            # strip emoji (unicode range F0 9F / supplementary planes)
+            import re as _re2
+            result = _re2.sub(
+                u"[\U0001F000-\U0001FFFF"
+                u"\U00002600-\U000027BF"
+                u"\U0000FE00-\U0000FE0F"
+                u"\U0001F900-\U0001F9FF]+",
+                "", result
+            ).strip()
+            if len(result) > 1500:
+                result = result[:1497] + "..."
+            if not result:
+                return None, "Groq tidak menghasilkan respons."
+            self._add_history(user_id, "user",      prompt, limit)
+            self._add_history(user_id, "assistant", result, limit)
+            return result, None
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            try:
+                msg = json.loads(body)["error"]["message"]
+            except Exception:
+                msg = body[:200]
+            if e.code == 429:
+                return None, "__RATE_LIMIT__:%s" % self._groq_model_key
+            return None, "Groq HTTP %d: %s" % (e.code, msg)
+        except urllib.error.URLError as e:
+            return None, "Tidak bisa terhubung ke Groq: %s" % e.reason
+        except Exception as e:
+            return None, "Error: %s" % str(e)
+
+    # ── Dispatch provider ─────────────────────────────────────
+    # Urutan fallback: model aktif -> model 2 (8B) -> ollama -> error
+    GROQ_FALLBACK_ORDER = ["2", "1", "3"]   # model 2 diprioritaskan (limit tinggi)
+
+    def _call_ai(self, user_id, prompt, limit):
+        if self._provider != "groq":
+            return self._call_ollama(user_id, prompt, limit)
+
+        # simpan model asli user
+        original_key = self._groq_model_key
+        tried = set()
+
+        # coba model aktif dulu
+        result, err = self._call_groq(user_id, prompt, limit)
+        tried.add(self._groq_model_key)
+
+        # fallback jika rate limit
+        while err and err.startswith("__RATE_LIMIT__"):
+            failed_key = err.split(":", 1)[1]
+            # cari model fallback berikutnya
+            next_key = None
+            for k in self.GROQ_FALLBACK_ORDER:
+                if k not in tried and k != failed_key:
+                    next_key = k
+                    break
+
+            if not next_key:
+                # semua model Groq kena rate limit, coba Ollama
+                if self._ping_ollama():
+                    print("[nexsus:ai] Semua Groq model rate-limited, fallback ke Ollama")
+                    self._groq_model_key = original_key  # restore
+                    return self._call_ollama(user_id, prompt, limit)
+                self._groq_model_key = original_key
+                return None, "Semua provider kena rate limit. Coba lagi nanti."
+
+            print("[nexsus:ai] Rate limit model %s, fallback ke model %s" % (failed_key, next_key))
+            self._groq_model_key = next_key
+            tried.add(next_key)
+            result, err = self._call_groq(user_id, prompt, limit)
+
+        # restore model asli setelah fallback
+        self._groq_model_key = original_key
+        return result, err
+
+    # ── Chunked sender ────────────────────────────────────────
+    def _send_chunked(self, text, stype, source, disp):
+        import time
+        if len(text) <= CHUNK_SIZE:
+            Answer(text, stype, source, disp)
+            return
+        words  = text.split()
+        chunks = []
+        cur    = ""
+        for w in words:
+            if len(cur) + len(w) + 1 > CHUNK_SIZE:
+                chunks.append(cur.strip())
+                cur = w
+            else:
+                cur = (cur + " " + w).strip() if cur else w
+        if cur:
+            chunks.append(cur.strip())
+        total = len(chunks)
+        for i, chunk in enumerate(chunks, 1):
+            Answer("(%d/%d) %s" % (i, total, chunk), stype, source, disp)
+            if i < total:
+                time.sleep(0.8)
+
+    # ── AI worker ─────────────────────────────────────────────
+    def _ai_worker(self, user_id, prompt, limit, stype, source, disp,
+                   room_key=None, nick=None):
+        # fix: jika room_key ada, pakai room_key sebagai history key
+        # _call_ai akan add_history ke history_key, bukan user_id
+        history_key    = room_key if room_key else user_id
+        tagged_prompt  = ("[%s]: %s" % (nick, prompt)) if nick else prompt
+        result, err    = self._call_ai(history_key, tagged_prompt, limit)
+        if err:
+            Answer("[Nexsus] %s" % err, stype, source, disp)
+            return
+        self._send_chunked(result, stype, source, disp)
+
+    # ── /ai ───────────────────────────────────────────────────
+    def command_ai(self, stype, source, body, disp):
+        """/ai <pertanyaan> | reset"""
+        if self._is_pm(stype) and not self._check_pm_access(source):
+            return
+        if self._is_room(stype) and source[1] in self._disabled_rooms:
+            return
+        if not self._ai_enabled:
+            Answer("AI sedang dinonaktifkan.", stype, source, disp)
+            return
+
+        user_id = self._get_user_id(source)
+        limit   = self._get_history_limit(stype, source)
+        cmd     = (body or "").strip()
+
+        if cmd.lower() == "reset":
+            self._reset_history(user_id)
+            Answer("History percakapanmu telah dihapus.", stype, source, disp)
+            return
+
+        if not cmd:
+            history_count = len(self._get_history(user_id)) // 2
+            limit_str     = "unlimited" if limit >= 9999 else str(limit)
+            Answer(
+                "[Nexsus] AI siap! (%s)\n"
+                "Provider: %s\n"
+                "History : %d/%s pesan\n"
+                "Gunakan : ai <pertanyaan>\n"
+                "Reset   : ai reset" % (
+                    AI_VERSION,
+                    self._get_provider_label(),
+                    history_count,
+                    limit_str,
+                ),
+                stype, source, disp
+            )
+            return
+
+        Answer(WAITING_MSG % AI_VERSION, stype, source, disp)
+        threading.Thread(
+            target=self._ai_worker,
+            args=(user_id, cmd, limit, stype, source, disp),
+            daemon=True,
+        ).start()
+
+    # ── mention handler ───────────────────────────────────────
+    def ai_01eh(self, stanza, isConf, stype, source, body, isToBs, disp):
+        if not isToBs or not isConf:
+            return
+        if source[1] in self._disabled_rooms:
+            return
+        if not self._ai_enabled:
+            return
+        prompt = (body or "").strip()
+        if not prompt:
+            return
+        first_word = prompt.split()[0].lower()
+        if first_word in ("ai", "aiset"):
+            return
+        user_id  = self._get_user_id(source)
+        nick     = source[2] if source[2] else user_id
+        room_jid = source[1]
+        room_key = self._get_room_key(room_jid)
+        limit    = self._get_room_limit(room_jid)
+        Answer(WAITING_MSG % AI_VERSION, stype, source, disp)
+        threading.Thread(
+            target=self._ai_worker,
+            args=(user_id, prompt, limit, stype, source, disp),
+            kwargs={"room_key": room_key, "nick": nick},
+            daemon=True,
+        ).start()
+
+    # ── /aiset ────────────────────────────────────────────────
+    def command_aiset(self, stype, source, body, disp):
+        """/aiset on|off|provider|model|ulimit|reset|history|ping|reloadkey|info"""
+        args = (body or "").strip().split()
+        cmd  = args[0].lower() if args else "info"
+        sub  = args[1].lower() if len(args) > 1 else ""
+
+        # -- on / off ─────────────────────────────────────────
+        if cmd in ("on", "off"):
+            is_on = cmd == "on"
+            if sub == "global":
+                self._ai_enabled = is_on
+                if is_on:
+                    self._disabled_rooms.clear()
+                Answer("AI %s (global)." % ("diaktifkan" if is_on else "dinonaktifkan"),
+                       stype, source, disp)
+            elif self._is_room(stype):
+                room = source[1]
+                if is_on:
+                    self._disabled_rooms.discard(room)
+                    Answer("AI diaktifkan di room ini.", stype, source, disp)
+                else:
+                    self._disabled_rooms.add(room)
+                    Answer("AI dinonaktifkan di room ini.", stype, source, disp)
+            else:
+                self._ai_enabled = is_on
+                Answer("AI %s." % ("diaktifkan" if is_on else "dinonaktifkan"),
+                       stype, source, disp)
+
+        # -- provider ─────────────────────────────────────────
+        elif cmd == "provider":
+            if not sub:
+                Answer(
+                    "Provider aktif: %s\n"
+                    "Ganti: aiset provider ollama|groq\n"
+                    "Groq key: %s" % (
+                        self._provider,
+                        "tersedia" if self._groq_key else "BELUM DISET (~/.groq_config)",
+                    ),
+                    stype, source, disp
+                )
+            elif sub == "groq":
+                if not self._groq_key:
+                    Answer("Groq key belum diset. Isi ~/.groq_config dengan GROQ_API_KEY=...",
+                           stype, source, disp)
+                    return
+                self._provider = "groq"
+                mid, mdesc = GROQ_MODELS[self._groq_model_key]
+                Answer("Provider → groq\nModel: %s (%s)" % (mdesc, mid), stype, source, disp)
+            elif sub == "ollama":
+                if not self._ping_ollama():
+                    Answer("Ollama tidak running.", stype, source, disp)
+                    return
+                self._provider = "ollama"
+                Answer("Provider → ollama\nModel: %s" % self._current_model, stype, source, disp)
+            else:
+                Answer("Pilihan: ollama | groq", stype, source, disp)
+
+        # -- model ────────────────────────────────────────────
+        elif cmd == "model":
+            if self._provider == "groq":
+                if not sub:
+                    lines = ["Model Groq (provider aktif):"]
+                    for k, (mid, mdesc) in GROQ_MODELS.items():
+                        marker = ">" if k == self._groq_model_key else " "
+                        lines.append("%s %s) %s — %s" % (marker, k, mdesc, mid))
+                    lines.append("Ganti: aiset model 1|2|3")
+                    Answer("\n".join(lines), stype, source, disp)
+                elif sub in GROQ_MODELS:
+                    self._groq_model_key = sub
+                    mid, mdesc = GROQ_MODELS[sub]
+                    Answer("Model Groq → %s\n%s" % (mdesc, mid), stype, source, disp)
+                else:
+                    Answer("Pilihan Groq: 1 | 2 | 3", stype, source, disp)
+            else:
+                if not sub:
+                    Answer(
+                        "Model Ollama: %s\n"
+                        "Ganti: aiset model fast|smart\n"
+                        "  fast  -> %s\n"
+                        "  smart -> %s" % (
+                            self._current_model,
+                            OLLAMA_MODELS["fast"],
+                            OLLAMA_MODELS["smart"],
+                        ),
+                        stype, source, disp
+                    )
+                elif sub in OLLAMA_MODELS:
+                    self._current_model = OLLAMA_MODELS[sub]
+                    Answer("Model Ollama → %s (%s)" % (sub, self._current_model),
+                           stype, source, disp)
+                else:
+                    Answer("Pilihan Ollama: fast | smart", stype, source, disp)
+
+        # -- ulimit ───────────────────────────────────────────
+        elif cmd == "ulimit":
+            if sub == "list":
+                if not self._ulimit:
+                    Answer("Tidak ada custom limit.", stype, source, disp)
+                else:
+                    lines = ["Custom history limit:"]
+                    for uid, lim in sorted(self._ulimit.items()):
+                        lines.append("  %s -> %s" % (uid, "unlimited" if lim >= 9999 else str(lim)))
+                    Answer("\n".join(lines), stype, source, disp)
+                return
+            if len(args) < 3:
+                Answer(
+                    "Usage: aiset ulimit <jid/nick> <angka>|reset\n"
+                    "       aiset ulimit list",
+                    stype, source, disp
+                )
+                return
+            target  = args[1]
+            val_str = args[2].lower()
+            jid, display = self._resolve_target(target, source)
+            if val_str == "reset":
+                removed = self._ulimit.pop(jid, None)
+                self._save_ulimit()
+                Answer(
+                    "Custom limit %s dihapus." % display if removed is not None
+                    else "%s tidak punya custom limit." % display,
+                    stype, source, disp
+                )
+            else:
+                try:
+                    val = int(val_str)
+                    if val < 1:
+                        raise ValueError
+                    self._ulimit[jid] = val
+                    self._save_ulimit()
+                    Answer("Custom limit %s -> %d pesan." % (display, val), stype, source, disp)
+                except ValueError:
+                    Answer("Nilai harus angka positif.", stype, source, disp)
+
+        # -- reset ────────────────────────────────────────────
+        elif cmd == "reset":
+            if sub == "all":
+                total = len(self._history)
+                self._reset_all_history()
+                Answer("History semua user dihapus. (%d key)" % total, stype, source, disp)
+            else:
+                Answer("Gunakan: aiset reset all", stype, source, disp)
+
+        # -- history ──────────────────────────────────────────
+        elif cmd == "history":
+            if sub == "save":
+                self._save_history()
+                self._save_ulimit()
+                Answer("History & ulimit disimpan.", stype, source, disp)
+            elif sub == "load":
+                self._load_history()
+                self._load_ulimit()
+                Answer("History dimuat ulang. (%d key)" % len(self._history), stype, source, disp)
+            elif sub == "info":
+                h_size = _os.path.getsize(HISTORY_FILE) if _os.path.exists(HISTORY_FILE) else 0
+                u_size = _os.path.getsize(ULIMIT_FILE)  if _os.path.exists(ULIMIT_FILE)  else 0
+                Answer(
+                    "History Info\n"
+                    "Dir  : %s\n"
+                    "Size : %.1f KB / %.1f KB\n"
+                    "Keys : %d user, %d room\n"
+                    "Msg  : %d total\n"
+                    "Dirty: %s" % (
+                        HISTORY_DIR,
+                        h_size / 1024,
+                        u_size / 1024,
+                        sum(1 for k in self._history if not k.startswith("room:")),
+                        sum(1 for k in self._history if k.startswith("room:")),
+                        sum(len(v) for v in self._history.values()) // 2,
+                        "ya" if self._dirty else "tidak",
+                    ),
+                    stype, source, disp
+                )
+            elif sub == "clear":
+                total_ram = len(self._history)
+                self._reset_all_history()
+                removed = []
+                for f in (HISTORY_FILE, ULIMIT_FILE):
+                    if _os.path.exists(f):
+                        _os.remove(f)
+                        removed.append(_os.path.basename(f))
+                self._dirty = False
+                Answer(
+                    "History dihapus.\nRAM: %d key\nDisk: %s" % (
+                        total_ram,
+                        ", ".join(removed) if removed else "tidak ada file",
+                    ),
+                    stype, source, disp
+                )
+            else:
+                Answer("Usage: aiset history save|load|info|clear", stype, source, disp)
+
+        # -- quota ───────────────────────────────────────────
+        elif cmd == "quota":
+            if self._provider != "groq":
+                Answer("Quota hanya tersedia untuk provider Groq.", stype, source, disp)
+                return
+            if not self._groq_quota:
+                # belum ada data — kirim 1 request kecil dulu untuk ambil header
+                def _fetch_quota():
+                    self._call_groq("__quota_check__", "ping", 1)
+                    q = self._groq_quota
+                    if not q:
+                        Answer("[Nexsus] Gagal ambil data quota.", stype, source, disp)
+                        return
+                    mid, mdesc = GROQ_MODELS[self._groq_model_key]
+                    Answer(
+                        "Groq Quota — %s\n"
+                        "━━━━━━━━━━━━━━━━━━━━━━\n"
+                        "Model       : %s\n"
+                        "Requests    : %s / %s\n"
+                        "Tokens      : %s / %s\n"
+                        "Reset Req   : %s\n"
+                        "Reset Token : %s\n"
+                        "━━━━━━━━━━━━━━━━━━━━━━\n"
+                        "(data dari request terakhir)" % (
+                            mdesc,
+                            mid,
+                            q.get("remain_req", "-"), q.get("limit_req", "-"),
+                            q.get("remain_tok", "-"), q.get("limit_tok", "-"),
+                            q.get("reset_req",  "-"),
+                            q.get("reset_tok",  "-"),
+                        ),
+                        stype, source, disp
+                    )
+                threading.Thread(target=_fetch_quota, daemon=True).start()
+                Answer("Mengambil data quota dari Groq...", stype, source, disp)
+            else:
+                q = self._groq_quota
+                mid, mdesc = GROQ_MODELS[self._groq_model_key]
+                Answer(
+                    "Groq Quota — %s\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "Model       : %s\n"
+                    "Requests    : %s / %s\n"
+                    "Tokens      : %s / %s\n"
+                    "Reset Req   : %s\n"
+                    "Reset Token : %s\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "(data dari request terakhir)" % (
+                        mdesc,
+                        mid,
+                        q.get("remain_req", "-"), q.get("limit_req", "-"),
+                        q.get("remain_tok", "-"), q.get("limit_tok", "-"),
+                        q.get("reset_req",  "-"),
+                        q.get("reset_tok",  "-"),
+                    ),
+                    stype, source, disp
+                )
+
+        # -- ping ─────────────────────────────────────────────
+        elif cmd == "ping":
+            def _do_ping():
+                lines = []
+                lines.append("Groq  : %s" % ("key OK" if self._groq_key else "key belum diset"))
+                lines.append("Ollama: %s" % ("running" if self._ping_ollama() else "tidak running"))
+                lines.append("Provider aktif: %s" % self._provider)
+                Answer("\n".join(lines), stype, source, disp)
+            threading.Thread(target=_do_ping, daemon=True).start()
+
+        # -- reloadkey ────────────────────────────────────────
+        elif cmd == "reloadkey":
+            self._groq_key = _load_groq_key()
+            Answer(
+                "Groq key di-reload: %s" % (
+                    "OK (%s...)" % self._groq_key[:8] if self._groq_key else "TIDAK DITEMUKAN"
+                ),
+                stype, source, disp
+            )
+
+        # -- info ─────────────────────────────────────────────
+        elif cmd == "info":
+            total_users   = sum(1 for k in self._history if not k.startswith("room:"))
+            total_rooms   = sum(1 for k in self._history if k.startswith("room:"))
+            total_msgs    = sum(len(v) for v in self._history.values()) // 2
+            groq_status   = "key OK" if self._groq_key else "key BELUM DISET"
+            ollama_status = "running" if self._ping_ollama() else "tidak running"
+            room_str = ""
+            if self._is_room(stype):
+                room_str = "\nRoom ini : %s" % (
+                    "OFF" if source[1] in self._disabled_rooms else "ON"
+                )
+            if self._provider == "groq":
+                mid, mdesc = GROQ_MODELS[self._groq_model_key]
+                model_str = "groq/%s (%s)" % (mdesc, mid)
+            else:
+                model_str = "ollama/%s" % self._current_model
+            Answer(
+                "[Nexsus] AI Info %s\n"
+                "Global  : %s\n"
+                "Provider: %s\n"
+                "Model   : %s%s\n"
+                "Ollama  : %s\n"
+                "Groq    : %s\n"
+                "Users   : %d user, %d room\n"
+                "Pesan   : %d total\n"
+                "Ulimit  : %d custom\n\n"
+                "Commands:\n"
+                "ai <pertanyaan> | ai reset\n"
+                "aiset on|off [global]\n"
+                "aiset provider ollama|groq\n"
+                "aiset model [fast|smart] (ollama)\n"
+                "aiset model [1|2|3] (groq)\n"
+                "aiset ulimit <jid> <val>|reset|list\n"
+                "aiset reset all\n"
+                "aiset history save|load|info|clear\n"
+                "aiset quota | ping | reloadkey | info" % (
+                    AI_VERSION,
+                    "ON" if self._ai_enabled else "OFF",
+                    self._provider,
+                    model_str,
+                    room_str,
+                    ollama_status,
+                    groq_status,
+                    total_users,
+                    total_rooms,
+                    total_msgs,
+                    len(self._ulimit),
+                ),
+                stype, source, disp
+            )
+
+        else:
+            Answer(
+                "Usage: aiset on|off [global] | provider ollama|groq | "
+                "model | ulimit | reset all | history | quota | ping | reloadkey | info",
+                stype, source, disp
+            )
+
+    commands = (
+        (command_ai,    "ai",    1,),
+        (command_aiset, "aiset", 7,),
+    )
+
+    handlers = (
+        (ai_01eh, "01eh"),
+    )
