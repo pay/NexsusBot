@@ -1715,7 +1715,8 @@ def _handle_presence(disp_key, presence):
 
             if Chat.isHereTS(nick):
                 Chat.sleaved(nick)
-            call_efunctions("05eh", (conf, nick, status, None, disp_key))
+            scode = next((sc for sc in status_codes if sc in sCodes), None)
+            call_efunctions("05eh", (conf, nick, status, scode, disp_key))
 
         call_efunctions("02eh", (presence, disp_key))
 
@@ -1824,7 +1825,7 @@ def _handle_message(disp_key, msg):
             else:
                 command = None
         elif isToBs and command not in Cmds and \
-             (command not in Macro) and command.startswith(cPrefs):
+             ((command, inst) not in Macro) and command.startswith(cPrefs):
             command = command[1:]
 
         if isConf and command in Chat.oCmds:
@@ -2340,11 +2341,14 @@ def load_nexsus():
 
 
     # Main loop — monitoring
+    last_seen_connected = time.time()
     while VarCache["alive"]:
         sleep(180)
         connected = sum(1 for c in Clients.values() if c.isConnected())
-        if not connected and Clients:
-            sys_exit("All clients down!")
+        if connected:
+            last_seen_connected = time.time()
+        elif Clients and (time.time() - last_seen_connected) > 600:
+            sys_exit("All clients down for over 10 minutes!")
         gc.collect()
         if MaxMemory:
             try:

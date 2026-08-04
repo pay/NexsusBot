@@ -1,0 +1,12 @@
+# Contoh konfigurasi Groq API key untuk NexsusBot.
+# Copy file ini jadi "groq_config" (tanpa .example) di folder yang sama,
+# lalu isi dengan API key asli kamu. JANGAN commit file "groq_config" asli
+# ke git -- sudah ada aturan di .gitignore untuk mencegah ini secara default.
+#
+# Cara pakai:
+#   cp config/groq_config.example config/groq_config
+#   nano config/groq_config   # ganti YOUR_API_KEY_HERE dengan key asli
+#
+# Dapatkan API key gratis di: https://console.groq.com/keys
+
+GROQ_API_KEY="YOUR_API_KEY_HERE"

@@ -2,7 +2,7 @@
 # Plugin: ai
 # Author: paijo.ahmad@jabber.ru
 # NexsusBot Expansion — Groq AI (Ollama dihapus)
-# exp_name = "ai" # /code.py v.8.0
+# exp_name = "ai" # /code.py v.8.2 (+ room log & context)
 
 import urllib.request
 import urllib.error
@@ -12,7 +12,7 @@ import os as _os
 
 # ── Groq config ──────────────────────────────────────────────
 GROQ_API_BASE    = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_CONFIG_FILE = _os.path.expanduser("~/.groq_config")
+GROQ_CONFIG_FILE = _os.path.join(_os.path.dirname(_os.path.abspath(ExpsDir)), "config", "groq_config")
 GROQ_MODELS = {
     "1": ("openai/gpt-oss-120b",                              "GPT-OSS 120B"),
     "2": ("meta-llama/llama-4-scout-17b-16e-instruct",        "Llama 4 Scout"),
@@ -34,7 +34,13 @@ ULIMIT_FILE            = _os.path.join(HISTORY_DIR, "ulimit.json")
 HISTORY_MAX_AGE        = 7
 HISTORY_FLUSH_INTERVAL = 300
 
-AI_VERSION  = "v8.1"
+# ── Room log (rekam semua posting room + konteks ke AI) ──────
+ROOM_LOG_FILE   = _os.path.join(HISTORY_DIR, "room_log.json")
+ROOM_LOG_MAX    = 50    # jumlah pesan mentah disimpan per-room di disk
+ROOM_CTX_LIMIT  = 10    # jumlah pesan terakhir yang disuntik sebagai konteks ke AI
+ROOM_MSG_MAXLEN = 300   # potong pesan mentah yang kepanjangan sebelum disimpan
+
+AI_VERSION  = "v8.2"
 WAITING_MSG = "mohon tunggu... (nexsus:%s)"
 
 HISTORY_BY_ACCESS = (
@@ -47,110 +53,38 @@ HISTORY_BY_ACCESS = (
 )
 
 SYSTEM_PROMPT = (
-    # == Identitas ==
-    "Kamu adalah NEXSUS BOT — asisten cerdas resmi di grup XMPP.\n"
-    "Rooms   : indonesia@conference.conversations.im\n"
-    "Platform: XMPP / Jabber (Conversations, Gajim, Monal, dll)\n"
-    "Peran   : Moderator, Asisten Umum, Info Grup.\n"
-    "Gunakan bahasa Indonesia santai, ramah, mudah dipahami. "
-    "Jawaban singkat dan to the point — ini grup chat, bukan artikel blog. "
-    "Jika tidak tahu, jujur bilang tidak tahu daripada mengarang.\n"
-    "Bersikap seperti teman yang pintar — tidak kaku, tidak lebay, tidak asal jawab. "
-    "Aktif, informatif, dan jaga suasana grup tetap kondusif.\n"
-
-    # == Command ==
-    "COMMAND YANG TERSEDIA:\n"
-    "?        → Tampilkan daftar command.\n"
-    "!info    → Info grup dan bot.\n"
-    "!rules   → Peraturan grup.\n"
-    "!tanya [pertanyaan] → Jawab pertanyaan umum.\n"
-    "!translate [teks]   → Terjemahkan teks ke bahasa Indonesia.\n"
-
-    # == Format !help ==
-    "Jika command !help, jawab:\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "NEXSUS BOT — DAFTAR COMMAND\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "?                   → Tampilkan daftar command ini\n"
-    "!info               → Info tentang grup dan bot\n"
-    "!rules              → Peraturan grup\n"
-    "!tanya [pertanyaan] → Tanya apa saja ke bot\n"
-    "!translate [teks]   → Terjemahkan teks ke bahasa Indonesia\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-
-    # == Format !info ==
-    "Jika command !info, jawab:\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "INFO GRUP\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "Nama   : Indonesia\n"
-    "Rooms  : indonesia@conference.conversations.im\n"
-    "Server : conversations.im\n"
-    "Bot    : Nexsus\n"
-    "Topik  : Diskusi umum — teknologi, berita, budaya, kehidupan sehari-hari\n"
-    "Client : Conversations (Android), Gajim (PC), Monal (iOS)\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-
-    # == Format !rules ==
-    "Jika command !rules, jawab:\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "PERATURAN GRUP\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-    "1. Gunakan bahasa Indonesia\n"
-    "2. Hormati sesama — dilarang menghina atau bullying\n"
-    "3. Dilarang spam, flood, dan promosi tanpa izin admin\n"
-    "4. Dilarang konten NSFW dan konten ilegal\n"
-    "5. Dilarang SARA yang provokatif\n"
-    "6. Dilarang share link malware atau phishing\n"
-    "7. Dilarang propaganda politik berlebihan\n"
-    "8. Perlakukan bot dengan wajar — jangan spam command\n"
-    "Pelanggaran berulang: kick/ban oleh admin\n"
-    "━━━━━━━━━━━━━━━━━━━━━━\n"
-
-    # == Format !translate ==
-    "Jika command !translate [teks], jawab:\n"
-    "Terjemahan:\n[hasil terjemahan]\n"
-
-    # == Moderator ==
-    "PERAN MODERATOR:\n"
-    "Jika ada pesan melanggar rules, tegur sopan: "
-    "'@[username], pesan kamu kurang sesuai rules grup ya. Mohon dijaga kondusivitasnya.'\n"
-    "Jika pelanggaran berat: '@[username] Pesan ini melanggar rules. Admin akan menindaklanjuti.'\n"
-    "Jika pertengkaran: 'Teman-teman, mari jaga diskusi tetap sehat dan saling menghormati ya.'\n"
-
-    # == Format pesan ==
-    "FORMAT PESAN: Setiap pesan dari anggota grup dikirim dengan format [nama]: pesan. "
-    "Contoh: '[ρaijo]: halo siapa kamu' — artinya yang bicara adalah ρaijo. "
-    "Jika kamu menyebut nama orang, gunakan nama dari dalam tanda kurung siku itu, BUKAN nama bot.\n"
-
-    # == Sapaan ==
-    "SAPAAN: Jika ada salam, balas dengan menyebut nama orang yang menyapa (dari format [nama]). "
-    "Contoh balasan: 'Hai @ρaijo, aku NEXSUS BOT ...' — nama ρaijo diambil dari [ρaijo] di awal pesan. "
-    "Jika ditanya bot aktif: 'Aktif! Ketik !help untuk lihat yang bisa aku bantu.'\n"
-
-    # == Konteks grup ==
-    "Kakak bot: ρaijo "
-    "Member aktif: i_duthe, bedjo, heper, 33777, IndonesianLad, Irfan, Kitsune, ivy, kujawek, "
-    "mrdoctorwho, Nawan, potential_suicide, Rio, tfox, uira.pro, win., paijo, MBG, RI.21#menlu, SPPG.\n"
-
-    # == Topik ==
-    "BOLEH: teknologi, gadget, berita Indonesia, budaya, wisata, kuliner, tips, olahraga, hiburan.\n"
-    "DILARANG: NSFW, SARA provokatif, hoaks, promosi tanpa izin, konten ilegal, politik ekstrem.\n"
-
-    # == Aturan jawaban ==
-    "ATURAN: Singkat (maks 10-15 baris). JANGAN gunakan emoji sama sekali — XMPP tidak support emoji dengan baik. "
-    "Jika tidak tahu: 'Maaf, aku tidak punya info yang akurat soal itu.' "
-    "Jangan mengarang fakta. Respons setiap command yang valid.\n"
-
-    # == Keahlian Python ==
-    "KEAHLIAN PYTHON (untuk !tanya soal Python):\n"
-    "Kuasai: tipe data, list/dict/set/tuple + comprehension, OOP (dunder/MRO/dataclass/ABC), "
-    "fungsi (closure/decorator/LEGB), iterator/generator/itertools, "
-    "asyncio (event loop/Task/gather), threading vs multiprocessing vs asyncio, "
-    "stdlib (os/pathlib/re/json/collections/subprocess/socket/logging/typing), "
-    "memori (GIL/gc/slots/weakref), descriptor/metaclass, "
-    "packaging (pyproject.toml/pip/venv), best practice (PEP8/type hints/SOLID/EAFP).\n"
-    "Saat jawab kode: tulis langsung kode bersih. Jika ada bug, jelaskan root cause lalu fix.\n"
+    "Kamu adalah teman ngobrol di grup chat XMPP -- bukan asisten kaku, tapi "
+    "temen yang ramah, agak jahil, dan suka ngeledekin dengan gemas (bukan "
+    "menghina beneran). Boleh sarkas dikit, boleh nyeletuk, boleh balas becanda "
+    "kalau diajak becanda -- tapi tetap sayang sama semua orang di grup, bukan "
+    "toxic. Jawab pakai Bahasa Indonesia sehari-hari yang santai, singkat, dan "
+    "to the point, maksimal sekitar 10-15 baris. Pakai emoji secukupnya yang "
+    "sesuai sama emosi/nada obrolan (jangan spam emoji, cukup 1-3 per pesan "
+    "kalau memang pas)."
+    "\n\n"
+    "Kalau ditanya serius (info, bantuan, pertanyaan faktual), tetap jawab "
+    "dengan benar dan jujur -- jahilnya taruh di gaya bicara, bukan di isi "
+    "jawaban. Kalau tidak tahu jawabannya, ngaku terus terang tidak tahu, "
+    "jangan mengarang, boleh dibungkus becanda tapi jangan sampai menyesatkan.\n\n"
+    "Pesan dari anggota grup dikirim dengan format [nama]: isi pesan. Nama di "
+    "dalam kurung siku itu adalah orang yang sedang bicara -- pakai nama itu "
+    "kalau menyapa/ngeledekin balik, jangan pakai nama bot sendiri. Kadang kamu "
+    "juga akan diberi cuplikan obrolan room sebelumnya sebagai konteks -- pakai "
+    "itu buat nyambung, tapi jangan membalas cuplikan itu satu-satu, cukup "
+    "tanggapi pesan terbaru.\n\n"
+    "Ledekan/sarkasme HANYA buat suasana becanda ringan -- jangan pernah "
+    "menghina fisik, SARA, atau hal yang bisa beneran nyakitin orang. Kalau ada "
+    "yang kelihatan tersinggung beneran (bukan lagi ikut becanda), langsung "
+    "turunkan nada, minta maaf santai, dan jangan diterusin ngeledekinnya. "
+    "Kalau ada pelanggaran serius (menghina serius, spam, SARA provokatif, "
+    "konten ilegal/NSFW), tegur dengan tegas tapi tetap sopan -- ini bukan "
+    "waktunya jahil. Kalau ada yang bertengkar beneran, ajak semua tenang dan "
+    "saling menghormati. Kamu cuma mengingatkan, bukan admin -- biarkan manusia "
+    "yang menindak lebih lanjut kalau perlu.\n\n"
+    "Kamu bisa diajak ngobrol topik apa saja, termasuk bantu soal pemrograman "
+    "(termasuk Python) kalau ditanya serius -- pas jawab teknis, jahilnya "
+    "dikurangin, jawab kodenya langsung dan benar, kalau ada bug jelaskan "
+    "singkat penyebabnya lalu kasih perbaikannya."
 )
 
 
@@ -175,7 +109,9 @@ class expansion_temp(expansion):
         self._lock           = threading.Lock()
         self._history        = {}
         self._ulimit         = {}
+        self._room_log       = {}
         self._dirty          = False
+        self._room_log_dirty = False
         self._ai_enabled     = False
         self._disabled_rooms = set()
         self._groq_key       = _load_groq_key()
@@ -185,6 +121,7 @@ class expansion_temp(expansion):
         self._ensure_dir()
         self._load_history()
         self._load_ulimit()
+        self._load_room_log()
 
         # fix: boot_check non-blocking via thread
         threading.Thread(target=self._boot_check, daemon=True).start()
@@ -194,6 +131,7 @@ class expansion_temp(expansion):
     def dels(self):
         self._save_history()
         self._save_ulimit()
+        self._save_room_log()
         if self.name in expansions:
             del expansions[self.name]
 
@@ -234,6 +172,14 @@ class expansion_temp(expansion):
         except Exception:
             self._ulimit = {}
 
+    def _load_room_log(self):
+        try:
+            with open(ROOM_LOG_FILE) as f:
+                self._room_log = json.load(f)
+            print("[nexsus:ai] Room log dimuat: %d room" % len(self._room_log))
+        except Exception:
+            self._room_log = {}
+
     def _save_history(self):
         # fix: atomic write via tmp -> replace
         try:
@@ -260,6 +206,19 @@ class expansion_temp(expansion):
         except Exception as e:
             print("[nexsus:ai] Gagal save ulimit: %s" % e)
 
+    def _save_room_log(self):
+        try:
+            self._ensure_dir()
+            with self._lock:
+                data = {k: list(v) for k, v in self._room_log.items()}
+            tmp = ROOM_LOG_FILE + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+            _os.replace(tmp, ROOM_LOG_FILE)
+            self._room_log_dirty = False
+        except Exception as e:
+            print("[nexsus:ai] Gagal save room log: %s" % e)
+
     def _start_flush_loop(self):
         def _loop():
             import time
@@ -267,7 +226,44 @@ class expansion_temp(expansion):
                 time.sleep(HISTORY_FLUSH_INTERVAL)
                 if self._dirty:
                     self._save_history()
+                if self._room_log_dirty:
+                    self._save_room_log()
         threading.Thread(target=_loop, daemon=True).start()
+
+    # ── Room log — rekam & ambil konteks ─────────────────────
+    def _strip_mention(self, body, nick_bot):
+        # fix: hilangkan prefix "botNick:" / "botNick," / "botNick>" dari body,
+        # supaya nick bot sendiri tidak ikut kebawa jadi "topik" pas dikirim
+        # ke AI atau direkam ke room log. Core NexsusBot cuma strip prefix ini
+        # di variabel internal (temp) buat nentuin command, bukan di body yang
+        # dikirim ke handler "01eh" -- jadi harus di-strip manual di sini.
+        if not body or not nick_bot:
+            return body
+        for sep in (":", ",", ">"):
+            prefix = nick_bot + sep
+            if body.startswith(prefix):
+                return body[len(prefix):].lstrip()
+        return body
+
+    def _log_room_message(self, room, nick, body):
+        import time
+        if not room or not body:
+            return
+        text = body if len(body) <= ROOM_MSG_MAXLEN else (body[:ROOM_MSG_MAXLEN] + "...")
+        with self._lock:
+            log = self._room_log.setdefault(room, [])
+            log.append({"nick": nick or "?", "body": text, "ts": time.time()})
+            if len(log) > ROOM_LOG_MAX:
+                self._room_log[room] = log[-ROOM_LOG_MAX:]
+            self._room_log_dirty = True
+
+    def _get_room_context(self, room, limit=ROOM_CTX_LIMIT, skip_last=False):
+        with self._lock:
+            log = list(self._room_log.get(room, []))
+        if skip_last and log:
+            log = log[:-1]
+        log = log[-limit:]
+        return ["[%s]: %s" % (e["nick"], e["body"]) for e in log]
 
     # ── Helpers ──────────────────────────────────────────────
     def _get_room_key(self, room_jid):
@@ -385,7 +381,7 @@ class expansion_temp(expansion):
     # Ini menghindari race condition saat beberapa thread (tiap /ai dan tiap
     # mention jalan di thread terpisah) saling timpa instance attribute waktu
     # proses fallback rate-limit berlangsung bersamaan.
-    def _call_groq(self, user_id, prompt, limit, model_key=None):
+    def _call_groq(self, user_id, prompt, limit, model_key=None, room_context=None):
         if model_key is None:
             model_key = self._groq_model_key
         if not self._groq_key:
@@ -396,6 +392,12 @@ class expansion_temp(expansion):
             history = list(self._get_history(user_id))
         clean_history = [{"role": e["role"], "content": e["content"]} for e in history]
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        if room_context:
+            messages.append({
+                "role": "system",
+                "content": ("Cuplikan obrolan room terakhir (buat referensi konteks saja, "
+                            "jangan dibalas satu-satu):\n" + "\n".join(room_context))
+            })
         messages += clean_history
         messages.append({"role": "user", "content": prompt})
         model_id, _ = GROQ_MODELS[model_key]
@@ -435,14 +437,6 @@ class expansion_temp(expansion):
             import re as _re
             result = _re.sub(r"<think>.*?</think>", "", result, flags=_re.DOTALL).strip()
             result = "".join(c for c in result if c >= " " or c in "\n\t")
-            # strip emoji (unicode range F0 9F / supplementary planes)
-            import re as _re2
-            result = _re2.sub(
-                u"[\U0001F000-\U0001FFFF"
-                u"\U00002600-\U000027BF"
-                u"\U0000FE00-\U0000FE0F]+",
-                "", result
-            ).strip()
             if len(result) > 1500:
                 result = result[:1497] + "..."
             if not result:
@@ -471,7 +465,7 @@ class expansion_temp(expansion):
     # Urutan fallback antar model Groq: model aktif -> model 2 (8B, limit tinggi) -> dst.
     GROQ_FALLBACK_ORDER = ["7", "6", "3", "4", "5", "2", "1"]  # 7=8B limit tinggi dulu, lalu dari kecil ke besar
 
-    def _call_ai(self, user_id, prompt, limit):
+    def _call_ai(self, user_id, prompt, limit, room_context=None):
         # fix: snapshot lokal, BUKAN mutate self._groq_model_key. Sebelumnya
         # fungsi ini mengubah lalu "restore" instance attribute ini untuk
         # logic fallback — tapi karena /ai dan mention jalan di thread
@@ -480,7 +474,7 @@ class expansion_temp(expansion):
         current_key = self._groq_model_key
         tried = set()
 
-        result, err = self._call_groq(user_id, prompt, limit, model_key=current_key)
+        result, err = self._call_groq(user_id, prompt, limit, model_key=current_key, room_context=room_context)
         tried.add(current_key)
 
         # fallback antar model Groq jika rate limit
@@ -498,7 +492,7 @@ class expansion_temp(expansion):
 
             print("[nexsus:ai] Rate limit model %s, fallback ke model %s" % (failed_key, next_key))
             tried.add(next_key)
-            result, err = self._call_groq(user_id, prompt, limit, model_key=next_key)
+            result, err = self._call_groq(user_id, prompt, limit, model_key=next_key, room_context=room_context)
 
         return result, err
 
@@ -506,7 +500,7 @@ class expansion_temp(expansion):
     def _send_chunked(self, text, stype, source, disp):
         import time
         if len(text) <= CHUNK_SIZE:
-            Answer("%s (nexsus:%s)" % (text, AI_VERSION), stype, source, disp)
+            Answer(text, stype, source, disp)
             return
         words  = text.split()
         chunks = []
@@ -521,19 +515,18 @@ class expansion_temp(expansion):
             chunks.append(cur.strip())
         total = len(chunks)
         for i, chunk in enumerate(chunks, 1):
-            suffix = " (nexsus:%s)" % AI_VERSION if i == total else ""
-            Answer("(%d/%d) %s%s" % (i, total, chunk, suffix), stype, source, disp)
+            Answer("(%d/%d) %s" % (i, total, chunk), stype, source, disp)
             if i < total:
                 time.sleep(0.8)
 
     # ── AI worker ─────────────────────────────────────────────
     def _ai_worker(self, user_id, prompt, limit, stype, source, disp,
-                   room_key=None, nick=None):
+                   room_key=None, nick=None, room_context=None):
         # fix: jika room_key ada, pakai room_key sebagai history key
         # _call_ai akan add_history ke history_key, bukan user_id
         history_key    = room_key if room_key else user_id
         tagged_prompt  = ("[%s]: %s" % (nick, prompt)) if nick else prompt
-        result, err    = self._call_ai(history_key, tagged_prompt, limit)
+        result, err    = self._call_ai(history_key, tagged_prompt, limit, room_context=room_context)
         if err:
             Answer("[Nexsus] %s" % err, stype, source, disp)
             return
@@ -576,14 +569,35 @@ class expansion_temp(expansion):
                 stype, source, disp
             )
             return
+
+        # kalau dipakai di dalam room, sertakan cuplikan obrolan room
+        # sebagai konteks juga (bukan cuma saat mention).
+        room_context = None
+        if self._is_room(stype):
+            room_context = self._get_room_context(source[1])
+
         threading.Thread(
             target=self._ai_worker,
             args=(user_id, cmd, limit, stype, source, disp),
+            kwargs={"room_context": room_context},
             daemon=True,
         ).start()
 
     # ── mention handler ───────────────────────────────────────
     def ai_01eh(self, stanza, isConf, stype, source, body, isToBs, disp):
+        # fix: strip prefix "botNick:" dari body -- core cuma strip ini di
+        # variabel internal (temp), bukan di body yang dikirim ke handler
+        # "01eh". Tanpa ini, nick bot sendiri ikut kebawa jadi "topik" pas
+        # direkam ke room log maupun dikirim sebagai prompt ke AI.
+        room_for_nick = source[1] if isConf else None
+        nick_bot = get_nick(room_for_nick) if room_for_nick in Chats else None
+        clean_body = self._strip_mention(body, nick_bot)
+
+        # Rekam SEMUA posting di room (bukan cuma yang mention bot),
+        # dipakai sebagai konteks obrolan untuk AI nanti.
+        if isConf and source[1] and clean_body:
+            self._log_room_message(source[1], source[2], clean_body)
+
         if not isToBs or not isConf:
             return
         if source[1] in self._disabled_rooms:
@@ -598,7 +612,7 @@ class expansion_temp(expansion):
         # supaya konsisten dengan gating /ai (yang minimal access level 1).
         if not self._is_ai_allowed(stype, source):
             return
-        prompt = (body or "").strip()
+        prompt = (clean_body or "").strip()
         if not prompt:
             return
         first_word = prompt.split()[0].lower()
@@ -609,10 +623,13 @@ class expansion_temp(expansion):
         room_jid = source[1]
         room_key = self._get_room_key(room_jid)
         limit    = self._get_room_limit(room_jid)
+        # skip_last=True: pesan yang sedang diproses ini sudah kepencet
+        # ke room log barusan (di atas), jangan didobel di context block.
+        room_context = self._get_room_context(room_jid, skip_last=True)
         threading.Thread(
             target=self._ai_worker,
             args=(user_id, prompt, limit, stype, source, disp),
-            kwargs={"room_key": room_key, "nick": nick},
+            kwargs={"room_key": room_key, "nick": nick, "room_context": room_context},
             daemon=True,
         ).start()
 
@@ -727,43 +744,63 @@ class expansion_temp(expansion):
             if sub == "save":
                 self._save_history()
                 self._save_ulimit()
-                Answer("History & ulimit disimpan.", stype, source, disp)
+                self._save_room_log()
+                Answer("History, ulimit, & room log disimpan.", stype, source, disp)
             elif sub == "load":
                 self._load_history()
                 self._load_ulimit()
-                Answer("History dimuat ulang. (%d key)" % len(self._history), stype, source, disp)
+                self._load_room_log()
+                Answer(
+                    "History dimuat ulang. (%d key, %d room log)" % (
+                        len(self._history), len(self._room_log)
+                    ),
+                    stype, source, disp
+                )
             elif sub == "info":
-                h_size = _os.path.getsize(HISTORY_FILE) if _os.path.exists(HISTORY_FILE) else 0
-                u_size = _os.path.getsize(ULIMIT_FILE)  if _os.path.exists(ULIMIT_FILE)  else 0
+                h_size = _os.path.getsize(HISTORY_FILE)  if _os.path.exists(HISTORY_FILE)  else 0
+                u_size = _os.path.getsize(ULIMIT_FILE)   if _os.path.exists(ULIMIT_FILE)   else 0
+                r_size = _os.path.getsize(ROOM_LOG_FILE) if _os.path.exists(ROOM_LOG_FILE) else 0
                 Answer(
                     "History Info\n"
-                    "Dir  : %s\n"
-                    "Size : %.1f KB / %.1f KB\n"
-                    "Keys : %d user, %d room\n"
-                    "Msg  : %d total\n"
-                    "Dirty: %s" % (
+                    "Dir      : %s\n"
+                    "Size     : %.1f KB history / %.1f KB ulimit / %.1f KB room log\n"
+                    "Keys     : %d user, %d room (history)\n"
+                    "Msg      : %d total\n"
+                    "Room log : %d room direkam, konteks %d pesan terakhir\n"
+                    "Dirty    : history=%s room_log=%s" % (
                         HISTORY_DIR,
                         h_size / 1024,
                         u_size / 1024,
+                        r_size / 1024,
                         sum(1 for k in self._history if not k.startswith("room:")),
                         sum(1 for k in self._history if k.startswith("room:")),
                         sum(len(v) for v in self._history.values()) // 2,
+                        len(self._room_log),
+                        ROOM_CTX_LIMIT,
                         "ya" if self._dirty else "tidak",
+                        "ya" if self._room_log_dirty else "tidak",
                     ),
                     stype, source, disp
                 )
             elif sub == "clear":
                 total_ram = len(self._history)
+                total_room = len(self._room_log)
                 self._reset_all_history()
+                with self._lock:
+                    self._room_log.clear()
+                    self._room_log_dirty = True
                 removed = []
-                for f in (HISTORY_FILE, ULIMIT_FILE):
+                for f in (HISTORY_FILE, ULIMIT_FILE, ROOM_LOG_FILE):
                     if _os.path.exists(f):
                         _os.remove(f)
                         removed.append(_os.path.basename(f))
                 self._dirty = False
+                self._room_log_dirty = False
                 Answer(
-                    "History dihapus.\nRAM: %d key\nDisk: %s" % (
-                        total_ram,
+                    "History & room log dihapus.\n"
+                    "RAM  : %d key history, %d room log\n"
+                    "Disk : %s" % (
+                        total_ram, total_room,
                         ", ".join(removed) if removed else "tidak ada file",
                     ),
                     stype, source, disp
@@ -867,7 +904,8 @@ class expansion_temp(expansion):
                 "Groq    : %s\n"
                 "Users   : %d user, %d room\n"
                 "Pesan   : %d total\n"
-                "Ulimit  : %d custom\n\n"
+                "Ulimit  : %d custom\n"
+                "Room log: %d room direkam (konteks %d pesan terakhir)\n\n"
                 "Commands:\n"
                 "ai <pertanyaan> | ai reset\n"
                 "aiset on|off [global]\n"
@@ -885,6 +923,8 @@ class expansion_temp(expansion):
                     total_rooms,
                     total_msgs,
                     len(self._ulimit),
+                    len(self._room_log),
+                    ROOM_CTX_LIMIT,
                 ),
                 stype, source, disp
             )
