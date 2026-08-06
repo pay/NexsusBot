@@ -4,10 +4,10 @@
 > Porting Python3 by: paijo.ahmad@jabber.ru
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![slixmpp](https://img.shields.io/badge/XMPP-slixmpp%201.15%2B-green)
+![slixmpp](https://img.shields.io/badge/XMPP-slixmpp%201.17%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-**Versi:** 1.0.0 Core BlackSmith mark.2
+**Versi:** 1.1.0 Core BlackSmith mark.2
 **Basis:** Port Python 3 / slixmpp dari BlackSmith mark.2 (WitcherGeralt)
 **Protokol:** XMPP (Jabber) — client MUC bot
 
@@ -15,13 +15,15 @@
 
 ## 1. Ringkasan
 
-Nexsus Safety adalah bot XMPP berbasis arsitektur **expansion** (plugin) — setiap fitur (command, auto-responder, scheduler) adalah modul terpisah yang dimuat otomatis saat startup dari folder `expansions/`. Engine inti (`NexsusBot.py`) menyediakan:
+Nexsus Serve adalah bot XMPP berbasis arsitektur **expansion** (plugin) — setiap fitur (command, auto-responder, scheduler) adalah modul terpisah yang dimuat otomatis saat startup dari folder `expansions/`. Engine inti (`NexsusBot.py`) menyediakan:
 
 - Koneksi XMPP (multi-account) via **slixmpp**
 - Manajemen room MUC (join, roles, affiliations)
 - Sistem command dengan prefix dan level akses
 - Database SQLite per-fitur
 - Sistem help otomatis dari file `.{lang}`
+- Asisten AI terintegrasi (Groq) dengan konteks obrolan room
+- Watchdog auto-restart dengan grace period, dan self-update dari git via chat command
 
 ---
 
@@ -38,6 +40,10 @@ nexsusBot/
 │   ├── config.ini            # Config utama: akun, TLS, limit, admin
 │   ├── clients.ini            # Akun XMPP tambahan (multi-account)
 │   └── insc.py                # AnsBase global (teks jawaban default)
+│
+├── config/                    # Konfigurasi rahasia terpisah dari git (secrets)
+│   ├── groq_config            # API key Groq (chmod 600, TIDAK di-commit)
+│   └── groq_config.example    # Template — aman di-commit, tanpa key asli
 │
 ├── current/                   # Data dinamis (runtime, per-room/per-user)
 │   ├── chats.db / chats.cp    # Daftar room yang diikuti bot
@@ -77,6 +83,7 @@ nexsusBot/
 | `Cmds` | Dict global semua command terdaftar |
 | `Chats` | Dict global semua room yang diikuti |
 | `Clients` | Dict global semua koneksi XMPP aktif |
+| `Macro` | Hook global untuk expansion yang intercept command sebagai macro/alias |
 
 ### 3.2 Siklus Hidup (Startup Flow)
 
@@ -90,13 +97,16 @@ load_config()          → baca static/config.ini & clients.ini
        ├─ connect_clients()    → connect semua akun XMPP
        ├─ join_chats()         → join semua room dari current/chats.db
        └─ Main loop: monitoring tiap 180s (memory, koneksi)
+            └─ Watchdog: restart total kalau SEMUA client putus
+               selama >10 menit berturut-turut (grace period,
+               supaya tidak restart cuma karena koneksi flaky sesaat)
 ```
 
 ### 3.3 Sistem Akses (Access Level)
 
 | Level | Label | Keterangan |
 |---|---|---|
-| 8 | God | Admin utama (`ADMIN=` di config.ini), akses penuh |
+| 8 | God | Admin utama (`ADMIN=` di config.ini), akses penuh — termasuk `update` |
 | 7 | Chief | Akses tinggi (private command, remote, dll) |
 | 6 | — | Owner/Admin room |
 | 5 | — | Moderator room |
@@ -115,17 +125,21 @@ _handle_message()
   ├─ Cek access minimum (enough_access)
   ├─ Cek prefix command (! @ # . *  atau nick bot)
   ├─ Parse command + argumen
-  ├─ Macro hook (untuk expansion yang intercept semua pesan)
+  ├─ Macro hook (untuk expansion yang intercept semua pesan, mis. alias)
   └─ Cmds[command].execute() → jalankan handler di thread terpisah
+       (kalau bukan command dikenal → diteruskan ke handler "01eh",
+        dipakai a.l. oleh expansion 'ai' untuk baca semua chat room)
 ```
 
 ---
 
-## 4. Daftar Expansion (31 Modul)
+## 4. Daftar Expansion (34 Modul)
 
 | Expansion | Command | Fungsi |
 |---|---|---|
 | `access` | `access`, `acclist`, `acclist2`, `gaccess`, `laccess` | Manajemen access level user |
+| `ai` | `ai`, `aiset` | Asisten AI (Groq) — nge-mention bot atau `/ai <tanya>`. Baca konteks 10 pesan terakhir room, simpan history percakapan & log room ke disk |
+| `alias` | `alias`, `macro` | Sistem alias/macro custom per-event (join, message, role change, dll) & shortcut command |
 | `alive_keeper` | — | Auto-ping berkala agar koneksi tetap hidup |
 | `allweb` | — | Helper akses web (internal) |
 | `basic_control` | `join`, `rejoin`, `leave`, `reconnect`, `reload`, `exit` | Kontrol koneksi & room |
@@ -154,12 +168,45 @@ _handle_message()
 | `sheriff` | `order` | Moderasi otomatis |
 | `talkers` | `talkers` | Statistik aktivitas user |
 | `turn` | `turn` | Sistem giliran/antrian |
+| `update` | `update` | Cek/tarik update bot dari git (`check`, `pull`, `status`) & restart untuk apply (`restart`). Akses level 8 (God) saja |
 | `user_stats` | `userstat`, `here` | Statistik per-user |
 | `wtf` | `wtf`, `def` | Kamus/definisi custom |
 
+### 4.1 Expansion `ai` (Groq AI)
+
+- Trigger: mention nick bot di room, atau command `ai <pertanyaan>` (PM/room)
+- Provider: **Groq API** (model bisa diganti lewat `aiset model [1-7]`), Ollama sudah dihapus dari arsitektur ini
+- **Konteks room**: setiap pesan di room (bukan cuma yang mention bot) direkam ke `.nexsus_ai/room_log.json` (maks 50 pesan/room di disk). Saat AI dipanggil, 10 pesan terakhir disuntik sebagai konteks — supaya jawaban nyambung dengan obrolan berjalan
+- History percakapan personal tersimpan terpisah di `.nexsus_ai/history.json`, limit jumlah pesan tersimpan mengikuti access level user
+- Command admin: `aiset on|off [global]`, `aiset model`, `aiset ulimit`, `aiset reset all`, `aiset history save|load|info|clear`, `aiset quota`, `aiset ping`, `aiset reloadkey`, `aiset info`
+- API key disimpan di `config/groq_config` (lihat §5.1) — **tidak** boleh ikut ter-commit ke git
+
+### 4.2 Expansion `alias`
+
+Porting dari BlackSmith mark.2 (xmpppy) ke Slixmpp. Memungkinkan admin bikin custom trigger berdasarkan event (`message`, `join`, `leave`, `kick`, `ban`, `nick`, `role`, `status`, dll) yang menjalankan command, kirim pesan, atau aksi moderasi otomatis. Juga mendukung `macro` — alias singkat untuk command yang sudah ada.
+
+Catatan: fitur auto-fetch version/capabilities client (XEP-0092/0115) saat user join **tidak** diporting (disederhanakan) — alias event `"join"` tetap jalan tanpa data versi/capabilities.
+
+### 4.3 Expansion `update`
+
+Update bot langsung dari git lewat chat, tanpa perlu masuk terminal:
+
+| Command | Fungsi |
+|---|---|
+| `update` / `update check` | Cek commit baru di remote (fetch, tanpa narik) |
+| `update status` | `git status --short --branch` |
+| `update pull` | Tarik update — **otomatis dibatalkan** kalau ada perubahan lokal belum di-commit |
+| `update restart` | Restart bot untuk terapkan update yang sudah ditarik |
+
+`update pull` pakai `git pull --ff-only` (tidak akan bikin merge commit otomatis). Karena jalan non-interaktif di background, `git` butuh credential helper tersimpan (`git config --global credential.helper store`) supaya tidak macet minta login.
+
+⚠️ **Catatan keamanan**: siapa pun dengan akses level 8 (God) di bot ini bisa menjalankan `update pull` + `update restart`, yang secara efektif berarti bisa mengganti kode yang dijalankan bot dengan apa pun yang ada di branch remote saat itu. Jaga akses level 8 hanya untuk JID yang benar-benar dipercaya, dan jaga akses tulis ke repo GitHub (branch protection / siapa saja yang punya hak push) sama ketatnya.
+
 ---
 
-## 5. Konfigurasi (`static/config.ini`)
+## 5. Konfigurasi
+
+### 5.1 `static/config.ini`
 
 ```ini
 [STATES]
@@ -191,6 +238,16 @@ CHAT_LIST_LENGTH = 100
 
 Multi-account tambahan didaftarkan di `static/clients.ini` dengan format section serupa.
 
+### 5.2 `config/groq_config` (API key untuk expansion `ai`)
+
+```bash
+cp config/groq_config.example config/groq_config
+chmod 600 config/groq_config
+nano config/groq_config   # isi GROQ_API_KEY="key_asli_kamu"
+```
+
+Dapatkan API key gratis di [console.groq.com/keys](https://console.groq.com/keys). File `config/groq_config` **sudah masuk `.gitignore`** — jangan pernah paksa-commit file ini, cukup commit `config/groq_config.example` (template tanpa key asli).
+
 ---
 
 ## 6. Instalasi & Menjalankan
@@ -201,6 +258,7 @@ pip install -r requirements.txt
 
 # 2. Edit konfigurasi
 nano static/config.ini
+cp config/groq_config.example config/groq_config && nano config/groq_config
 
 # 3. Jalankan
 python3 NexsusBot.py
@@ -209,7 +267,15 @@ python3 NexsusBot.py
 python3 NexsusBot.py -s static -d current -e expansions
 ```
 
-Bot akan auto-reconnect setelah crash (delay 30 detik), dan menyimpan PID di `current/sessions.db` untuk mencegah proses duplikat.
+Bot akan auto-reconnect setelah crash (delay 30 detik via `os.execl`), menyimpan PID di `current/sessions.db` untuk mencegah proses duplikat, dan punya watchdog terpisah yang restart total proses kalau **semua** client XMPP putus koneksi selama lebih dari 10 menit berturut-turut (bukan langsung di kegagalan pertama — kasih ruang untuk reconnect logic internal coba dulu).
+
+### 6.1 Auto-start saat boot (Termux)
+
+Contoh `~/.termux/boot/boot.sh`:
+```bash
+cd ~/xmppbot/nesxusbot && nohup python NexsusBot.py >> nexsus.log 2>&1 & disown
+```
+Butuh paket `termux-boot` terinstall + app **Termux:Boot** companion, dan `termux-setup-storage` sudah dijalankan sekali kalau mau akses `~/storage/downloads`.
 
 ---
 
@@ -237,7 +303,7 @@ class expansion_temp(expansion):
 
 Opsional: buat `expansions/<nama>/contoh.en` (file help, format bebas, baris 1-2 = header).
 
-Expansion otomatis termuat saat restart, atau gunakan `expload <nama>` untuk load runtime.
+Expansion otomatis termuat saat restart, atau gunakan `expload <nama>` untuk load runtime (butuh access level 7+, tergantung config `exp_control`).
 
 ---
 
@@ -249,4 +315,16 @@ Proyek ini adalah hasil porting dari BlackSmith mark.2 (Python 2, library `xmppp
 - `has_key()`, `xrange()`, `itervalues()` → sintaks Python 3
 - `itypes.Number()` → `AtomicNumber` (thread-safe counter custom)
 - Setiap `NexusClient` berjalan di **asyncio event loop tersendiri** dalam thread daemon
-- MUC presence di-parse langsung dari XML (`<x xmlns="muc#user"><item .../></x>`) untuk kompatibilitas penuh dengan slixmpp 1.15.x
+- MUC presence di-parse langsung dari XML (`<x xmlns="muc#user"><item .../></x>`) untuk kompatibilitas penuh dengan slixmpp 1.17.x
+- `database()` (xmpppy-era alias untuk `itypes.Database`) → class `Database` bawaan NexsusBot
+- Expansion `alias`: `xmpp_raise()` (NodeProcessed) dihapus, tidak ada padanan langsung di Slixmpp untuk kasus ini — efek sampingnya minor (redundansi proses non-fatal)
+- Handler event `"05eh"` (leave/kick/ban) dan `Macro.__contains__` di core sempat butuh 2 patch tambahan supaya argumen yang dikirim core cocok dengan yang diharapkan expansion `alias` (lihat commit history untuk detail)
+
+---
+
+## 9. Keamanan & Praktik Baik
+
+- **Jangan commit** `config/groq_config`, `.nexsus_ai/history.json`, atau file backup versi (`*.v3`, `*.v4`, dst) — semua sudah masuk `.gitignore` secara default
+- Gunakan **Personal Access Token (PAT)**, bukan password akun, untuk `git push`/`pull` via HTTPS — GitHub sudah tidak menerima password biasa sejak 2021
+- Akses level 8 (God) setara root — cuma berikan ke JID yang benar-benar dipercaya, terutama karena expansion `update` bisa mengubah kode yang dijalankan bot langsung dari git
+- File secret (`config/groq_config`) sebaiknya `chmod 600` — cuma owner yang bisa baca/tulis
