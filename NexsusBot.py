@@ -191,7 +191,7 @@ def PrintSection(title):
 
 # ── Product Identity ───────────────────────────────────────────
 
-(NxMark, NxVer, NxRev) = (1, 0, 1)
+(NxMark, NxVer, NxRev) = (1, 1, 0)
 ProdName   = "Nexsus Serve"
 ProdCore   = "BlackSmith-M.2"
 ProdVer    = "%d.%d.%d Core:%s" % (NxMark, NxVer, NxRev, ProdCore)
