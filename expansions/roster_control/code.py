@@ -45,8 +45,7 @@ class expansion_temp(expansion):
 									nick  = body.pop(0) if body else jid.split("@")[0]
 									group = "Admins" if body and body.pop(0).lower() in ("admin", "админ") else "Users"
 									try:
-										roster[jid]["name"]   = nick
-										roster[jid]["groups"] = [group]
+										roster.update(jid=jid, name=nick, groups=[group])
 									except Exception:
 										pass
 									answer = AnsBase[4]
