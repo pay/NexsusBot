@@ -1,0 +1,19 @@
+{
+  "0": "ℹ️ [join] %s (%s) minta join ke %s",
+  "1": " (alasan: %s)",
+  "11": "ℹ️ Reload atas permintaan %s...",
+  "12": "ℹ️ Shutdown atas permintaan %s...",
+  "13": " (timer reconnect aktif)",
+  "14": "❌ Dispatcher offline.",
+  "15": "❌ Nggak bisa bikin direktori untuk %s.",
+  "16": "❌ Thread dispatcher error.",
+  "17": "❌ Dispatcher tidak dikenal: %s",
+  "2": "✅ Berhasil join ke %s.",
+  "3": "❌ Gagal join ke %s.",
+  "4": "✅ Selesai.",
+  "5": "ℹ️ Udah ada di room itu.",
+  "6": "❌ JID room nggak valid: %s",
+  "7": "ℹ️ Halo! Aku %s, diundang oleh %s.",
+  "8": "ℹ️ Keluar atas permintaan %s.",
+  "9": "✅ Keluar dari %s."
+}

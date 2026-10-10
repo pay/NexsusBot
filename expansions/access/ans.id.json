@@ -1,0 +1,13 @@
+{
+  "0": "ℹ️ Access lo: %s",
+  "1": "ℹ️ Access %s: %s",
+  "10": "❌ User %s tidak ditemukan.",
+  "2": "❌ %s tidak ditemukan.",
+  "3": "❌ Daftar access global kosong.",
+  "4": "❌ Daftar access lokal kosong.",
+  "5": "📋 Daftar access:\n",
+  "6": "❌ %s tidak ada di daftar access.",
+  "7": "❌ Level access harus antara -1 dan 8.",
+  "8": "❌ Level access harus antara 0 dan 6.",
+  "9": "ℹ️ User ini ada di daftar global, pakai gaccess."
+}

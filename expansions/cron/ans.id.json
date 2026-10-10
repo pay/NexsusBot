@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Menjalankan cron: %s",
+  "1": "❌ Tidak ada cron dengan id %d.",
+  "2": "❌ Interval terlalu pendek atau pengulangan terlalu sedikit.",
+  "3": " (+%d pengulangan disembunyikan)",
+  "4": "📋 Jadwal:\n%s",
+  "5": "❌ Body terlalu panjang.",
+  "6": "✅ Dijadwalkan: %s",
+  "7": "❌ Belum ada cron task.",
+  "8": "📋 Cron task:\n%s",
+  "9": "❌ Tanggal tidak valid."
+}

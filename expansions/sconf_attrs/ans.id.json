@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' sedang offline.",
+  "1": "ℹ️ Sedang dipakai '%s'.",
+  "10": "ℹ️ Prefix yang tersedia: '%s'",
+  "11": "ℹ️ Prefix sekarang: '%s'",
+  "12": "❌ Belum ada prefix.",
+  "13": "❌ State tidak dikenal: '%s'",
+  "2": "❌ Dispatcher tidak dikenal: '%s'.",
+  "3": "✅ Join ulang...",
+  "4": "✅ Nick diganti ke: %s",
+  "5": "❌ Nick terlalu panjang (maks 16).",
+  "6": "✅ Prefix dihapus.",
+  "7": "❌ Belum ada prefix.",
+  "8": "✅ Prefix diganti ke: '%s'",
+  "9": "ℹ️ Prefix '%s' sudah dipakai."
+}

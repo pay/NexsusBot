@@ -1,0 +1,13 @@
+{
+  "0": "📋 Definisi global (%d):\\n%s",
+  "1": "📋 Definisi lokal (%d) [%s]:\\n%s",
+  "10": "ℹ️ Nggak ada konteks room.",
+  "2": "❌ Belum ada definisi.",
+  "3": "ℹ️ %s — %d sebutan",
+  "4": "❌ Tidak ditemukan.",
+  "5": "%s:\\n%s\\n— Ditambahkan oleh %s (%s)",
+  "6": "❌ '%s' tidak ditemukan.",
+  "7": "ℹ️ Global: %d definisi.",
+  "8": "ℹ️ Lokal: %d definisi [%s].",
+  "9": "ℹ️ '%s' ada di global, nggak bisa di-override."
+}

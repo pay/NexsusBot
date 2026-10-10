@@ -1,0 +1,17 @@
+{
+  "0": "📋 Info ekspansi:",
+  "10": "✅ Ekspansi '%s' ter-load.",
+  "11": "❌ Gagal load '%s': %s",
+  "13": "✅ Versi sebelumnya dipulihkan.",
+  "14": "ℹ️ Handler yang tersedia: %s",
+  "15": "❌ Nggak ada handler di '%s'.",
+  "16": "ℹ️ Command '%s' sudah aktif.",
+  "17": "ℹ️ Command '%s' sudah nonaktif.",
+  "18": "✅ Semua command aktif.",
+  "3": "✅ Selesai.",
+  "4": "✅ Ter-load.",
+  "6": "❌ belum ter-load",
+  "7": "❌ Tidak ditemukan.",
+  "8": "📋 Ekspansi:",
+  "9": "\\nBelum ter-load (%d):\\n%s"
+}

@@ -1,0 +1,15 @@
+{
+  "0": "✅ Diperbarui: %s",
+  "1": "ℹ️ Nggak ada yang perlu diperbarui.",
+  "10": "ℹ️ Sudah terhubung.",
+  "11": "❌ Client tidak ditemukan: %s",
+  "12": "❌ Client offline: %s",
+  "2": "📋 Config sekarang:\n",
+  "3": "❌ Belum ada client tambahan yang dikonfigurasi.",
+  "4": "ℹ️ Keluar dari room...",
+  "5": "ℹ️ Disconnect...",
+  "6": "ℹ️ Dispatcher utama baru: %s",
+  "7": "❌ Nggak bisa hapus client terakhir.",
+  "8": "❌ Thread error.",
+  "9": "❌ Koneksi gagal."
+}
