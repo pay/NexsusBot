@@ -13,22 +13,22 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"Command '%s' is from expansion: %s",   # 0
-		"Command '%s' requires access: %d",     # 1
+		"\u2139\ufe0f Command '%s' is from expansion: %s",   # 0
+		"\u2139\ufe0f Command '%s' requires access: %d",     # 1
 		"%s\n%s",                                # 2  help header
 		"Usage:",                                # 3
 		"\u274c No help file found.",                   # 4
 		"Commands list — use 'commands'.",       # 5
 		"\U0001f4cb Commands (prefix '%s'):",               # 6
 		"'%s'",                                  # 7  prefix display
-		"\n[8/God+] (%d): %s",                  # 8
-		"\n[7/Chief] (%d): %s",                 # 9
-		"\n[6] (%d): %s",                        # 10
-		"\n[5] (%d): %s",                        # 11
-		"\n[4] (%d): %s",                        # 12
-		"\n[3] (%d): %s",                        # 13
-		"\n[2] (%d): %s",                        # 14
-		"\n[1/All] (%d): %s",                    # 15
+		"\n\U0001f451 [8/God+] (%d): %s",                  # 8
+		"\n\U0001f9d1 [7/Chief] (%d): %s",                 # 9
+		"\n\U0001f48e [6] (%d): %s",                        # 10
+		"\n\U0001f5e2 [5] (%d): %s",                        # 11
+		"\n\U0001f528 [4] (%d): %s",                        # 12
+		"\n\U0001f464 [3] (%d): %s",                        # 13
+		"\n⚖ [2] (%d): %s",                        # 14
+		"\n✅ [1/All] (%d): %s",                    # 15
 		"\nYour access: %s",                     # 16
 		"\u274c Help file format error.",               # 17
 	)

@@ -26,7 +26,7 @@ class expansion_temp(expansion):
 	compile_chat = compile__(r"^[^\s'\"@<>&]+?@(?:conference|muc|conf|chat|group)\.[\w-]+?\.[\.\w-]+?$")
 
 	AnsBase = (
-		"[join] %s (%s) requested joining %s",           # 0
+		"\u274c [join] %s (%s) requested joining %s",           # 0
 		" (reason: %s)",                                  # 1
 		"\u274c Joined %s successfully.",                        # 2
 		"\u274c Failed to join %s.",                             # 3

@@ -47,13 +47,13 @@ class expansion_temp(expansion):
 		"\u274c Presence/status is too long.",                 # 9
 		"\u274c %s: Auto-banned after %d kicks.",              # 10
 		"\u274c %s: You are devoiced, wait.",                  # 11
-		"%s: Anti-wipe triggered.",                     # 12
+		"\u26a0\ufe0f %s: Anti-wipe triggered.",                     # 12
 		"\u274c Flood detected.",                              # 13
 		"\u274c You are devoiced. Wait: %s",                   # 14
 		"",                                             # 15
 		"",                                             # 16
 		"\u274c %s: Please verify yourself.",                  # 17
-		"%s: Answer this question to join: %s",         # 18
+		"\u2139\ufe0f %s: Answer this question to join: %s",         # 18
 		# questions format: "question|answer\nquestion2|answer2"
 		"What is 2+2?|4\nWhat color is the sky?|blue",  # 19
 		"",                                             # 20
@@ -70,8 +70,8 @@ class expansion_temp(expansion):
 		"Msg max len: %d\nAcaps: ",                     # 31
 		"Presence max len: %d\nSPARTA: ",               # 32
 		"",                                             # 33
-		"Server already in list.",                      # 34
-		"Server not in list.",                          # 35
+		"\u274c Server already in list.",                      # 34
+		"\u274c Server not in list.",                          # 35
 		"\u274c Invalid server (must contain a dot).",         # 36
 	)
 
