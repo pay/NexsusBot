@@ -1919,6 +1919,23 @@ def _handle_presence(disp_key, presence):
 
 # ── Message Handler ────────────────────────────────────────────
 
+def _set_reply_lang(conf, nick, source=None):
+    """Pasang bahasa reply untuk thread ini berdasarkan bahasa user."""
+    if LocalizationContext is None:
+        return
+    try:
+        # getLang() menerima tuple (source, conf, nick) - bentuk yang sama
+        # dengan `source` di dispatcher - atau string conf saja.
+        LocalizationContext.set(getLang((source, conf, nick)))
+    except Exception:
+        # Reply locale bukan fitur kritis; kalau tidak bisa menentukan
+        # bahasa user, pakai default saja dan jangan ganggu pemrosesan.
+        try:
+            LocalizationContext.reset()
+        except Exception:
+            pass
+
+
 def _handle_message(disp_key, msg):
     """
     Dipanggil dari thread pool — menangani pesan chat & groupchat.
@@ -1977,6 +1994,13 @@ def _handle_message(disp_key, msg):
             user = Chat.get_user(nick)
             if user:
                 user.updateLastMessageTime()
+
+        # Bahasa untuk reply di thread ini.  Dipasang di sini (bukan di
+        # Answer/Message) karena string AnsBase dievaluasi di call site
+        # SEBELUM Answer() dipanggil - memasang di dalam Answer() sudah
+        # terlambat.  Context ini hanya untuk satu pesan; thread pool
+        # memakai thread baru per pesan, jadi tidak menetes ke pesan lain.
+        _set_reply_lang(conf, nick, source)
 
         if len(body) > IncLimit:
             body = "%s[...] %d symbols limit." % (body[:IncLimit].strip(), IncLimit)
