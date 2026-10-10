@@ -88,6 +88,34 @@ else:
 LibDir = "library"
 sys.path.insert(0, LibDir)
 
+# ── Localization ───────────────────────────────────────────────
+# Bungkus AnsBase tuple polos jadi LocalizedAnswers supaya reply bisa
+# memakai string per bahasa tanpa mengubah satu baris pun di 16 ekspansi.
+# Import 실패 (mis. library/ hilang) tidak boleh menjatuhkan bot:
+# _wrap_answers() akan mengembalikan tuple apa adanya.
+try:
+    from nxs_locale import LocalizedAnswers
+    from nxs_l10n import LocalizationContext
+except Exception:                      # noqa: BLE001 - degradasi ke non-lokalisasi
+    LocalizedAnswers  = None
+    LocalizationContext = None
+
+
+def _wrap_answers(answers, exp_name, exp_dir):
+    """Tuple -> LocalizedAnswers, kalau infra lokalisasi tersedia."""
+    if LocalizedAnswers is None or not answers:
+        return answers
+    try:
+        wrapped = LocalizedAnswers(answers, exp_name=exp_name,
+                                    locale_dir=exp_dir)
+    except Exception:
+        return answers
+    try:
+        LocalizationContext.register(wrapped)
+    except Exception:
+        pass
+    return wrapped
+
 # ── Argument Parser ────────────────────────────────────────────
 
 argParser = ArgumentParser(description="Nexsus Safety XMPP Engine")
@@ -2173,7 +2201,12 @@ class expansion:
             exec(open(self.file, encoding="utf-8").read(), g)
             exp_inst = g.get("expansion_temp", lambda n: None)(self.name)
             if exp_inst and AnsBase_temp:
-                exp_inst.AnsBase = AnsBase_temp
+                # Bungkus tuple polos jadi LocalizedAnswers supaya
+                # `self.AnsBase[i]` tetap jalan (kode ekspansi existing
+                # tidak berubah) tapi bisa memilih string per bahasa.
+                # Kalau kelasnya tidak tersedia, jatuh ke tuple biasa.
+                exp_inst.AnsBase = _wrap_answers(AnsBase_temp,
+                                                 self.name, self.path)
         except Exception:
             exc_info_()
             return (None, exc_info())
