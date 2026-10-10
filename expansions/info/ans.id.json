@@ -1,13 +1,13 @@
 {
-  "0": "📋 Pengunjung hari ini (%s):\\n%s\\n(online: %s)",
+  "0": "📋 Pengunjung hari ini (%s):\n%s\n(online: %s)",
   "1": "❌ Belum ada pengunjung hari ini.",
   "10": "❌ Tidak ditemukan.",
-  "2": "📋 Daftar (%s):\\n%s",
-  "3": "📋 Offline (%s):\\n%s\\n(online: %s)",
+  "2": "📋 Daftar (%s):\n%s",
+  "3": "📋 Offline (%s):\n%s\n(online: %s)",
   "4": "❌ Tidak ada user offline.",
   "5": "📋 Room:",
   "6": "❌ Belum ada room.",
   "7": "📋 Dispatcher:",
   "8": "📋 Online:",
-  "9": "📋 Hasil pencarian (%s):\\n%s"
+  "9": "📋 Hasil pencarian (%s):\n%s"
 }
