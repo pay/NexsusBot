@@ -1,5 +1,6 @@
 {
   "0": "📋 Info ekspansi:",
+  "1": "ada",
   "10": "✅ Ekspansi '%s' ter-load.",
   "11": "❌ Gagal load '%s': %s",
   "13": "✅ Versi sebelumnya dipulihkan.",
@@ -8,6 +9,7 @@
   "16": "ℹ️ Command '%s' sudah aktif.",
   "17": "ℹ️ Command '%s' sudah nonaktif.",
   "18": "✅ Semua command aktif.",
+  "2": "❌ nggak ada",
   "3": "✅ Selesai.",
   "4": "✅ Ter-load.",
   "6": "❌ belum ter-load",

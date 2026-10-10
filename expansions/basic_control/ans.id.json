@@ -1,6 +1,7 @@
 {
   "0": "ℹ️ [join] %s (%s) minta join ke %s",
   "1": " (alasan: %s)",
+  "10": "✅ Keluar dari %s.",
   "11": "ℹ️ Reload atas permintaan %s...",
   "12": "ℹ️ Shutdown atas permintaan %s...",
   "13": " (timer reconnect aktif)",
