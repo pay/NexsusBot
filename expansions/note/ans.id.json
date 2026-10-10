@@ -1,0 +1,11 @@
+{
+  "0": "❌ Notepad kosong.",
+  "1": "❌ Catatan terlalu panjang (maks 512).",
+  "2": "❌ Argumen tidak valid.",
+  "3": "❌ Notepad penuh (16 baris).",
+  "4": "✅ Selesai.",
+  "5": "❌ Baris kosong.",
+  "6": "📋 Catatan lo:\n",
+  "7": "✅ Disimpan di baris %s.",
+  "8": "❌ Baris itu sudah kosong."
+}

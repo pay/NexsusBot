@@ -88,6 +88,9 @@ else:
 LibDir = "library"
 sys.path.insert(0, LibDir)
 
+# Peringatan LANG yang tidak dikenal; diisi load_config().
+_lang_warn = None
+
 # ── Localization ───────────────────────────────────────────────
 # Bungkus AnsBase tuple polos jadi LocalizedAnswers supaya reply bisa
 # memakai string per bahasa tanpa mengubah satu baris pun di 16 ekspansi.
@@ -96,9 +99,11 @@ sys.path.insert(0, LibDir)
 try:
     from nxs_locale import LocalizedAnswers
     from nxs_l10n import LocalizationContext
+    import nxs_lang
 except Exception:                      # noqa: BLE001 - degradasi ke non-lokalisasi
     LocalizedAnswers  = None
     LocalizationContext = None
+    nxs_lang          = None
 
 
 def _wrap_answers(answers, exp_name, exp_dir):
@@ -414,6 +419,10 @@ def _print_banner():
     """Pay-style: satu baris identitas, lewat logger."""
     _Log("%s %d.%d.%d | %s | pid %d"
          % (ProdName, NxMark, NxVer, NxRev, GenDisp, NxPid), logging.INFO)
+    _Log("language: %s" % (nxs_lang.describe(DefLANG)
+                            if nxs_lang else DefLANG), logging.INFO)
+    if _lang_warn:
+        PrintWarn(_lang_warn)
 
 
 def _print_startup_summary(ok_count, err_count):
@@ -1008,6 +1017,7 @@ ConDisp = None   # configparser.ConfigParser untuk static/clients.ini
 
 def load_config():
     global GodName, DefNick, DefStatus, GenResource
+    global _lang_warn
     global ConTls, Mserve, GetExc, DefLANG
     global IncLimit, PrivLimit, ConfLimit, ChatListLimit, MaxMemory
     global Debug, GenDisp, InstancesDesc, Galist
@@ -1022,6 +1032,17 @@ def load_config():
         Mserve             = GenCon.getboolean("STATES", "MSERVE", fallback=True)
         GetExc             = GenCon.getboolean("STATES", "GETEXC", fallback=True)
         DefLANG            = GenCon.get("STATES", "LANG", fallback="EN").upper()[:2]
+        # Normalisasi + validasi kode bahasa.  Nilai lama di-parse dengan
+        # .upper()[:2], jadi "Indonesian" jadi "IN" - bukan kode bahasa.
+        # normalize() memetakan alias ke kode yang benar; kalau hasilnya
+        # tidak dikenal, tetap jalan dengan kode itu dan beri warning.
+        _lang_warn = None
+        if nxs_lang is not None:
+            _lang_warn = nxs_lang.warn_if_unknown(
+                GenCon.get("STATES", "LANG", fallback="EN"))
+            DefLANG = nxs_lang.normalize(DefLANG)
+        else:
+            DefLANG = DefLANG.lower()
         GodName            = GenCon.get("CONFIG", "ADMIN",    fallback="admin@localhost").lower()
         DefNick            = GenCon.get("CONFIG", "NICK",     fallback="NexsusBot").split()[0]
         DefStatus          = GenCon.get("CONFIG", "STATUS",   fallback="Nexus Online")

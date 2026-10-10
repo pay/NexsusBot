@@ -2,7 +2,7 @@
 TLS    = True       # True = STARTTLS (port 5222), False = plain TCP
 MSERVE = True       # True = layani pesan meski bot bukan moderator
 GETEXC = True       # True = kirim detail exception ke admin
-LANG   = EN         # Bahasa default (EN / RU / UA / ID)
+LANG   = ID         # Bahasa default (EN / RU / UA / ID)
 [CLIENT]
 SERV = jabber.server.com       # server XMPP (bisa beda dari HOST)
 PORT = 5222
