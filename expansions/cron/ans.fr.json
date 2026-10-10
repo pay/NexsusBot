@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Exécution du cron : %s",
+  "1": "❌ Aucun cron avec l'id %d.",
+  "2": "❌ Intervalle trop court ou trop peu de répétitions.",
+  "3": " (+%d répétitions supplémentaires masquées)",
+  "4": "📋 Planification :\n%s",
+  "5": "❌ Corps trop long.",
+  "6": "✅ Planifié : %s",
+  "7": "❌ Aucune tâche cron.",
+  "8": "Tâches cron :\n%s",
+  "9": "❌ Date invalide."
+}

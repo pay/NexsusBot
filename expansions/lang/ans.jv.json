@@ -1,0 +1,10 @@
+{
+  "0": "📋 Basa saiki: %s\n📄 Digunakake: %s\n🔍 Codes: %s\n💡Iki uga bisa digunakake minangka nama: %s",
+  "1": "✅ Basa sampeyan saiki: %s.",
+  "2": "❌ Kode basa ora dikenal: %s.\n🔍 Codes: %s",
+  "3": "❌ Gagal nyimpen pilihan basa.",
+  "4": "ℹ️ Nutup putaran: ':lang auto' kanggo balik menyang deteksi otomatis.",
+  "5": "📋 Basa ing ruang iki:\n%s",
+  "6": "ℹ️ Durung ana sing milih basa ing kene.",
+  "7": "❌ Gagal maca basis data basa."
+}

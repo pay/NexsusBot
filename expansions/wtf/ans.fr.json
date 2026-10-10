@@ -1,0 +1,13 @@
+{
+  "0": "📋 Définitions globales (%d) :\n%s",
+  "1": "📋 Définitions locales (%d) [%s] :\n%s",
+  "2": "❌ Aucune définition trouvée.",
+  "3": "%s — %d mentions",
+  "4": "❌ Introuvable.",
+  "5": "%s :\n%s\n— Ajouté par %s (%s)",
+  "6": "❌ '%s' introuvable.",
+  "7": "Global : %d définitions.",
+  "8": "Local : %d définitions [%s].",
+  "9": "'%s' existe globalement, impossible d'écraser.",
+  "10": "Aucun contexte de salon."
+}

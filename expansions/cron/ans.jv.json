@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Nglajengko cron: %s",
+  "1": "❌ Ora ana cron kan id %d.",
+  "2": "❌ Interval kependek utawa ngrepeng kepiye.",
+  "3": " (+%d enggo ulangan liya dikonco)",
+  "4": "📋 Jadwal:\n%s",
+  "5": "❌ Badan kepanjangan.",
+  "6": "✅ Dijadwalake: %s",
+  "7": "❌ Ora ana tugas cron.",
+  "8": "Tugas cron:\n%s",
+  "9": "❌ Tanggal ora valid."
+}

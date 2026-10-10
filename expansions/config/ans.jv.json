@@ -1,0 +1,15 @@
+{
+  "0": "✅ Diperbarui: %s",
+  "1": "Ora ana sing perlu diperbarui.",
+  "10": "Uwis tersambung.",
+  "11": "❌ Klien ora ketemu: %s",
+  "12": "Klien offline: %s",
+  "2": "Konfigurasi saiki:\n",
+  "3": "❌ Ora ana klien tambahan sing dikonfigurasi.",
+  "4": "ℹ️ Metu saka ruang...",
+  "5": "ℹ️ Ngeputus sambungan...",
+  "6": "Dispatcher utama anyar: %s",
+  "7": "❌ Ora bisa mbusak klien sing mung ana.",
+  "8": "❌ Kasalahan thread.",
+  "9": "Sambungane gagal."
+}

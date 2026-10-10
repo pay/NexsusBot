@@ -1,0 +1,14 @@
+{
+  "0": "ℹ️ Pong! %.3f dtk",
+  "1": "ℹ️ Pong! %s — %.3f dtk",
+  "10": "vCard kosong.",
+  "11": "\nTotal: %d item.",
+  "2": "❌ Ora ana tanggepan.",
+  "3": "Statistik ping kanggo %s:\n count: %s\n min: %s\n max: %s\n avg: %s",
+  "4": "❌ Ora ana data.",
+  "5": "❌ %s ora ana ing ruang.",
+  "6": "❌ Kasalahan utawa ora ana tanggepan.",
+  "7": "ℹ️ Nganggur: %s — %s",
+  "8": "ℹ️ Nganggur: %s — %s",
+  "9": "❌ Ora ana cocogan sing ketemu."
+}

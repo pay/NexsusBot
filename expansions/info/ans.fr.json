@@ -1,0 +1,13 @@
+{
+  "0": "📋 Visiteurs du jour (%s) :\n%s\n(en ligne : %s)",
+  "1": "❌ Aucun visiteur aujourd'hui.",
+  "2": "📋 Liste (%s) :\n%s",
+  "3": "📋 Hors ligne (%s) :\n%s\n(en ligne : %s)",
+  "4": "❌ Aucun utilisateur hors ligne.",
+  "5": "📋 Salons :",
+  "6": "❌ Aucun salon.",
+  "7": "📋 Dispatchers :",
+  "8": "📋 En ligne :",
+  "9": "📋 Résultats de recherche (%s) :\n%s",
+  "10": "❌ Introuvable."
+}

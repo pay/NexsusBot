@@ -1,0 +1,20 @@
+{
+  "0": "📋 Info ekspansi:",
+  "1": "ana",
+  "10": "Ekspansi '%s' dimuat.",
+  "11": "❌ Gagal muat '%s': %s",
+  "13": "✅  Versi sadurunge dipulihake.",
+  "14": "Handler sing kasedhiya: %s",
+  "15": "❌ Ora ana handler ing '%s'.",
+  "16": "❌ Perintah '%s' wis aktif.",
+  "17": "❌ Perintah '%s' wis nonaktif.",
+  "18": "✅ Kabeh perintah aktif.",
+  "2": "❌ ilang",
+  "3": "dimuat",
+  "4": "✅ Selesai.",
+  "5": " handler: %s",
+  "6": "❌ ora dimuat",
+  "7": "❌ Ora ketemu.",
+  "8": "📋 Ekspansi:",
+  "9": "\nOra dimuat (%d):\n%s"
+}

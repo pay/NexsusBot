@@ -28,7 +28,7 @@ class expansion_temp(expansion):
 	AnsBase = (
 		"\u274c [join] %s (%s) requested joining %s",           # 0
 		" (reason: %s)",                                  # 1
-		"\u274c Joined %s successfully.",                        # 2
+		"\u2705 Joined %s successfully.",                        # 2
 		"\u274c Failed to join %s.",                             # 3
 		"\u2705 Done.",                                          # 4  (generic ok)
 		"\u274c Already in that room.",                          # 5

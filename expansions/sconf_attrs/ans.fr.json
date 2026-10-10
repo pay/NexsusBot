@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' est hors ligne.",
+  "1": "Utilise déjà '%s'.",
+  "2": "❌ Dispatcher inconnu : '%s'.",
+  "3": "✅ Réintégration...",
+  "4": "✅ Nick défini sur : %s",
+  "5": "❌ Nick trop long (16 max).",
+  "6": "Préfixe supprimé.",
+  "7": "❌ Aucun préfixe défini.",
+  "8": "✅ Préfixe défini sur : '%s'",
+  "9": "Le préfixe '%s' est déjà défini.",
+  "10": "Préfixes disponibles : '%s'",
+  "11": "Préfixe actuel : '%s'",
+  "12": "❌ Aucun préfixe.",
+  "13": "❌ État inconnu : '%s'"
+}

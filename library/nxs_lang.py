@@ -36,14 +36,16 @@ KNOWN = (
 
 # Nama yang sering diketik orang tapi bukan kode bahasa.
 # Hanya alias yang menunjuk kode yang benar-benar tersaji (lihat
-# languages_with_reply).  Alias ke 'ru'/'fi' sengaja tidak ada karena
-# reply-nya belum ada - KNOWN adalah daftar bahasa yang dikenal bot,
-# bukan yang bisa dilayani.
+# languages_with_reply).  Tambah alias di sini SETELAH file locale-nya
+# ada - alias ke kode yang belum ada teksnya hanya jebak, karena :lang
+# akan menolaknya padahal bot menawarkannya di baris bantuan.
 ALIASES = {
     "indonesian": "id",
     "bahasa": "id",
     "english": "en",
     "inggris": "en",
+    "russian": "ru",
+    "rusia": "ru",
 }
 
 # Nama untuk pesan error/warning.

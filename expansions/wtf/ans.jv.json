@@ -1,0 +1,13 @@
+{
+  "0": "📋 Definisi global (%d):\n%s",
+  "1": "📋 Definisi lokal (%d) [%s]:\n%s",
+  "10": "Ora ana konteks ruang.",
+  "2": "❌ Ora ana definisi sing ketemu.",
+  "3": "%s — %d sebuthan",
+  "4": "❌ Ora ketemu.",
+  "5": "%s:\n%s\n— Ditambahake dening %s (%s)",
+  "6": "❌ '%s' ora ketemu.",
+  "7": "Global: %d definisi.",
+  "8": "Lokal: %d definisi [%s].",
+  "9": "'%s' wis ana global, ora bisa ditimpa."
+}

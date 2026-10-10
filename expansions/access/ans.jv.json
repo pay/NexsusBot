@@ -1,0 +1,13 @@
+{
+  "0": "ℹ️ Akses sampeyan: %s",
+  "1": "❌ Akses saka %s: %s",
+  "10": "❌ Ora ketemu pangguna %s.",
+  "2": "❌ %s ora ketemu.",
+  "3": "❌ Daftar akses global kosong.",
+  "4": "❌ Daftar akses lokal kosong.",
+  "5": "📋 Daftar akses:\n",
+  "6": "❌ %s ora ana ing daftar akses.",
+  "7": "❌ Tingkat akses kudu antarane -1 lan 8.",
+  "8": "❌ Tingkat akses kudu antarane 0 lan 6.",
+  "9": "Wong iki ana ing daftar global, gunakna gaccess."
+}

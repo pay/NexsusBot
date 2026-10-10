@@ -1,0 +1,14 @@
+{
+  "0": "ℹ️ Pong ! %.3f s",
+  "1": "ℹ️ Pong ! %s — %.3f s",
+  "2": "❌ Aucune réponse.",
+  "3": "Statistiques de ping pour %s :\n count : %s\n min : %s\n max : %s\n moy : %s",
+  "4": "❌ Aucune donnée.",
+  "5": "❌ %s n'est pas dans le salon.",
+  "6": "❌ Erreur ou pas de réponse.",
+  "7": "ℹ️ Inactif : %s — %s",
+  "8": "ℹ️ Inactif : %s — %s",
+  "9": "❌ Aucune correspondance trouvée.",
+  "10": "vCard vide.",
+  "11": "\nTotal : %d élément(s)."
+}
