@@ -1,32 +1,29 @@
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.py.bak
-
-# Runtime / data files — jangan di-upload ke GitHub
+# ── Runtime state: JID, access level, room list, notepad ─────────
 current/
+*.db
+*.db.bak
+*.cp
 nexsus.log
+nexsus.log.*
 *.log
 
-# Credentials — JANGAN pernah di-upload
+# ── Credentials: JANGAN PERNAH di-upload ─────────────────────────
 static/config.ini
 static/clients.ini
 
-# Database runtime
-*.db
-*.cp
+# ── Python bytecode ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
 
-# OS
+# ── OS / editor ─────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
-
-# Editor
 .vscode/
 .idea/
 *.swp
 *.swo
+
+# ── Legacy ──────────────────────────────────────────────────────
 expansions/ai/code.py.v*
 .nexsus_ai/
 config/groq_config
