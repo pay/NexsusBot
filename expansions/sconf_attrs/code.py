@@ -13,20 +13,20 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"'%s' is offline.",                     # 0
+		"\u274c '%s' is offline.",                     # 0
 		"Already using '%s'.",                  # 1
-		"Unknown dispatcher: '%s'.",            # 2
-		"Rejoining...",                         # 3
-		"Nick set to: %s",                      # 4
-		"Nick too long (max 16).",              # 5
+		"\u274c Unknown dispatcher: '%s'.",            # 2
+		"\u2705 Rejoining...",                         # 3
+		"\u2705 Nick set to: %s",                      # 4
+		"\u274c Nick too long (max 16).",              # 5
 		"Prefix removed.",                      # 6
-		"No prefix set.",                       # 7
-		"Prefix set to: '%s'",                  # 8
+		"\u274c No prefix set.",                       # 7
+		"\u2705 Prefix set to: '%s'",                  # 8
 		"Prefix '%s' already set.",             # 9
 		"Available prefixes: '%s'",             # 10
 		"Current prefix: '%s'",                 # 11
-		"No prefix.",                           # 12
-		"Unknown state: '%s'",                  # 13
+		"\u274c No prefix.",                           # 12
+		"\u274c Unknown state: '%s'",                  # 13
 	)
 
 	def command_redisp(self, stype, source, body, disp):

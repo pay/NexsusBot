@@ -14,6 +14,16 @@ RESOURCE = Nexsus
 STATUS   = Type "HELP" for help with commands
 NICK     = Nexsus
 ADMIN    = admin@jabber.server.com   # JID admin utama (access level 8)
+[LOGGING]
+# Level: DEBUG / INFO / WARNING / ERROR / CRITICAL / OFF
+# FILE: NONE = tidak menulis file log sama sekali
+# CATATAN: configparser tidak bisa parsing inline comment (nilai harus polos)
+LEVEL        = INFO
+FILE_LEVEL   = DEBUG
+FILE         = nexsus.log
+CONSOLE      = False
+MAX_BYTES    = 2097152
+BACKUP_COUNT = 3
 [LIMITS]
 MEMORY          = 64     # MB, 0 = unlimited
 INCOMING        = 10240  # batas karakter pesan masuk

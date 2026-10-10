@@ -20,8 +20,8 @@ class expansion_temp(expansion):
 		return Database(chat_file(conf, self.TalkersFile), self.TalkersDesc.get(conf))
 
 	AnsBase = (
-		"Top talkers:",                             # 0
-		"No data.",                                 # 1
+		"\U0001f4cb Top talkers:",                             # 0
+		"\u274c No data.",                                 # 1
 		"Messages: %d\nWords: %d\nWords/msg: %s",  # 2
 		"\n(showing partial results)",              # 3
 	)

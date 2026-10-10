@@ -8,16 +8,16 @@
 class expansion_temp(expansion):
 
 	AnsBase = (
-		"Clearing...",                        # 0
-		"All systems operational.",           # 1
-		"%s, errors detected: %d",            # 2
-		"Errors: %d",                         # 3
+		"\u2139\ufe0f Clearing...",                        # 0
+		"\u2705 All systems operational.",           # 1
+		"\u274c %s, errors detected: %d",            # 2
+		"\u274c Errors: %d",                         # 3
 		"",                                   # 4 (unused)
 		"%s: %s",                             # 5
 		"Already here.",                      # 6
-		"Can't find user.",                   # 7
+		"\u274c Can't find user.",                   # 7
 		"Cooldown: %s",                       # 8
-		"Nothing to clear.",                  # 9
+		"\u274c Nothing to clear.",                  # 9
 	)
 
 	def __init__(self, name):

@@ -13,25 +13,25 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"Expansion info:",                                        # 0
+		"\U0001f4cb Expansion info:",                                        # 0
 		"exists",                                                 # 1
-		"missing",                                                # 2
+		"\u274c missing",                                                # 2
 		"loaded",                                                 # 3
-		"Done.",                                                  # 4
+		"\u2705 Done.",                                                  # 4
 		" handlers: %s",                                          # 5
-		"not loaded",                                             # 6
-		"Not found.",                                             # 7
-		"Expansions:",                                            # 8
+		"\u274c not loaded",                                             # 6
+		"\u274c Not found.",                                             # 7
+		"\U0001f4cb Expansions:",                                            # 8
 		"\nUnloaded (%d):\n%s",                                   # 9
 		"Expansion '%s' loaded.",                                 # 10
-		"Failed to load '%s': %s",                               # 11
+		"\u274c Failed to load '%s': %s",                               # 11
 		"",                                                       # 12
-		" Previous version restored.",                            # 13
+		"\u2705  Previous version restored.",                            # 13
 		"Available handlers: %s",                                 # 14
-		"No handlers in '%s'.",                                   # 15
-		"Command '%s' is already enabled.",                       # 16
-		"Command '%s' is already disabled.",                      # 17
-		"All commands are enabled.",                              # 18
+		"\u274c No handlers in '%s'.",                                   # 15
+		"\u274c Command '%s' is already enabled.",                       # 16
+		"\u274c Command '%s' is already disabled.",                      # 17
+		"\u2705 All commands are enabled.",                              # 18
 	)
 
 	def command_expinfo(self, stype, source, body, disp):

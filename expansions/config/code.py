@@ -8,29 +8,36 @@
 class expansion_temp(expansion):
 
 	AnsBase = (
-		"Updated: %s",                        # 0
+		"\u2705 Updated: %s",                        # 0
 		"Nothing to update.",                 # 1
 		"Current config:\n",                  # 2
-		"No extra clients configured.",       # 3
-		"Leaving rooms...",                   # 4
-		"Disconnecting...",                   # 5
+		"\u274c No extra clients configured.",       # 3
+		"\u2139\ufe0f Leaving rooms...",                   # 4
+		"\u2139\ufe0f Disconnecting...",                   # 5
 		"New primary dispatcher: %s",         # 6
-		"Can't remove the only client.",      # 7
-		"Thread error.",                      # 8
+		"\u274c Can't remove the only client.",      # 7
+		"\u274c Thread error.",                      # 8
 		"Connection failed.",                 # 9
 		"Already connected.",                 # 10
-		"Client not found: %s",              # 11
+		"\u274c Client not found: %s",              # 11
 		"Client offline: %s",                # 12
 	)
 
 	def __init__(self, name):
 		expansion.__init__(self, name)
 
+	# Key yang nilainya tidak boleh tampil di room. get_config() dipanggil
+	# untuk output apa adanya (perintah "config"), baik private maupun room,
+	# jadi nilainya dimasker di sini - satu-satunya tempat yang mencetak config.
+	secretKeys = ("pass", "passwd", "password", "secret", "token", "apikey", "api_key")
+
 	def get_config(self, config):
 		cfg = []
 		for s in config.sections():
 			cfg.append("[%s]" % s.upper())
 			for (opt, i) in config.items(s):
+				if opt.lower().replace("_", "") in self.secretKeys:
+					i = "[REDACTED]"
 				cfg.append("%s = %s" % (opt.upper(), str(i)))
 		return "\r\n".join(cfg)
 

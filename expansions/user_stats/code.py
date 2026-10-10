@@ -22,13 +22,13 @@ class expansion_temp(expansion):
 		return Database(chat_file(conf, self.UstatsFile), sem)
 
 	AnsBase = (
-		"Joined: %s\nDate: %s\nRole: %s",          # 0
+		"\u2139\ufe0f Joined: %s\u000aDate: %s\u000aRole: %s",          # 0
 		"\nLast seen: %s\nLeft: %s",               # 1
 		"\nNicks: %s",                              # 2
-		"No data.",                                 # 3
-		"%s has been here for %s.",                 # 4
+		"\u274c No data.",                                 # 3
+		"\u2139\ufe0f %s has been here for %s.",                 # 4
 		"You have been here for %s.",               # 5
-		"Not here.",                                # 6
+		"\u274c Not here.",                                # 6
 	)
 
 	def command_user_stats(self, stype, source, body, disp):

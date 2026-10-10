@@ -17,13 +17,13 @@ class expansion_temp(expansion):
 	ChatBase = "wtf.db"
 
 	AnsBase = (
-		"Global definitions (%d):\n%s",        # 0
-		"Local definitions (%d) [%s]:\n%s",    # 1
-		"No definitions found.",               # 2
+		"\U0001f4cb Global definitions (%d):\u000a%s",        # 0
+		"\U0001f4cb Local definitions (%d) [%s]:\u000a%s",    # 1
+		"\u274c No definitions found.",               # 2
 		"%s — %d mentions",                    # 3
-		"Not found.",                           # 4
+		"\u274c Not found.",                           # 4
 		"%s:\n%s\n— Added by %s (%s)",         # 5
-		"'%s' not found.",                      # 6
+		"\u274c '%s' not found.",                      # 6
 		"Global: %d definitions.",             # 7
 		"Local: %d definitions [%s].",         # 8
 		"'%s' exists globally, can't override.", # 9

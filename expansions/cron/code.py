@@ -19,16 +19,16 @@ class expansion_temp(expansion):
 	CronCounter = AtomicNumber()
 
 	AnsBase = (
-		"Executing cron: %s",           # 0
-		"No cron with id %d.",          # 1
-		"Interval too short or repeats too few.",  # 2
+		"\u2139\ufe0f Executing cron: %s",           # 0
+		"\u274c No cron with id %d.",          # 1
+		"\u274c Interval too short or repeats too few.",  # 2
 		" (+%d more repeats hidden)",   # 3
-		"Schedule:\n%s",                # 4
-		"Body too long.",               # 5
-		"Scheduled: %s",                # 6
-		"No cron tasks.",               # 7
+		"\U0001f4cb Schedule:\u000a%s",                # 4
+		"\u274c Body too long.",               # 5
+		"\u2705 Scheduled: %s",                # 6
+		"\u274c No cron tasks.",               # 7
 		"Cron tasks:\n%s",              # 8
-		"Invalid date.",                # 9
+		"\u274c Invalid date.",                # 9
 	)
 
 	def def_cron(self):

@@ -28,6 +28,7 @@ import socket
 import threading
 import traceback
 import logging
+import logging.handlers
 import sqlite3
 import configparser
 
@@ -95,30 +96,200 @@ argParser.add_argument("-d", "--dynamic",    help="Dynamic folder",   default="c
 argParser.add_argument("-e", "--expansions", help="Expansions folder", default="expansions")
 args = argParser.parse_args()
 
-# ── Logger ─────────────────────────────────────────────────────
+# ── Logging Manager ────────────────────────────────────────────
 
-LOG_LEVEL = logging.DEBUG
-logFile   = "nexsus.log"
+_LOG_LEVELS = {
+    "DEBUG":    logging.DEBUG,
+    "INFO":     logging.INFO,
+    "WARNING":  logging.WARNING,
+    "ERROR":    logging.ERROR,
+    "CRITICAL": logging.CRITICAL,
+    "OFF":      logging.CRITICAL + 10,
+}
 
-logger        = logging.getLogger("nexsus")
-logger.setLevel(LOG_LEVEL)
-loggerHandler = logging.FileHandler(logFile, encoding="utf-8")
-formatter     = logging.Formatter(
-    "%(asctime)s %(levelname)s: %(name)s: %(message)s",
-    "%d.%m.%Y %H:%M:%S")
-loggerHandler.setFormatter(formatter)
-logger.addHandler(loggerHandler)
 
-# Suppress "Unknown stanza interface: ..." warnings dari slixmpp
-# yang muncul di terminal via root logger — tidak ada action yang bisa diambil
-# dan warning ini sudah di-handle via XML fallback parse.
-class _SlixmppFilter(logging.Filter):
-    _suppress = ("Unknown stanza interface:",)
-    def filter(self, record):
-        msg = record.getMessage()
-        return not any(s in msg for s in self._suppress)
+class LogManager:
+    """
+    Satu-satunya pintu log di bot ini.  Seluruh setelan diambil dari
+    section [LOGGING] di static/config.ini:
 
-logging.getLogger().addFilter(_SlixmppFilter())
+        LEVEL         ambang yang ditulis ke file (dan ke console)
+        FILE          path file log; kosong / NONE = tidak ada file log
+        CONSOLE       True = log ikut tampil di terminal
+        MAX_BYTES     batas ukuran per file sebelum di-rotate
+        BACKUP_COUNT  jumlah file rotasi yang disimpan
+        FORMAT / DATE_FORMAT   pola baris log
+
+    Semua nilai opsional: section hilang atau option tidak ada → default
+    dipakai, bot tetap jalan.  Dipanggil sekali di import dengan default,
+    lalu dipanggil ulang dari load_config() setelah config terbaca.
+    """
+
+    DEFAULTS = {
+        "LEVEL":        "INFO",
+        "FILE_LEVEL":   "DEBUG",
+        "FILE":         "nexsus.log",
+        "CONSOLE":      "False",
+        "MAX_BYTES":    str(2 * 1024 * 1024),
+        "BACKUP_COUNT": "3",
+        "FORMAT":       "%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+        "DATE_FORMAT":  "%d.%m.%Y %H:%M:%S",
+    }
+
+    class SlixmppFilter(logging.Filter):
+        # "Unknown stanza interface" = warning dari slixmpp yang tidak ada
+        # aksi yang bisa diambil dan sudah di-handle via XML fallback parse.
+        _suppress = ("Unknown stanza interface:",)
+
+        def filter(self, record):
+            return not any(s in record.getMessage() for s in self._suppress)
+
+    def __init__(self, name="nexsus"):
+        self.name    = name
+        self.logger  = logging.getLogger(name)
+        self.console = None
+        self.file    = None
+        self._owned  = []
+        self.settings  = dict(self.DEFAULTS)
+        self.level_name = self.DEFAULTS["LEVEL"]
+        self.configure()
+
+    # ── internal ───────────────────────────────────────────────
+
+    @staticmethod
+    def _bool(value, fallback=False):
+        try:
+            return configparser.ConfigParser.BOOLEAN_STATES[str(value).strip().lower()]
+        except KeyError:
+            return fallback
+
+    def _clear(self):
+        # Hanya copot handler milik sendiri — handler root milik library lain
+        # (slixmpp, asyncio) tidak boleh ikut hilang.
+        root = logging.getLogger()
+        for handler in self._owned:
+            for target in (self.logger, root):
+                if handler in target.handlers:
+                    target.removeHandler(handler)
+            try:
+                handler.close()
+            except Exception:
+                pass
+        self._owned    = []
+        self.console   = None
+        self.file      = None
+
+    # ── public ─────────────────────────────────────────────────
+
+    def configure(self, con=None, defaults=None):
+        """(Re)pasang handler sesuai [LOGGING].  con=None → pakai default."""
+        values = dict(self.DEFAULTS)
+        if defaults:
+            values.update(defaults)
+        if con is not None:
+            for key in values:
+                try:
+                    values[key] = con.get("LOGGING", key, fallback=values[key])
+                except Exception:
+                    pass
+        self.settings = {k: str(v) for k, v in values.items()}
+
+        self._clear()
+
+        raw_level = self.settings["LEVEL"].strip().upper()
+        if raw_level in _LOG_LEVELS:
+            level = _LOG_LEVELS[raw_level]
+            self.level_name = raw_level
+        else:
+            # Level ngawur di config = error config, bukan error fatal.
+            # Pakai DEBUG supaya isinya tetap kelihatan, dan sebut di
+            # ringkasan startup kalau nilai aslinya ditolak.
+            level          = logging.DEBUG
+            self.level_name = "%s (unknown, pakai DEBUG)" % (
+                raw_level or "kosong")
+        fmt = logging.Formatter(self.settings["FORMAT"],
+                                 self.settings["DATE_FORMAT"])
+
+        # FILE_LEVEL boleh lebih rendah dari LEVEL: file log jadi lengkap,
+        # terminal tetap ringkas.  Logger harus di level terendah supaya
+        # record yang dilewatkan console tetap sampai ke file handler.
+        raw_file_level = self.settings["FILE_LEVEL"].strip().upper()
+        file_level = (_LOG_LEVELS.get(raw_file_level) or level)
+
+        self.logger.setLevel(min(level, file_level))
+        self.logger.propagate = False
+
+        if self._bool(self.settings["CONSOLE"]):
+            console = logging.StreamHandler(sys.stderr)
+            console.setLevel(level)
+            console.setFormatter(fmt)
+            self.console = console
+            self._owned.append(console)
+            self.logger.addHandler(console)
+
+        path = self.settings["FILE"].strip()
+        if path and path.upper() not in ("NONE", "OFF", "-"):
+            try:
+                max_bytes = int(float(self.settings["MAX_BYTES"]))
+                backups   = int(float(self.settings["BACKUP_COUNT"]))
+            except (TypeError, ValueError):
+                max_bytes, backups = int(self.DEFAULTS["MAX_BYTES"]), 3
+            if max_bytes > 0:
+                try:
+                    handler = logging.handlers.RotatingFileHandler(
+                        path, maxBytes=max_bytes, backupCount=backups,
+                        encoding="utf-8")
+                except OSError:
+                    handler = logging.handlers.FileHandler(path, encoding="utf-8")
+                handler.setLevel(file_level)
+                handler.setFormatter(fmt)
+                self.file   = handler
+                self._owned.append(handler)
+                self.logger.addHandler(handler)
+
+        # Root logger: bot ini TIDAK_PAYA lihat log library.  Tanpa handler
+        # sama sekali, library akan jatuh ke logging.lastResort yang
+        # mencetak WARNING ke stderr — persis perilaku yang unattractive
+        # ini sebelumnya.  Filter pun harus nempel di HANDLER, bukan di
+        # logger: filter di logger cuma menyaring record yang dilog
+        # langsung ke logger itu, record dari slixmpp tetap lewat apa adanya.
+        root = logging.getLogger()
+        if not root.handlers:
+            quiet = logging.StreamHandler(sys.stderr)
+            quiet.setLevel(logging.WARNING)
+            quiet.setFormatter(fmt)
+            root.addHandler(quiet)
+            self._owned.append(quiet)
+        for handler in root.handlers:
+            if not any(isinstance(f, LogManager.SlixmppFilter)
+                       for f in handler.filters):
+                handler.addFilter(LogManager.SlixmppFilter())
+
+        return self.settings
+
+    def describe(self):
+        """Ringkasan singkat buat Cetak ke terminal saat start."""
+        where = self.settings["FILE"].strip() or "off"
+        if self.file:
+            where += " (rotate %s x %s)" % (
+                self.settings["BACKUP_COUNT"], self.settings["MAX_BYTES"])
+        elif self.settings["FILE"].strip().upper() not in ("NONE", "OFF", "-"):
+            where += " (unavailable)"
+        return "%s → file: %s, console: %s" % (
+            self.level_name, where, "on" if self.console else "off")
+
+    def log(self, level, text):
+        try:
+            self.logger.log(level, text)
+        except Exception:
+            pass
+
+    def error(self, text):
+        self.log(logging.ERROR, text)
+
+
+logMgr  = LogManager()
+logger  = logMgr.logger   # alias supaya call site lama tetap jalan
 
 # ── ANSI Colors ────────────────────────────────────────────────
 
@@ -148,40 +319,45 @@ def _hr(char="\u2500"):
     return char * _TW
 
 
-def Print(text, color=color0):
-    print(color + str(text) + color0, flush=True)
+def _Log(text, level):
+    """Tulis ke file log (tanpa warna). Kalau logging gagal, jangan ganggu output."""
+    logMgr.log(level, text)
+
+
+# ── Pay-style output ───────────────────────────────────────────
+# Semua output lewat logger dengan satu format global, persis seperti
+# `~/pay/app.py` (basicConfig level=INFO + format asctime/name/level/message).
+# Tidak ada print(), banner, emoji, warna, atau divider.
+
+
+def Print(text, color=None):
+    _Log(text, logging.INFO)
 
 
 def PrintOK(text):
-    """Hijau dengan prefix check"""
-    print(color3 + "  \u2714  " + str(text) + color0, flush=True)
+    _Log(text, logging.INFO)
 
 
 def PrintWarn(text):
-    """Kuning dengan prefix warning"""
-    print(color1 + "  \u26a0  " + str(text) + color0, flush=True)
+    _Log(text, logging.WARNING)
 
 
 def PrintErr(text):
-    """Merah dengan prefix cross"""
-    print(color2 + "  \u2718  " + str(text) + color0, flush=True)
+    _Log(text, logging.ERROR)
 
 
 def PrintInfo(text):
-    """Biru dengan prefix bullet"""
-    print(color4 + "  \u25cf  " + str(text) + color0, flush=True)
+    _Log(text, logging.INFO)
 
 
 def PrintDivider():
-    """Garis pemisah flat — pengganti border kotak."""
-    print(color5 + _hr() + color0, flush=True)
+    """No-op — pay-style tidak memakai garis pemisah."""
+    return
 
 
 def PrintHeader(title):
-    """Header section flat: divider / judul / divider — tanpa kotak."""
-    PrintDivider()
-    print(color5 + "  " + title + color0, flush=True)
-    PrintDivider()
+    """No-op — pay-style tidak memakai section header."""
+    return
 
 
 def PrintSection(title):
@@ -207,36 +383,20 @@ OSList = SimpleNamespace(
 
 
 def _print_banner():
-    """Cetak banner startup Nexsus Safety — flat, auto-fit lebar terminal."""
-    import platform as _plt
-    py_ver  = "%d.%d.%d" % sys.version_info[:3]
-    ver_num = "%d.%d.%d" % (NxMark, NxVer, NxRev)
-    started = strfTime("%Y-%m-%d %H:%M:%S")
-
-    PrintDivider()
-    print(color5 + "  \U0001f916  %s  v%s" % (ProdName, ver_num) + color0, flush=True)
-    PrintDivider()
-    print("  Account    : %s" % GenDisp, flush=True)
-    print("  Admin      : %s" % GodName, flush=True)
-    print("  PID        : %d" % NxPid, flush=True)
-    print("  Python     : %s (%s)" % (py_ver, _plt.system()), flush=True)
-    print("  Started at : %s" % started, flush=True)
+    """Pay-style: satu baris identitas, lewat logger."""
+    _Log("%s %d.%d.%d | %s | pid %d"
+         % (ProdName, NxMark, NxVer, NxRev, GenDisp, NxPid), logging.INFO)
 
 
 def _print_startup_summary(ok_count, err_count):
-    """Cetak ringkasan startup — flat, dipanggil saat tahap READY."""
+    """Pay-style: satu baris ringkasan, lewat logger."""
     n_cmds    = len([c for c in Cmds.values() if c.isAvailable])
     n_rooms   = len(Chats)
     n_clients = sum(1 for c in Clients.values() if c.isConnected())
     n_total   = len(Clients)
-    active    = ", ".join(sorted(expansions.keys()))
 
-    PrintHeader("Startup Summary")
-    print("  Expansions     : %d loaded, %d failed" % (ok_count, err_count), flush=True)
-    print("  Commands       : %d" % n_cmds, flush=True)
-    print("  Rooms joined   : %d" % n_rooms, flush=True)
-    print("  Clients        : %d / %d connected" % (n_clients, n_total), flush=True)
-    print("  Active plugins : %s" % active, flush=True)
+    _Log("%d expansions, %d commands, %d room(s), %d/%d clients"
+         % (ok_count, n_cmds, n_rooms, n_clients, n_total), logging.INFO)
 
 
 
@@ -514,8 +674,11 @@ def set_global(name, value):
     globals()[name] = value
 
 
-def Exit(text, do_exit, slp):
-    PrintErr(text)
+def Exit(text, do_exit, slp, level=logging.INFO):
+    # Level default INFO: Exit() juga dipakai untuk shutdown normal
+    # (Ctrl+C, reload), bukan hanya kegagalan.  Pemanggil boleh naikkan
+    # ke logging.ERROR kalau memang exit karena error.
+    _Log(text, level)
     try_sleep(slp)
     if do_exit:
         os._exit(0)
@@ -841,6 +1004,9 @@ def load_config():
         ChatListLimit      = int(GenCon.get("LIMITS", "CHAT_LIST_LENGTH", fallback="100"))
         MaxMemory          = int(GenCon.get("LIMITS", "MEMORY",           fallback="0")) * 1024
 
+        # [LOGGING] opsional — section hilang → default LogManager tetap berlaku.
+        logMgr.configure(GenCon)
+
         try:
             Debug = eval(GenCon.get("CONFIG", "DEBUG"))
         except (configparser.NoOptionError, Exception):
@@ -861,7 +1027,7 @@ def load_config():
         Exit(
             "One of the configuration files is missing or corrupted!\n"
             "  Create static/config.ini with [CLIENT], [STATES], [CONFIG], [LIMITS] sections.",
-            True, 2)
+            True, 2, level=logging.ERROR)
 
 # ── NexusClient — slixmpp wrapper ─────────────────────────────
 
@@ -2031,12 +2197,12 @@ class expansion:
 
 
 def load_expansions():
-    PrintHeader("Loading Expansions")
     if not os.path.isdir(ExpsDir):
         PrintWarn("No expansions directory found (%s), skipping." % ExpsDir)
         return (0, 0)
     ok_count  = 0
     err_count = 0
+    failed    = []
     for expDir in sorted(os.listdir(ExpsDir)):
         if expDir.startswith(".") or not os.path.isdir(os.path.join(ExpsDir, expDir)):
             continue
@@ -2046,18 +2212,24 @@ def load_expansions():
             if inst:
                 try:
                     inst.initialize_exp()
-                    print(color3 + "  \u2705 " + expDir + color0, flush=True)
                     ok_count += 1
+                    _Log("expansion loaded: %s" % expDir, logging.DEBUG)
                 except Exception:
                     exc_info_()
                     inst.dels(True)
-                    print(color2 + "  \u274c %s  (init failed: %s)" % (expDir, exc_info()) + color0, flush=True)
+                    failed.append("%s (init failed)" % expDir)
                     err_count += 1
             else:
-                print(color2 + "  \u274c %s  (load failed: %s)" % (expDir, exc) + color0, flush=True)
+                failed.append("%s (load failed)" % expDir)
                 err_count += 1
         else:
-            Print("  \u00b7  %s  (no code.py)" % expDir, color6)
+            _Log("expansion skipped (disabled): %s" % expDir, logging.DEBUG)
+    # Ringkas: satu baris jumlah, plus daftar hanya yang gagal.
+    _Log("expansions: %d loaded%s"
+         % (ok_count, ", %d failed" % err_count if err_count else ""),
+         logging.INFO)
+    for f in failed:
+        PrintWarn("  %s" % f)
     return (ok_count, err_count)
 
 
@@ -2213,13 +2385,11 @@ def connectAndDispatch(disp):
 
 
 def connect_clients():
-    PrintSection("CONNECTIONS")
     for inst, attrs in list(InstancesDesc.items()):
         ok, result = connect_client(inst, attrs)
         if not ok:
             composeTimer(60, connectAndDispatch,
                          "%s-%s" % (sBase[13], inst), (inst,)).start()
-    print(flush=True)
 
 # ── Session & Chat Loading ─────────────────────────────────────
 
@@ -2259,7 +2429,7 @@ def check_copies():
                             except ProcessLookupError:
                                 pass
                         except ProcessLookupError:
-                            PrintInfo("Old PID %d already gone." % cache["PID"])
+                            pass
                     cache = base
             except Exception:
                 cache = base
@@ -2275,8 +2445,7 @@ def join_chats():
             confs = eval(get_file(ChatsFile))
         except Exception:
             confs = {}
-        PrintSection("ROOMS")
-        Print("  %d room(s) in list" % len(confs), color6)
+        Print("rooms: %d" % len(confs), color6)
         for conf, desc in confs.items():
             Chats[conf] = Chat = sConf(conf, added=True, **desc)
             Chat.load_all()
@@ -2285,7 +2454,6 @@ def join_chats():
                 PrintOK("%s  →  %s" % (Chat.disp, conf))
             else:
                 PrintWarn("Pending %s  (waiting for %s)" % (conf, Chat.disp))
-        print(flush=True)
     else:
         PrintErr("Can't create chats file!")
 
@@ -2305,7 +2473,7 @@ def load_nexsus():
             exec(open(insc_path, encoding="utf-8").read(), g2)
             if "AnsBase" in g2:
                 AnsBase = g2["AnsBase"]
-                PrintOK("AnsBase loaded from static/insc.py")
+                pass
         except Exception:
             exc_info_()
             PrintWarn("Could not load static/insc.py")
@@ -2332,10 +2500,7 @@ def load_nexsus():
     join_chats()
     _print_startup_summary(ok_count, err_count)
 
-    PrintDivider()
-    print(color3 + "  \u25cf  %s is running  \u2014  Press Ctrl+C to stop" % ProdName + color0, flush=True)
-    PrintDivider()
-    print(flush=True)
+    _Log("%s is running. Press Ctrl+C to stop." % ProdName, logging.INFO)
 
     call_sfunctions("02si")
 
@@ -2362,7 +2527,9 @@ def load_nexsus():
 
 def sys_exit(reason="Shutdown"):
     VarCache["alive"] = False
-    PrintWarn(reason)
+    # INFO, bukan WARNING: shutdown karena Ctrl+C adalah hal normal,
+    # bukan kondisi yang perlu diwaspadai.
+    _Log(reason, logging.INFO)
     try:
         call_sfunctions("03si")
     except KeyboardInterrupt:

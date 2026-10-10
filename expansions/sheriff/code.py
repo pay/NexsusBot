@@ -39,20 +39,20 @@ class expansion_temp(expansion):
 		"",                                             # 1
 		"",                                             # 2
 		"",                                             # 3
-		"Advertising is not allowed here.",             # 4
+		"\u274c Advertising is not allowed here.",             # 4
 		"",                                             # 5
 		"",                                             # 6
 		"",                                             # 7
-		"Obscene language is not allowed here.",        # 8
-		"Presence/status is too long.",                 # 9
-		"%s: Auto-banned after %d kicks.",              # 10
-		"%s: You are devoiced, wait.",                  # 11
+		"\u274c Obscene language is not allowed here.",        # 8
+		"\u274c Presence/status is too long.",                 # 9
+		"\u274c %s: Auto-banned after %d kicks.",              # 10
+		"\u274c %s: You are devoiced, wait.",                  # 11
 		"%s: Anti-wipe triggered.",                     # 12
-		"Flood detected.",                              # 13
-		"You are devoiced. Wait: %s",                   # 14
+		"\u274c Flood detected.",                              # 13
+		"\u274c You are devoiced. Wait: %s",                   # 14
 		"",                                             # 15
 		"",                                             # 16
-		"%s: Please verify yourself.",                  # 17
+		"\u274c %s: Please verify yourself.",                  # 17
 		"%s: Answer this question to join: %s",         # 18
 		# questions format: "question|answer\nquestion2|answer2"
 		"What is 2+2?|4\nWhat color is the sky?|blue",  # 19
@@ -66,13 +66,13 @@ class expansion_temp(expansion):
 		"Nick max len: %d\nAwipe: ",                    # 27
 		"Auto-ban after: %d kicks\nVerif: ",            # 28
 		"Loyalty: %d\nAtiser: ",                        # 29
-		"Devoice time: %d sec\nAobscene: ",             # 30
+		"\u274c Devoice time: %d sec\u000aAobscene: ",             # 30
 		"Msg max len: %d\nAcaps: ",                     # 31
 		"Presence max len: %d\nSPARTA: ",               # 32
 		"",                                             # 33
 		"Server already in list.",                      # 34
 		"Server not in list.",                          # 35
-		"Invalid server (must contain a dot).",         # 36
+		"\u274c Invalid server (must contain a dot).",         # 36
 	)
 
 	class Convict(object):

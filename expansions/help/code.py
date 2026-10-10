@@ -17,9 +17,9 @@ class expansion_temp(expansion):
 		"Command '%s' requires access: %d",     # 1
 		"%s\n%s",                                # 2  help header
 		"Usage:",                                # 3
-		"No help file found.",                   # 4
+		"\u274c No help file found.",                   # 4
 		"Commands list — use 'commands'.",       # 5
-		"Commands (prefix '%s'):",               # 6
+		"\U0001f4cb Commands (prefix '%s'):",               # 6
 		"'%s'",                                  # 7  prefix display
 		"\n[8/God+] (%d): %s",                  # 8
 		"\n[7/Chief] (%d): %s",                 # 9
@@ -30,7 +30,7 @@ class expansion_temp(expansion):
 		"\n[2] (%d): %s",                        # 14
 		"\n[1/All] (%d): %s",                    # 15
 		"\nYour access: %s",                     # 16
-		"Help file format error.",               # 17
+		"\u274c Help file format error.",               # 17
 	)
 
 	def command_location(self, stype, source, body, disp):
@@ -107,21 +107,32 @@ class expansion_temp(expansion):
 		          else ":")
 		answer = self.AnsBase[6] % pref
 		cmds   = {}
-		# Count cumulative accessible commands per access level
-		lcmds  = {x: 0 for x in range(1, 9)}
+		# Group command by access level, sorted.
 		for cmd in Cmds.keys():
-			access = Cmds[cmd].access
-			cmds.setdefault(access, []).append(cmd)
-			for x in lcmds:
-				if x >= access:
-					lcmds[x] += 1
-		for ls in cmds.values():                 # Fix: itervalues → values
+			if not Cmds[cmd].isAvailable:
+				continue
+			cmds.setdefault(Cmds[cmd].access, []).append(cmd)
+		for ls in cmds.values():
 			ls.sort()
-		for level, fmt_idx in ((8, 8), (7, 9), (6, 10), (5, 11),
-		                       (4, 12), (3, 13), (2, 14), (1, 15)):
-			if level in cmds:
-				answer += self.AnsBase[fmt_idx] % (lcmds[level], ", ".join(cmds[level]))
+
+		# Tampilkan HANYA command yang boleh dipakai oleh peminta: semua
+		# command dengan access <= access peminta.  Grouping per level tetap
+		# dipakai supaya jelas mana yang butuh level berapa, tapi angka dan
+		# daftar harus COCOK — dulu lcmds[level] menghitung kumulatif
+		# sementara cmds[level] hanya isinya yang persis di level itu, jadi
+		# "N commands" tidak sesuai dengan nama yang dicetak.
 		access = get_access(source[1], source[2])
+		shown  = {l: sorted(c for c in cmds.get(l, []) if l <= access)
+		          for l in range(1, 9)}
+		shown  = {l: v for l, v in shown.items() if v}
+
+		fmt_by_level = {8: 8, 7: 9, 6: 10, 5: 11,
+		                 4: 12, 3: 13, 2: 14, 1: 15}
+		for level in range(8, 0, -1):
+			if level in shown:
+				answer += self.AnsBase[fmt_by_level[level]] % (
+				    len(shown[level]), ", ".join(shown[level]))
+
 		if access > 8:
 			access_str = "%d (Gandalf)" % access
 		elif access == 8:

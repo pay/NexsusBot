@@ -28,22 +28,22 @@ class expansion_temp(expansion):
 	AnsBase = (
 		"[join] %s (%s) requested joining %s",           # 0
 		" (reason: %s)",                                  # 1
-		"Joined %s successfully.",                        # 2
-		"Failed to join %s.",                             # 3
-		"Done.",                                          # 4  (generic ok)
-		"Already in that room.",                          # 5
-		"Invalid room JID: %s",                           # 6
-		"Hello! I am %s, invited by %s.",                 # 7
-		"Leaving by request of %s.",                      # 8
-		"Left %s.",                                       # 8 (leave answer)  -- idx 9
-		"Left %s.",                                       # 10
-		"Reloading by request of %s...",                  # 11
-		"Shutting down by request of %s...",              # 12
+		"\u274c Joined %s successfully.",                        # 2
+		"\u274c Failed to join %s.",                             # 3
+		"\u2705 Done.",                                          # 4  (generic ok)
+		"\u274c Already in that room.",                          # 5
+		"\u274c Invalid room JID: %s",                           # 6
+		"\u2139\ufe0f Hello! I am %s, invited by %s.",                 # 7
+		"\u2139\ufe0f Leaving by request of %s.",                      # 8
+		"\u2705 Left %s.",                                       # 8 (leave answer)  -- idx 9
+		"\u2705 Left %s.",                                       # 10
+		"\u2139\ufe0f Reloading by request of %s...",                  # 11
+		"\u2139\ufe0f Shutting down by request of %s...",              # 12
 		" (reconnect timer active)",                      # 13
-		"Dispatcher offline.",                            # 14
-		"Cannot create directory for %s.",                # 15
-		"Dispatcher thread error.",                       # 16
-		"Unknown dispatcher: %s",                         # 17
+		"\u274c Dispatcher offline.",                            # 14
+		"\u274c Cannot create directory for %s.",                # 15
+		"\u274c Dispatcher thread error.",                       # 16
+		"\u274c Unknown dispatcher: %s",                         # 17
 	)
 
 	def command_join(self, stype, source, body, disp):

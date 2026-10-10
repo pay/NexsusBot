@@ -18,16 +18,16 @@ class expansion_temp(expansion):
         expansion.__init__(self, name)
 
     AnsBase = (
-        "Pong! %.3f sec",                      # 0  ping ok
-        "Pong! %s — %.3f sec",                 # 1  ping via version
-        "No response.",                         # 2
+        "\u2139\ufe0f Pong! %.3f sec",                      # 0  ping ok
+        "\u2139\ufe0f Pong! %s \u2014 %.3f sec",                 # 1  ping via version
+        "\u274c No response.",                         # 2
         "Ping stats for %s:\n count: %s\n min: %s\n max: %s\n avg: %s",  # 3
-        "No data.",                             # 4
-        "%s is not in the room.",               # 5
-        "Error or no response.",                # 6
-        "Idle: %s — %s",                        # 7  server uptime
-        "Idle: %s — %s",                        # 8  user idle
-        "No matches found.",                    # 9
+        "\u274c No data.",                             # 4
+        "\u274c %s is not in the room.",               # 5
+        "\u274c Error or no response.",                # 6
+        "\u2139\ufe0f Idle: %s \u2014 %s",                        # 7  server uptime
+        "\u2139\ufe0f Idle: %s \u2014 %s",                        # 8  user idle
+        "\u274c No matches found.",                    # 9
         "Empty vCard.",                         # 10
         "\nTotal: %d items.",                   # 11
     )
@@ -124,15 +124,22 @@ class expansion_temp(expansion):
             return Answer(self.AnsBase[2], stype, source, disp)
 
         async def do_ping():
-            try:
-                await client.plugin["xep_0199"].send_ping(instance, timeout=10)
-                return True
-            except Exception:
-                return False
+            for target in cands:
+                try:
+                    await client.plugin["xep_0199"].send_ping(target, timeout=5)
+                    return True
+                except Exception as e:
+                    # Candidate gagal = normal.  Bare JID sering tidak di-ping
+                    # server; full JID resource yang berhasil.  Ini bukan error,
+                    # jadi jangan sampai mengotori log level ERROR.
+                    _Log("ping %s: %s (trying next candidate)"
+                         % (target, type(e).__name__), logging.DEBUG)
+                    continue
+            return False
 
         future = asyncio.run_coroutine_threadsafe(do_ping(), loop)
         try:
-            ok = future.result(timeout=12)
+            ok = future.result(timeout=5 * len(cands) + 5)
         except Exception:
             ok = False
 
@@ -463,7 +470,11 @@ class expansion_temp(expansion):
         client = self._get_client(disp)
         if not client:
             return Answer(self.AnsBase[2], stype, source, disp)
-        result = self._query_last(client, instance)
+        result = None
+        for target in cands:
+            result = self._query_last(client, target)
+            if result:
+                break
         if result:
             secs   = result.get("last_activity", {}).get("seconds", 0)
             answer = self.AnsBase[8] % (source_ or instance, Time2Text(int(secs)))

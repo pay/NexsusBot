@@ -13,17 +13,17 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"Today's visitors (%s):\n%s\n(online: %s)",   # 0
-		"No visitors today.",                           # 1
-		"List (%s):\n%s",                              # 2
-		"Offline (%s):\n%s\n(online: %s)",             # 3
-		"No offline users.",                            # 4
-		"Rooms:",                                       # 5
-		"No rooms.",                                    # 6
-		"Dispatchers:",                                 # 7
-		"Online:",                                      # 8
-		"Search results (%s):\n%s",                    # 9
-		"Not found.",                                   # 10
+		"\U0001f4cb Today's visitors (%s):\u000a%s\u000a(online: %s)",   # 0
+		"\u274c No visitors today.",                           # 1
+		"\U0001f4cb List (%s):\u000a%s",                              # 2
+		"\U0001f4cb Offline (%s):\u000a%s\u000a(online: %s)",             # 3
+		"\u274c No offline users.",                            # 4
+		"\U0001f4cb Rooms:",                                       # 5
+		"\u274c No rooms.",                                    # 6
+		"\U0001f4cb Dispatchers:",                                 # 7
+		"\U0001f4cb Online:",                                      # 8
+		"\U0001f4cb Search results (%s):\u000a%s",                    # 9
+		"\u274c Not found.",                                   # 10
 	)
 
 	def command_online(self, stype, source, body, disp):

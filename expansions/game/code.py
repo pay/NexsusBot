@@ -47,9 +47,9 @@ class expansion_temp(expansion):
 	}
 
 	AnsBase = (
-		"Draw!",                    # 0
-		"You win! %s.",             # 1
-		"I win! %s.",               # 2
+		"\U0001f3b2 Draw!",                    # 0
+		"\U0001f3b2 You win! %s.",             # 1
+		"\U0001f3b2 I win! %s.",               # 2
 	)
 
 	def command_game(self, stype, source, body, disp):
