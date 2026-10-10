@@ -100,10 +100,12 @@ try:
     from nxs_locale import LocalizedAnswers
     from nxs_l10n import LocalizationContext
     import nxs_lang
+    import nxs_userlang
 except Exception:                      # noqa: BLE001 - degradasi ke non-lokalisasi
     LocalizedAnswers  = None
     LocalizationContext = None
     nxs_lang          = None
+    nxs_userlang      = None
 
 
 def _wrap_answers(answers, exp_name, exp_dir):
@@ -1438,17 +1440,67 @@ def get_source(source, nick):
     return source
 
 
+def _get_user_lang(chat, nick):
+    """
+    Bahasa yang dipilih eksplisit lewat command `lang`, atau None.
+
+    None berarti user belum memilih - pemanggil lalu memakai tag <lang/>
+    dari presence, lalu DefLANG.  Modul userlang boleh None kalau import
+    gagal; itu hanya berarti belum ada yang bisa memilih bahasa, bukan error.
+    """
+    if nxs_userlang is None:
+        return None
+    return nxs_userlang.get_user_lang(chat, nick)
+
+
+def _presence_lang(presence, default=None):
+    """
+    Ambil tag <lang/> dari presence stanza (XEP-0115) dan normalkan.
+
+    Karena itu: client seperti Conversations/Monocle mengirim bahasa client
+    mereka di setiap presence available.  Ini hanya deteksi otomatis -
+    pilihan eksplisit lewat command `lang` menang (lihat _set_reply_lang).
+    """
+    default = default if default is not None else DefLANG
+    try:
+        el = presence.xml.find(".//{http://jabber.org/protocol/caps}lang")
+        if el is None:
+            el = presence.xml.find(".//lang")
+        if el is not None and el.text:
+            return nxs_lang.normalize(el.text, default=default)
+    except Exception:
+        exc_info_()
+    return nxs_lang.normalize(default, default="en")
+
+
 def getLang(source):
     """
     Dari BlackSmith: ambil bahasa user dari Chats (untuk multi-lang expansion).
     source bisa berupa tuple (source, conf, nick) atau string conf.
+
+    Urutan prioritas:
+      1. Pilihan eksplisit dari command `lang` (tabel userlang.db)
+      2. Tag <lang/> dari presence (client language)
+      3. DefLANG dari config
     """
     if isinstance(source, (tuple, list)) and len(source) > 2:
         chat = Chats.get(source[1])
         if chat:
             user = chat.get_user(source[2])
             if user:
-                return getattr(user, "lang", DefLANG.lower())
+                # Pilihan eksplisit menang atas presence.
+                try:
+                    chosen = _get_user_lang(source[1], source[2])
+                except Exception:
+                    exc_info_()
+                    chosen = None
+                if chosen:
+                    return chosen
+                # sUser.lang diisi dari presence (lihat _presence_lang).
+                lang = getattr(user, "lang", None)
+                if lang:
+                    return nxs_lang.normalize(lang, default=DefLANG.lower())
+                return DefLANG.lower()
     return DefLANG.lower()
 
 
@@ -1840,7 +1892,10 @@ def _handle_presence(disp_key, presence):
         role_tuple  = (aff, role)
         stanza_info = {
             "caps": {},
-            "lang": DefLANG,
+            # Baca <lang/> dari presence (XEP-0115).  Sebelumnya di-hardcode
+            # DefLANG, jadi getLang() selalu balik default untuk semua user
+            # dan pilihan bahasa per-user tidak pernah berjalan.
+            "lang": _presence_lang(presence, DefLANG),
             "raw":  presence,
             "status_codes": [],
             "jid_full": jid_full,
