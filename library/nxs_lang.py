@@ -35,16 +35,15 @@ KNOWN = (
 )
 
 # Nama yang sering diketik orang tapi bukan kode bahasa.
+# Hanya alias yang menunjuk kode yang benar-benar tersaji (lihat
+# languages_with_reply).  Alias ke 'ru'/'fi' sengaja tidak ada karena
+# reply-nya belum ada - KNOWN adalah daftar bahasa yang dikenal bot,
+# bukan yang bisa dilayani.
 ALIASES = {
     "indonesian": "id",
     "bahasa": "id",
-    "melayu": "ms",
     "english": "en",
     "inggris": "en",
-    "russian": "ru",
-    "rusia": "ru",
-    "finnish": "fi",
-    "finland": "fi",
 }
 
 # Nama untuk pesan error/warning.
@@ -53,7 +52,6 @@ NAMES = {
     "id": "Bahasa Indonesia",
     "ru": "Russian",
     "fi": "Finnish",
-    "ms": "Bahasa Melayu",
 }
 
 
@@ -83,8 +81,49 @@ def normalize(tag, default="en"):
     return default
 
 
-def is_known(lang):
-    return normalize(lang) in KNOWN
+def is_known(lang, exp_dir="expansions"):
+    """
+    True kalau bahasa ini benar-benar bisa dilayani bot.
+
+    KNOWN hanya daftar yang DIKENAL Nexsus - bukan daftar yang TERSEDIA.
+    Bahasa seperti 'ru'/'fi' dikenal bot karena ada file help-nya, tapi
+    belum ada file locale reply, jadi memilihnya cuma menghasilkan bahasa
+    Inggris.  is_known() dipakai command `lang` untuk menolak pilihan yang
+    tidak ada isinya, supaya user tidak memilih bahasa yang teksnya tidak ada.
+
+    exp_dir: path ke folder expansions/.  Kalau None, hanya cek KNOWN.
+    """
+    code = normalize(lang)
+    if code not in KNOWN:
+        return False
+    if exp_dir is None:
+        return True
+    # English selalu bisa dilayani: string Inggris ada langsung di AnsBase
+    # tiap ekspansi dan jadi fallback loader.
+    if code == "en":
+        return True
+    return languages_with_reply(exp_dir).count(code) > 0
+
+
+def languages_with_reply(exp_dir="expansions"):
+    """
+    Kode bahasa yang punya setidaknya satu file ans.<lang>.json di ekspansi
+    manapun.  Ini daftar yang benar-benar bisa dilayani, berbeda dari KNOWN.
+    """
+    found = {"en"}
+    if not exp_dir or not os.path.isdir(exp_dir):
+        return sorted(found)
+    try:
+        for name in os.listdir(exp_dir):
+            sub = os.path.join(exp_dir, name)
+            if not os.path.isdir(sub):
+                continue
+            for f in os.listdir(sub):
+                if f.startswith("ans.") and f.endswith(".json"):
+                    found.add(normalize(f[4:-5], default="en"))
+    except OSError:
+        pass
+    return sorted(found)
 
 
 def describe(lang):

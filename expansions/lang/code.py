@@ -36,37 +36,25 @@ class expansion_temp(expansion):
 	# ── helpers ────────────────────────────────────────────────
 
 	def _codes(self):
-		"""Kode bahasa yang punya file locale di ekspansi manapun.
+		"""Kode bahasa yang benar-benar ada teksnya, bukan cuma 'dikenal'.
 
-		English sengaja tidak punya file ans.en.json - string Inggris
-		ditulis langsung di AnsBase tiap ekspansi dan jadi fallback.  Jadi
-		'en' selalu tersedia walau tidak ada file-nya.
+		KNOWN di nxs_lang masih berisi 'ru'/'fi' karena ada file help-nya,
+		tapi belum ada file locale reply - memilih salah satu cuma
+		menghasilkan bahasa Inggris.  Bot tidak boleh menawarkan bahasa
+		yang tidak bisa dilayani.
 		"""
-		exp_root = "expansions"
-		found = {"en"}
-		try:
-			for name in os.listdir(exp_root):
-				d = os.path.join(exp_root, name)
-				if not os.path.isdir(d):
-					continue
-				for f in os.listdir(d):
-					if f.startswith("ans.") and f.endswith(".json"):
-						found.add(f[4:-5].lower())
-		except OSError:
-			pass
-		# Bahasa default selalu ada - kalau English, sudah masuk di atas.
-		found.add(nxs_lang.normalize(DefLANG, default="en"))
-		return sorted(found)
+		return nxs_lang.languages_with_reply(ExpsDir)
 
 	def _available_langs(self):
-		"""Kode -> nama bahasa, hanya yang benar-benar ada lokalnya."""
+		"""(kode, nama) untuk setiap bahasa yang bisa dilayani."""
 		codes = self._codes()
-		return [(c, nxs_lang.describe(c)) for c in codes]
+		return [(c, nxs_lang.describe(c)) for c in codes
+		        if nxs_lang.is_known(c, ExpsDir)]
 
 	def _effective(self, source):
 		"""Bahasa yang benar-benar dipakai untuk reply ke user ini.
 
-		getLang() sudahimplementasikan urutan prioritas (pilihan manual >
+		getLang() sudah mengimplementasikan urutan prioritas (pilihan manual >
 		tag presence > DefLANG), jadi jangan query database dua kali di
 		sini - cukup andalkan hasilnya.
 		"""
@@ -130,7 +118,7 @@ class expansion_temp(expansion):
 
 		# ── :lang <code> ──
 		code = nxs_lang.normalize(arg)
-		if not nxs_lang.is_known(code):
+		if not nxs_lang.is_known(code, ExpsDir):
 			avail = self._available_langs()
 			return Answer(self.AnsBase[2] % (
 				arg, ", ".join(c for c, _ in avail)), stype, source, disp)
