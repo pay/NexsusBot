@@ -1,0 +1,14 @@
+{
+  "0": "ℹ️ Pong! %.3f sn",
+  "1": "ℹ️ Pong! %s — %.3f sn",
+  "2": "❌ Yanıt yok.",
+  "3": "%s ping istatistikleri:\n sayı: %s\n min: %s\n maks: %s\n ort: %s",
+  "4": "❌ Veri yok.",
+  "5": "❌ %s odada değil.",
+  "6": "❌ Hata var ya da yanıt yok.",
+  "7": "ℹ️ Boşta: %s — %s",
+  "8": "ℹ️ Boşta: %s — %s",
+  "9": "❌ Eşleşme bulunamadı.",
+  "10": "vCard boş.",
+  "11": "\nToplam: %d öğe."
+}

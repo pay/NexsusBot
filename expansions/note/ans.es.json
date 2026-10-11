@@ -1,0 +1,11 @@
+{
+  "0": "❌ El bloc de notas está vacío.",
+  "1": "❌ Nota demasiado larga (máx. 512).",
+  "2": "❌ Argumento no válido.",
+  "3": "❌ El bloc de notas está lleno (16 líneas).",
+  "4": "✅ Listo.",
+  "5": "❌ La línea está vacía.",
+  "6": "📋 Tus notas:\n",
+  "7": "✅ Guardado en la línea %s.",
+  "8": "❌ La línea ya estaba vacía."
+}

@@ -1,0 +1,20 @@
+{
+  "0": "📋 Eklenti bilgisi:",
+  "1": "mevcut",
+  "2": "❌ eksik",
+  "3": "yüklendi",
+  "4": "✅ Tamam.",
+  "5": " işleyici: %s",
+  "6": "❌ yüklü değil",
+  "7": "❌ Bulunamadı.",
+  "8": "📋 Eklentiler:",
+  "9": "\nYüklenmemiş (%d):\n%s",
+  "10": "'%s' eklentisi yüklendi.",
+  "11": "❌ '%s' yüklenemedi: %s",
+  "13": "✅  Önceki sürüm geri yüklendi.",
+  "14": "Kullanılabilir işleyiciler: %s",
+  "15": "❌ '%s' içinde işleyici yok.",
+  "16": "ℹ️ '%s' komutu zaten etkin.",
+  "17": "ℹ️ '%s' komutu zaten devre dışı.",
+  "18": "✅ Tüm komutlar etkin."
+}

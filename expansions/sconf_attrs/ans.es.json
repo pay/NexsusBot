@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' está fuera de línea.",
+  "1": "Ya se está usando '%s'.",
+  "2": "❌ Dispatcher desconocido: '%s'.",
+  "3": "✅ Volviendo a unirse...",
+  "4": "✅ Nick fijado en: %s",
+  "5": "❌ Nick demasiado largo (máx. 16).",
+  "6": "Prefijo eliminado.",
+  "7": "❌ No hay prefijo configurado.",
+  "8": "✅ Prefijo fijado en: '%s'",
+  "9": "El prefijo '%s' ya está configurado.",
+  "10": "Prefijos disponibles: '%s'",
+  "11": "Prefijo actual: '%s'",
+  "12": "❌ Sin prefijo.",
+  "13": "❌ Estado desconocido: '%s'"
+}

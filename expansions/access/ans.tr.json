@@ -1,0 +1,13 @@
+{
+  "0": "ℹ️ Erişimin: %s",
+  "1": "ℹ️ Erişim %s: %s",
+  "2": "❌ %s bulunamadı.",
+  "3": "❌ Genel erişim listesi boş.",
+  "4": "❌ Yerel erişim listesi boş.",
+  "5": "📋 Erişim listesi:\n",
+  "6": "❌ %s erişim listesinde değil.",
+  "7": "❌ Erişim seviyesi -1 ile 8 arasında olmalı.",
+  "8": "❌ Erişim seviyesi 0 ile 6 arasında olmalı.",
+  "9": "Bu kullanıcı genel listede, gaccess kullan.",
+  "10": "❌ %s kullanıcısı bulunamadı."
+}

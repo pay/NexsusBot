@@ -1,0 +1,11 @@
+{
+  "0": "❌ Not defteri boş.",
+  "1": "❌ Not çok uzun (en fazla 512).",
+  "2": "❌ Geçersiz argüman.",
+  "3": "❌ Not defteri dolu (16 satır).",
+  "4": "✅ Tamam.",
+  "5": "❌ Satır boş.",
+  "6": "📋 Notların:\n",
+  "7": "✅ %s. satıra kaydedildi.",
+  "8": "❌ Satır zaten boş."
+}

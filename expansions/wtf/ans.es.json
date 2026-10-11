@@ -1,0 +1,13 @@
+{
+  "0": "📋 Definiciones globales (%d):\n%s",
+  "1": "📋 Definiciones locales (%d) [%s]:\n%s",
+  "2": "❌ No se encontraron definiciones.",
+  "3": "%s — %d menciones",
+  "4": "❌ No encontrado.",
+  "5": "%s:\n%s\n— Añadido por %s (%s)",
+  "6": "❌ '%s' no encontrado.",
+  "7": "Global: %d definiciones.",
+  "8": "Local: %d definiciones [%s].",
+  "9": "'%s' ya existe en global, no se puede sobrescribir.",
+  "10": "Sin contexto de sala."
+}

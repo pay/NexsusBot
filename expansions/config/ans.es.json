@@ -1,0 +1,15 @@
+{
+  "0": "✅ Actualizado: %s",
+  "1": "Nada que actualizar.",
+  "2": "Configuración actual:\n",
+  "3": "❌ No hay clientes extra configurados.",
+  "4": "ℹ️ Saliendo de las salas...",
+  "5": "ℹ️ Desconectando...",
+  "6": "Nuevo dispatcher principal: %s",
+  "7": "❌ No se puede quitar el único cliente.",
+  "8": "❌ Error en el hilo.",
+  "9": "Conexión fallida.",
+  "10": "Ya conectado.",
+  "11": "❌ Cliente no encontrado: %s",
+  "12": "Cliente fuera de línea: %s"
+}

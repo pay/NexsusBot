@@ -1,0 +1,15 @@
+{
+  "0": "✅ Güncellendi: %s",
+  "1": "Güncellenecek bir şey yok.",
+  "2": "Mevcut ayarlar:\n",
+  "3": "❌ Ek istemci ayarlanmamış.",
+  "4": "ℹ️ Odalardan çıkılıyor...",
+  "5": "ℹ️ Bağlantı kesiliyor...",
+  "6": "Yeni ana dağıtıcı: %s",
+  "7": "❌ Tek istemci kaldırılamaz.",
+  "8": "❌ İş parçacığı hatası.",
+  "9": "Bağlantı başarısız.",
+  "10": "Zaten bağlı.",
+  "11": "❌ İstemci bulunamadı: %s",
+  "12": "İstemci çevrimdışı: %s"
+}

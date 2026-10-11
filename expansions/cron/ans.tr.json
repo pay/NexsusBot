@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Cron çalıştırılıyor: %s",
+  "1": "❌ %d id'li cron yok.",
+  "2": "❌ Aralık çok kısa veya tekrar sayısı çok az.",
+  "3": " (%d tekrar daha gizlendi)",
+  "4": "📋 Zamanlama:\n%s",
+  "5": "❌ Metin çok uzun.",
+  "6": "✅ Zamanlandı: %s",
+  "7": "❌ Cron görevi yok.",
+  "8": "Cron görevleri:\n%s",
+  "9": "❌ Geçersiz tarih."
+}

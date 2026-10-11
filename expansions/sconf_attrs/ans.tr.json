@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' çevrimdışı.",
+  "1": "'%s' zaten kullanılıyor.",
+  "2": "❌ Bilinmeyen dağıtıcı: '%s'.",
+  "3": "✅ Yeniden katılınıyor...",
+  "4": "✅ Takma ad şu ayarlandı: %s",
+  "5": "❌ Takma ad çok uzun (en fazla 16).",
+  "6": "Önek kaldırıldı.",
+  "7": "❌ Önek ayarlanmamış.",
+  "8": "✅ Önek şu ayarlandı: '%s'",
+  "9": "'%s' ön eki zaten ayarlı.",
+  "10": "Kullanılabilir ön ekler: '%s'",
+  "11": "Mevcut ön ek: '%s'",
+  "12": "❌ Önek yok.",
+  "13": "❌ Bilinmeyen durum: '%s'"
+}

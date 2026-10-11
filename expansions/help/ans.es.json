@@ -1,0 +1,20 @@
+{
+  "0": "ℹ️ El comando '%s' es de la expansión: %s",
+  "1": "ℹ️ El comando '%s' requiere acceso: %d",
+  "2": "%s\n%s",
+  "3": "Uso:",
+  "4": "❌ No se encontró el archivo de ayuda.",
+  "5": "Lista de comandos — usa 'commands'.",
+  "6": "📋 Comandos (prefijo '%s'):",
+  "7": "'%s'",
+  "8": "\n👑 [8/God+] (%d): %s",
+  "9": "\n🧑 [7/Chief] (%d): %s",
+  "10": "\n💎 [6] (%d): %s",
+  "11": "\n🗢 [5] (%d): %s",
+  "12": "\n🔨 [4] (%d): %s",
+  "13": "\n👤 [3] (%d): %s",
+  "14": "\n⚖ [2] (%d): %s",
+  "15": "\n✅ [1/All] (%d): %s",
+  "16": "\nTu acceso: %s",
+  "17": "❌ Error de formato en el archivo de ayuda."
+}

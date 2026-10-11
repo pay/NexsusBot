@@ -1,0 +1,13 @@
+{
+  "0": "📋 Bugünün ziyaretçileri (%s):\n%s\n(çevrimiçi: %s)",
+  "1": "❌ Bugün ziyaretçi yok.",
+  "2": "📋 Liste (%s):\n%s",
+  "3": "📋 Çevrimdışı (%s):\n%s\n(çevrimiçi: %s)",
+  "4": "❌ Çevrimdışı kullanıcı yok.",
+  "5": "📋 Odalar:",
+  "6": "❌ Oda yok.",
+  "7": "📋 Dağıtıcılar:",
+  "8": "📋 Çevrimiçi:",
+  "9": "📋 Arama sonuçları (%s):\n%s",
+  "10": "❌ Bulunamadı."
+}

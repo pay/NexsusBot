@@ -1,0 +1,20 @@
+{
+  "0": "📋 [join] %s (%s) %s odasına katılmak istiyor",
+  "1": " (sebep: %s)",
+  "2": "✅ %s odasına başarıyla katıldın.",
+  "3": "❌ %s odasına katılınamadı.",
+  "4": "✅ Tamam.",
+  "5": "ℹ️ Zaten bu odadasın.",
+  "6": "❌ Geçersiz oda JID: %s",
+  "7": "ℹ️ Merhaba! Ben %s, %s tarafından davet edildim.",
+  "8": "ℹ️ %s isteğiyle ayrılıyorum.",
+  "9": "✅ %s odasından ayrıldın.",
+  "10": "✅ %s odasından ayrıldın.",
+  "11": "ℹ️ %s isteğiyle yeniden yükleniyor...",
+  "12": "ℹ️ %s isteğiyle kapatılıyor...",
+  "13": " (yeniden bağlanma zamanlayıcısı açık)",
+  "14": "❌ Dağıtıcı çevrimdışı.",
+  "15": "❌ %s için dizin oluşturulamadı.",
+  "16": "❌ Dağıtıcı iş parçacığı hatası.",
+  "17": "❌ Bilinmeyen dağıtıcı: %s"
+}

@@ -1,0 +1,13 @@
+{
+  "0": "📋 Genel tanımlar (%d):\n%s",
+  "1": "📋 Yerel tanımlar (%d) [%s]:\n%s",
+  "2": "❌ Tanım bulunamadı.",
+  "3": "%s — %d kez bahsedildi",
+  "4": "❌ Bulunamadı.",
+  "5": "%s:\n%s\n— %s (%s) tarafından eklendi",
+  "6": "❌ '%s' bulunamadı.",
+  "7": "Genel: %d tanım.",
+  "8": "Yerel: %d tanım [%s].",
+  "9": "'%s' genelde zaten var, geçersiz kılınamaz.",
+  "10": "Oda bağlamı yok."
+}
