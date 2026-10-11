@@ -741,27 +741,20 @@ isNumber = lambda obj: str(obj).lstrip("-").isdigit()
 
 
 def Time2Text(secs):
-    ext   = []
-    units = [
-        ("Year",   None),
-        ("Day",    365.25),
-        ("Hour",   24),
-        ("Minute", 60),
-        ("Second", 60)
-    ]
-    t = secs
-    while units:
-        label, div = units.pop()
-        if div:
-            t, rest = divmod(t, div)
-        else:
-            rest = t
-        if rest >= 1.0:
-            plural = "s" if rest >= 2 else ""
-            ext.insert(0, "%d %s%s" % (int(rest), label, plural))
-        if not (units and t):
-            return " ".join(ext)
-    return "0 Seconds"
+    """Localized duration text. See library/nxs_time.py.
+
+    Historically this built English-only labels ("3 Minutes") with an English
+    s-plural rule, so a Russian user saw "3 Minutes" inside an otherwise
+    translated sentence. Kept as a module-level function because expansions
+    import it directly.
+    """
+    from library.nxs_time import duration_text
+    try:
+        from library.nxs_l10n import LocalizationContext
+        lang = LocalizationContext.get()
+    except Exception:
+        lang = "en"
+    return duration_text(secs, lang)
 
 
 def Size2Text(size):

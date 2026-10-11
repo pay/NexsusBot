@@ -75,6 +75,13 @@ ALIASES = {
     "persian": "fa",
     "farsi": "fa",
     "ukrainian": "ua",
+    "zhongwen": "zh",
+    "mandarin": "zh",
+    "cantonese": "zh",
+    "chinese": "zh",
+    "turkish": "tr",
+    "turkce": "tr",
+    "turkiye": "tr",
 }
 
 # Nama untuk pesan error/warning.
@@ -156,14 +163,20 @@ def languages_with_reply(exp_dir="expansions"):
     found = {"en"}
     if not exp_dir or not os.path.isdir(exp_dir):
         return sorted(found)
+    def _harvest(directory):
+        for f in os.listdir(directory):
+            if f.startswith("ans.") and f.endswith(".json"):
+                found.add(normalize(f[4:-5], default="en"))
     try:
         for name in os.listdir(exp_dir):
             sub = os.path.join(exp_dir, name)
-            if not os.path.isdir(sub):
-                continue
-            for f in os.listdir(sub):
-                if f.startswith("ans.") and f.endswith(".json"):
-                    found.add(normalize(f[4:-5], default="en"))
+            if os.path.isdir(sub):
+                # expansions/<exp>/ans.<lang>.json
+                _harvest(sub)
+            # The global answer table lives flat in static/ans.<lang>.json with
+            # no subdirectory at all, so the top level has to be scanned too.
+            # Skipping it made every static locale invisible here.
+        _harvest(exp_dir)
     except OSError:
         pass
     return sorted(found)

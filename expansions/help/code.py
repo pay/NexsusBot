@@ -57,6 +57,21 @@ class expansion_temp(expansion):
 
 	mark = "{command}"
 
+
+def _active_help_lang():
+	"""Language code for the active thread, or None when unknown.
+
+	Help files are plain text rather than reply strings, so this reads the
+	per-thread localization context directly instead of going through
+	LocalizedAnswers.
+	"""
+	try:
+		from library.nxs_l10n import LocalizationContext
+		lang = LocalizationContext.get()
+	except Exception:
+		lang = None
+	return lang.lower() if lang else None
+
 	def command_help(self, stype, source, body, disp):
 		if not body:
 			return Answer(self.AnsBase[5], stype, source, disp)
@@ -72,7 +87,22 @@ class expansion_temp(expansion):
 			else:
 				helpf = None
 		else:
-			helpf = Cmds[command].help
+			# No language given: resolve against the ACTIVE language of this user.
+			# Previously this reused Cmds[command].help, which command_handler()
+			# resolved ONCE at boot from DefLANG. Because :lang can change per user
+			# at runtime, ":lang ru" still printed English help for everyone.
+			exp_name  = Cmds[command].exp.name
+			help_base = Cmds[command].default
+			helpf     = None
+			for cand in (_active_help_lang(), "en"):
+				if not cand:
+					continue
+				probe = os.path.join(ExpsDir, exp_name, "%s.%s" % (help_base, cand))
+				if os.path.isfile(probe):
+					helpf = probe
+					break
+			if helpf is None:
+				helpf = Cmds[command].help
 		if helpf and os.path.isfile(helpf):
 			text = get_file(helpf)
 			if self.mark in text:
