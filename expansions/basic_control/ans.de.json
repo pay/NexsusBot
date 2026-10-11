@@ -1,0 +1,20 @@
+{
+  "0": "📋 [join] %s (%s) hat das Betreten von %s angefragt",
+  "1": " (Grund: %s)",
+  "10": "✅ %s verlassen.",
+  "11": "ℹ️ Neuladen auf Anfrage von %s...",
+  "12": "ℹ️ Herunterfahren auf Anfrage von %s...",
+  "13": " (Reconnect-Timer aktiv)",
+  "14": "❌ Dispatcher offline.",
+  "15": "❌ Verzeichnis für %s kann nicht erstellt werden.",
+  "16": "❌ Fehler im Dispatcher-Thread.",
+  "17": "❌ Unbekannter Dispatcher: %s",
+  "2": "✅ %s erfolgreich betreten.",
+  "3": "❌ Betreten von %s fehlgeschlagen.",
+  "4": "✅ Erledigt.",
+  "5": "ℹ️ Bereits in diesem Raum.",
+  "6": "❌ Ungültige Raum-JID: %s",
+  "7": "ℹ️ Hallo! Ich bin %s, eingeladen von %s.",
+  "8": "ℹ️ Verlasse den Raum auf Anfrage von %s.",
+  "9": "✅ %s verlassen."
+}

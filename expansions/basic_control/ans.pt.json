@@ -1,0 +1,20 @@
+{
+  "0": "📋 [join] %s (%s) solicitou entrada em %s",
+  "1": " (motivo: %s)",
+  "10": "✅ Saiu de %s.",
+  "11": "ℹ️ Recarregando a pedido de %s...",
+  "12": "ℹ️ Encerrando a pedido de %s...",
+  "13": " (temporizador de reconexão ativo)",
+  "14": "❌ Dispatcher offline.",
+  "15": "❌ Não é possível criar o diretório para %s.",
+  "16": "❌ Erro na thread do dispatcher.",
+  "17": "❌ Dispatcher desconhecido: %s",
+  "2": "✅ Entrou em %s com sucesso.",
+  "3": "❌ Falha ao entrar em %s.",
+  "4": "✅ Feito.",
+  "5": "ℹ️ Já está nessa sala.",
+  "6": "❌ JID da sala inválido: %s",
+  "7": "ℹ️ Olá! Eu sou %s, convidado por %s.",
+  "8": "ℹ️ Saindo a pedido de %s.",
+  "9": "✅ Saiu de %s."
+}

@@ -1,6 +1,14 @@
 {
   "0": "📋 Infos sur l'expansion :",
   "1": "existe",
+  "10": "Expansion '%s' chargée.",
+  "11": "❌ Échec du chargement de '%s' : %s",
+  "13": "✅  Version précédente restaurée.",
+  "14": "Gestionnaires disponibles : %s",
+  "15": "❌ Aucun gestionnaire dans '%s'.",
+  "16": "ℹ️ La commande '%s' est déjà activée.",
+  "17": "ℹ️ La commande '%s' est déjà désactivée.",
+  "18": "✅ Toutes les commandes sont activées.",
   "2": "❌ manquante",
   "3": "chargée",
   "4": "✅ Terminé.",
@@ -8,13 +16,5 @@
   "6": "❌ non chargée",
   "7": "❌ Introuvable.",
   "8": "📋 Expansions :",
-  "9": "\nNon chargées (%d) :\n%s",
-  "10": "Expansion '%s' chargée.",
-  "11": "❌ Échec du chargement de '%s' : %s",
-  "13": "✅  Version précédente restaurée.",
-  "14": "Gestionnaires disponibles : %s",
-  "15": "❌ Aucun gestionnaire dans '%s'.",
-  "16": "❌ La commande '%s' est déjà activée.",
-  "17": "❌ La commande '%s' est déjà désactivée.",
-  "18": "✅ Toutes les commandes sont activées."
+  "9": "\nNon chargées (%d) :\n%s"
 }

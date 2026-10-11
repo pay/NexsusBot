@@ -1,0 +1,20 @@
+{
+  "0": "📋 Informacje o rozszerzeniu:",
+  "1": "istnieje",
+  "10": "Rozszerzenie '%s' załadowane.",
+  "11": "❌ Nie udało się załadować '%s': %s",
+  "13": "✅  Przywrócono poprzednią wersję.",
+  "14": "Dostępne handlery: %s",
+  "15": "❌ Brak handlerów w '%s'.",
+  "16": "ℹ️ Polecenie '%s' jest już włączone.",
+  "17": "ℹ️ Polecenie '%s' jest już wyłączone.",
+  "18": "✅ Wszystkie polecenia są włączone.",
+  "2": "❌ brak",
+  "3": "załadowane",
+  "4": "✅ Gotowe.",
+  "5": " handlery: %s",
+  "6": "❌ nie załadowane",
+  "7": "❌ Nie znaleziono.",
+  "8": "📋 Rozszerzenia:",
+  "9": "\nNiezaładowane (%d):\n%s"
+}

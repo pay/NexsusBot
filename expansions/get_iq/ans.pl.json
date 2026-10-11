@@ -1,0 +1,14 @@
+{
+ "0": "ℹ️ Pong! %.3f s",
+ "1": "ℹ️ Pong! %s — %.3f s",
+ "2": "❌ Brak odpowiedzi.",
+ "3": "Statystyki ping dla %s:\n liczba: %s\n min: %s\n maks: %s\n śr: %s",
+ "4": "❌ Brak danych.",
+ "5": "❌ %s nie ma w pokoju.",
+ "6": "❌ Błąd lub brak odpowiedzi.",
+ "7": "ℹ️ Bezczynny: %s — %s",
+ "8": "ℹ️ Bezczynny: %s — %s",
+ "9": "❌ Nie znaleziono dopasowań.",
+ "10": "Pusta wizytówka.",
+ "11": "\nŁącznie: %d elementów."
+}

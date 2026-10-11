@@ -1,0 +1,14 @@
+{
+  "0": "ℹ️ Pong! %.3f Sek.",
+  "1": "ℹ️ Pong! %s — %.3f Sek.",
+  "10": "Leere vCard.",
+  "11": "\nGesamt: %d Einträge.",
+  "2": "❌ Keine Antwort.",
+  "3": "Ping-Statistik für %s:\n Anzahl: %s\n min: %s\n max: %s\n avg: %s",
+  "4": "❌ Keine Daten.",
+  "5": "❌ %s ist nicht im Raum.",
+  "6": "❌ Fehler oder keine Antwort.",
+  "7": "ℹ️ Leerlauf: %s — %s",
+  "8": "ℹ️ Leerlauf: %s — %s",
+  "9": "❌ Keine Treffer gefunden."
+}

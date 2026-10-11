@@ -1,0 +1,16 @@
+{
+ "0": "❌ '%s' jest offline.",
+ "1": "Już używasz '%s'.",
+ "2": "❌ Nieznany dyspozytor: '%s'.",
+ "3": "✅ Ponowne dołączanie...",
+ "4": "✅ Nick ustawiony na: %s",
+ "5": "❌ Nick za długi (maks. 16).",
+ "6": "Prefiks usunięty.",
+ "7": "❌ Nie ustawiono prefiksu.",
+ "8": "✅ Prefiks ustawiony na: '%s'",
+ "9": "Prefiks '%s' jest już ustawiony.",
+ "10": "Dostępne prefiksy: '%s'",
+ "11": "Bieżący prefiks: '%s'",
+ "12": "❌ Brak prefiksu.",
+ "13": "❌ Nieznany stan: '%s'"
+}

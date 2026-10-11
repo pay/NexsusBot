@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' está offline.",
+  "1": "Já está usando '%s'.",
+  "10": "Prefixos disponíveis: '%s'",
+  "11": "Prefixo atual: '%s'",
+  "12": "❌ Sem prefixo.",
+  "13": "❌ Estado desconhecido: '%s'",
+  "2": "❌ Dispatcher desconhecido: '%s'.",
+  "3": "✅ Entrando novamente...",
+  "4": "✅ Nick definido como: %s",
+  "5": "❌ Nick muito longo (máx. 16).",
+  "6": "Prefixo removido.",
+  "7": "❌ Nenhum prefixo definido.",
+  "8": "✅ Prefixo definido como: '%s'",
+  "9": "Prefixo '%s' já definido."
+}

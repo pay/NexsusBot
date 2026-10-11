@@ -1,0 +1,11 @@
+{
+  "0": "❌ Il blocco note è vuoto.",
+  "1": "❌ Nota troppo lunga (max 512).",
+  "2": "❌ Argomento non valido.",
+  "3": "❌ Il blocco note è pieno (16 righe).",
+  "4": "✅ Fatto.",
+  "5": "❌ La riga è vuota.",
+  "6": "📋 Le tue note:\n",
+  "7": "✅ Salvato alla riga %s.",
+  "8": "❌ La riga è già vuota."
+}

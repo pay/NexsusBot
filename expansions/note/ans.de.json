@@ -1,0 +1,11 @@
+{
+  "0": "❌ Notizblock ist leer.",
+  "1": "❌ Notiz zu lang (max. 512).",
+  "2": "❌ Ungültiges Argument.",
+  "3": "❌ Notizblock ist voll (16 Zeilen).",
+  "4": "✅ Erledigt.",
+  "5": "❌ Zeile ist leer.",
+  "6": "📋 Deine Notizen:\n",
+  "7": "✅ In Zeile %s gespeichert.",
+  "8": "❌ Zeile ist bereits leer."
+}

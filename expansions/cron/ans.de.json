@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Cron wird ausgeführt: %s",
+  "1": "❌ Kein Cron mit der ID %d.",
+  "2": "❌ Intervall zu kurz oder zu wenige Wiederholungen.",
+  "3": " (+%d weitere Wiederholungen ausgeblendet)",
+  "4": "📋 Zeitplan:\n%s",
+  "5": "❌ Text zu lang.",
+  "6": "✅ Eingeplant: %s",
+  "7": "❌ Keine Cron-Aufgaben.",
+  "8": "Cron-Aufgaben:\n%s",
+  "9": "❌ Ungültiges Datum."
+}

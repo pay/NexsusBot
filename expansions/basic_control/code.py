@@ -26,12 +26,12 @@ class expansion_temp(expansion):
 	compile_chat = compile__(r"^[^\s'\"@<>&]+?@(?:conference|muc|conf|chat|group)\.[\w-]+?\.[\.\w-]+?$")
 
 	AnsBase = (
-		"\u274c [join] %s (%s) requested joining %s",           # 0
+		"\U0001f4cb [join] %s (%s) requested joining %s",           # 0
 		" (reason: %s)",                                  # 1
 		"\u2705 Joined %s successfully.",                        # 2
 		"\u274c Failed to join %s.",                             # 3
 		"\u2705 Done.",                                          # 4  (generic ok)
-		"\u274c Already in that room.",                          # 5
+		"\u2139\ufe0f Already in that room.",                          # 5
 		"\u274c Invalid room JID: %s",                           # 6
 		"\u2139\ufe0f Hello! I am %s, invited by %s.",                 # 7
 		"\u2139\ufe0f Leaving by request of %s.",                      # 8

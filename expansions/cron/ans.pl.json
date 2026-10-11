@@ -1,0 +1,12 @@
+{
+ "0": "ℹ️ Uruchamianie crona: %s",
+ "1": "❌ Brak crona o id %d.",
+ "2": "❌ Interwał za krótki lub za mało powtórzeń.",
+ "3": " (ukryto jeszcze %d powtórzeń)",
+ "4": "📋 Harmonogram:\n%s",
+ "5": "❌ Treść za długa.",
+ "6": "✅ Zaplanowano: %s",
+ "7": "❌ Brak zadań crona.",
+ "8": "Zadania crona:\n%s",
+ "9": "❌ Nieprawidłowa data."
+}

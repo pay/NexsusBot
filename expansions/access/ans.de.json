@@ -1,0 +1,13 @@
+{
+  "0": "ℹ️ Dein Zugriff: %s",
+  "1": "ℹ️ Zugriff von %s: %s",
+  "10": "❌ Benutzer %s nicht gefunden.",
+  "2": "❌ %s nicht gefunden.",
+  "3": "❌ Die globale Zugriffsliste ist leer.",
+  "4": "❌ Die lokale Zugriffsliste ist leer.",
+  "5": "📋 Zugriffsliste:\n",
+  "6": "❌ %s steht nicht in der Zugriffsliste.",
+  "7": "❌ Die Zugriffsebene muss zwischen -1 und 8 liegen.",
+  "8": "❌ Die Zugriffsebene muss zwischen 0 und 6 liegen.",
+  "9": "Dieser Benutzer steht in der globalen Liste, benutze gaccess."
+}

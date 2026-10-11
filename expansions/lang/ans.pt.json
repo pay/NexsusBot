@@ -1,0 +1,10 @@
+{
+  "0": "📋 Idioma atual: %s\n📄 Em uso: %s\n🔍 Códigos: %s\n💡 Também usados como nomes: %s",
+  "1": "✅ Seu idioma agora: %s.",
+  "2": "❌ Código de idioma desconhecido: %s.\n🔍 Códigos: %s",
+  "3": "❌ Falha ao salvar a escolha de idioma.",
+  "4": "ℹ️ Fechando o ciclo: ':lang auto' volta para a detecção automática.",
+  "5": "📋 Idiomas nesta sala:\n%s",
+  "6": "ℹ️ Ainda ninguém escolheu um idioma aqui.",
+  "7": "❌ Falha ao ler o banco de dados de idiomas."
+}

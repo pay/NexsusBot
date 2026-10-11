@@ -1,0 +1,15 @@
+{
+ "0": "✅ Zaktualizowano: %s",
+ "1": "Nie ma czego aktualizować.",
+ "2": "Aktualna konfiguracja:\n",
+ "3": "❌ Nie skonfigurowano dodatkowych klientów.",
+ "4": "ℹ️ Opuszczanie pokoi...",
+ "5": "ℹ️ Rozłączanie...",
+ "6": "Nowy główny dyspozytor: %s",
+ "7": "❌ Nie można usunąć jedynego klienta.",
+ "8": "❌ Błąd wątku.",
+ "9": "Połączenie nieudane.",
+ "10": "Już połączono.",
+ "11": "❌ Nie znaleziono klienta: %s",
+ "12": "Klient offline: %s"
+}

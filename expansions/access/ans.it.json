@@ -1,0 +1,13 @@
+{
+  "0": "ℹ️ Il tuo accesso: %s",
+  "1": "ℹ️ Accesso di %s: %s",
+  "10": "❌ Utente %s non trovato.",
+  "2": "❌ %s non trovato.",
+  "3": "❌ L'elenco accessi globale è vuoto.",
+  "4": "❌ L'elenco accessi locale è vuoto.",
+  "5": "📋 Elenco accessi:\n",
+  "6": "❌ %s non è nell'elenco accessi.",
+  "7": "❌ Il livello di accesso deve essere tra -1 e 8.",
+  "8": "❌ Il livello di accesso deve essere tra 0 e 6.",
+  "9": "Questo utente è nell'elenco globale, usa gaccess."
+}

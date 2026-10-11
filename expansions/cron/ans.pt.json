@@ -1,0 +1,12 @@
+{
+  "0": "ℹ️ Executando cron: %s",
+  "1": "❌ Nenhum cron com o id %d.",
+  "2": "❌ Intervalo muito curto ou poucas repetições.",
+  "3": " (+%d repetições ocultas)",
+  "4": "📋 Agenda:\n%s",
+  "5": "❌ Texto muito longo.",
+  "6": "✅ Agendado: %s",
+  "7": "❌ Nenhuma tarefa cron.",
+  "8": "Tarefas cron:\n%s",
+  "9": "❌ Data inválida."
+}

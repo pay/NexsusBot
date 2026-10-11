@@ -1,0 +1,11 @@
+{
+  "0": "ℹ️ Pulizia in corso...",
+  "1": "✅ Tutti i sistemi sono operativi.",
+  "2": "❌ %s, errori rilevati: %d",
+  "3": "❌ Errori: %d",
+  "5": "%s: %s",
+  "6": "Già presente.",
+  "7": "❌ Utente non trovato.",
+  "8": "Cooldown: %s",
+  "9": "❌ Niente da pulire."
+}

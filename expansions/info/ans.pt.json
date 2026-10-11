@@ -1,0 +1,13 @@
+{
+  "0": "📋 Visitantes de hoje (%s):\n%s\n(online: %s)",
+  "1": "❌ Nenhum visitante hoje.",
+  "10": "❌ Não encontrado.",
+  "2": "📋 Lista (%s):\n%s",
+  "3": "📋 Offline (%s):\n%s\n(online: %s)",
+  "4": "❌ Nenhum usuário offline.",
+  "5": "📋 Salas:",
+  "6": "❌ Nenhuma sala.",
+  "7": "📋 Dispatchers:",
+  "8": "📋 Online:",
+  "9": "📋 Resultados da busca (%s):\n%s"
+}

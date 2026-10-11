@@ -1,14 +1,6 @@
 {
-  "0": "❌ [join] %s (%s) a demandé à rejoindre %s",
+  "0": "📋 [join] %s (%s) a demandé à rejoindre %s",
   "1": " (raison : %s)",
-  "2": "❌ %s rejoint avec succès.",
-  "3": "❌ Échec de l'ajout à %s.",
-  "4": "✅ Terminé.",
-  "5": "❌ Déjà dans ce salon.",
-  "6": "❌ JID de salon invalide : %s",
-  "7": "ℹ️ Bonjour ! Je suis %s, invité par %s.",
-  "8": "ℹ️ Sortie sur demande de %s.",
-  "9": "✅ %s quitté.",
   "10": "✅ %s quitté.",
   "11": "ℹ️ Rechargement sur demande de %s...",
   "12": "ℹ️ Arrêt sur demande de %s...",
@@ -16,5 +8,13 @@
   "14": "❌ Dispatcher hors ligne.",
   "15": "❌ Impossible de créer le répertoire pour %s.",
   "16": "❌ Erreur du thread du dispatcher.",
-  "17": "❌ Dispatcher inconnu : %s"
+  "17": "❌ Dispatcher inconnu : %s",
+  "2": "✅ %s rejoint avec succès.",
+  "3": "❌ Échec de l'ajout à %s.",
+  "4": "✅ Terminé.",
+  "5": "ℹ️ Déjà dans ce salon.",
+  "6": "❌ JID de salon invalide : %s",
+  "7": "ℹ️ Bonjour ! Je suis %s, invité par %s.",
+  "8": "ℹ️ Sortie sur demande de %s.",
+  "9": "✅ %s quitté."
 }

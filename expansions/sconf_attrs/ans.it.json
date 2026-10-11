@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' è offline.",
+  "1": "Stai già usando '%s'.",
+  "2": "❌ Dispatcher sconosciuto: '%s'.",
+  "3": "✅ Sto rientrando...",
+  "4": "✅ Nick impostato su: %s",
+  "5": "❌ Nick troppo lungo (max 16).",
+  "6": "Prefisso rimosso.",
+  "7": "❌ Nessun prefisso impostato.",
+  "8": "✅ Prefisso impostato su: '%s'",
+  "9": "Il prefisso '%s' è già impostato.",
+  "10": "Prefissi disponibili: '%s'",
+  "11": "Prefisso attuale: '%s'",
+  "12": "❌ Nessun prefisso.",
+  "13": "❌ Stato sconosciuto: '%s'"
+}

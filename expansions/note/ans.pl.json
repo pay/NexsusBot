@@ -1,0 +1,11 @@
+{
+ "0": "❌ Notatnik jest pusty.",
+ "1": "❌ Notatka za długa (maks. 512).",
+ "2": "❌ Nieprawidłowy argument.",
+ "3": "❌ Notatnik jest pełny (16 wierszy).",
+ "4": "✅ Gotowe.",
+ "5": "❌ Wiersz jest pusty.",
+ "6": "📋 Twoje notatki:\n",
+ "7": "✅ Zapisano w wierszu %s.",
+ "8": "❌ Wiersz jest już pusty."
+}

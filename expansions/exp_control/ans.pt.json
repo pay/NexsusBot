@@ -1,0 +1,20 @@
+{
+  "0": "📋 Informações da expansão:",
+  "1": "existe",
+  "10": "Expansão '%s' carregada.",
+  "11": "❌ Falha ao carregar '%s': %s",
+  "13": "✅  Versão anterior restaurada.",
+  "14": "Handlers disponíveis: %s",
+  "15": "❌ Nenhum handler em '%s'.",
+  "16": "ℹ️ O comando '%s' já está habilitado.",
+  "17": "ℹ️ O comando '%s' já está desabilitado.",
+  "18": "✅ Todos os comandos estão habilitados.",
+  "2": "❌ ausente",
+  "3": "carregada",
+  "4": "✅ Feito.",
+  "5": " handlers: %s",
+  "6": "❌ não carregada",
+  "7": "❌ Não encontrado.",
+  "8": "📋 Expansões:",
+  "9": "\nNão carregadas (%d):\n%s"
+}

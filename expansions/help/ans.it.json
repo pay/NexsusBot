@@ -1,0 +1,20 @@
+{
+  "0": "ℹ️ Il comando '%s' è dell'espansione: %s",
+  "1": "ℹ️ Il comando '%s' richiede accesso: %d",
+  "2": "%s\n%s",
+  "3": "Utilizzo:",
+  "4": "❌ Nessun file di help trovato.",
+  "5": "Elenco comandi — usa 'commands'.",
+  "6": "📋 Comandi (prefisso '%s'):",
+  "7": "'%s'",
+  "8": "\n👑 [8/Dio+] (%d): %s",
+  "9": "\n🧑 [7/Capo] (%d): %s",
+  "10": "\n💎 [6] (%d): %s",
+  "11": "\n🗢 [5] (%d): %s",
+  "12": "\n🔨 [4] (%d): %s",
+  "13": "\n👤 [3] (%d): %s",
+  "14": "\n⚖ [2] (%d): %s",
+  "15": "\n✅ [1/Tutti] (%d): %s",
+  "16": "\nIl tuo accesso: %s",
+  "17": "❌ Errore nel formato del file di help."
+}

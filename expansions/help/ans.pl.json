@@ -1,0 +1,20 @@
+{
+ "0": "ℹ️ Polecenie '%s' pochodzi z rozszerzenia: %s",
+ "1": "ℹ️ Polecenie '%s' wymaga dostępu: %d",
+ "2": "%s\n%s",
+ "3": "Użycie:",
+ "4": "❌ Nie znaleziono pliku pomocy.",
+ "5": "Lista poleceń — użyj 'commands'.",
+ "6": "📋 Polecenia (prefiks '%s'):",
+ "7": "'%s'",
+ "8": "\n👑 [8/God+] (%d): %s",
+ "9": "\n🧑 [7/Chief] (%d): %s",
+ "10": "\n💎 [6] (%d): %s",
+ "11": "\n🗢 [5] (%d): %s",
+ "12": "\n🔨 [4] (%d): %s",
+ "13": "\n👤 [3] (%d): %s",
+ "14": "\n⚖ [2] (%d): %s",
+ "15": "\n✅ [1/Wszyscy] (%d): %s",
+ "16": "\nTwój dostęp: %s",
+ "17": "❌ Błąd formatu pliku pomocy."
+}

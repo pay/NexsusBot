@@ -1,0 +1,15 @@
+{
+  "0": "✅ Atualizado: %s",
+  "1": "Nada para atualizar.",
+  "10": "Já conectado.",
+  "11": "❌ Cliente não encontrado: %s",
+  "12": "Cliente offline: %s",
+  "2": "Configuração atual:\n",
+  "3": "❌ Nenhum cliente extra configurado.",
+  "4": "ℹ️ Saindo das salas...",
+  "5": "ℹ️ Desconectando...",
+  "6": "Novo dispatcher principal: %s",
+  "7": "❌ Não é possível remover o único cliente.",
+  "8": "❌ Erro na thread.",
+  "9": "Falha na conexão."
+}

@@ -13,7 +13,7 @@ class expansion_temp(expansion):
 
 	AnsBase = (
 		"\u2139\ufe0f Your access: %s",                          # 0
-		"\u274c Access of %s: %s",                         # 1
+		"\u2139\ufe0f Access %s: %s",                         # 1
 		"\u274c %s not found.",                            # 2
 		"\u274c Global access list is empty.",             # 3
 		"\u274c Local access list is empty.",              # 4

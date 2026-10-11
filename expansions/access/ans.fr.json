@@ -1,6 +1,7 @@
 {
   "0": "ℹ️ Ton accès : %s",
-  "1": "❌ Accès de %s : %s",
+  "1": "ℹ️ Accès de %s : %s",
+  "10": "❌ Utilisateur %s introuvable.",
   "2": "❌ %s introuvable.",
   "3": "❌ La liste d'accès globale est vide.",
   "4": "❌ La liste d'accès locale est vide.",
@@ -8,6 +9,5 @@
   "6": "❌ %s n'est pas dans la liste d'accès.",
   "7": "❌ Le niveau d'accès doit être compris entre -1 et 8.",
   "8": "❌ Le niveau d'accès doit être compris entre 0 et 6.",
-  "9": "Cet utilisateur est dans la liste globale, utilise gaccess.",
-  "10": "❌ Utilisateur %s introuvable."
+  "9": "Cet utilisateur est dans la liste globale, utilise gaccess."
 }

@@ -1,0 +1,20 @@
+{
+  "0": "📋 [join] %s (%s) ha chiesto di entrare in %s",
+  "1": " (motivo: %s)",
+  "10": "✅ Uscito da %s.",
+  "11": "ℹ️ Ricarico su richiesta di %s...",
+  "12": "ℹ️ Spegnimento su richiesta di %s...",
+  "13": " (timer di riconnessione attivo)",
+  "14": "❌ Dispatcher offline.",
+  "15": "❌ Impossibile creare la directory per %s.",
+  "16": "❌ Errore nel thread del dispatcher.",
+  "17": "❌ Dispatcher sconosciuto: %s",
+  "2": "✅ Entrato in %s con successo.",
+  "3": "❌ Impossibile entrare in %s.",
+  "4": "✅ Fatto.",
+  "5": "ℹ️ Sei già in quella stanza.",
+  "6": "❌ JID stanza non valido: %s",
+  "7": "ℹ️ Ciao! Sono %s, invitato da %s.",
+  "8": "ℹ️ Sto uscendo su richiesta di %s.",
+  "9": "✅ Uscito da %s."
+}

@@ -1,0 +1,13 @@
+{
+  "0": "📋 Globale Definitionen (%d):\n%s",
+  "1": "📋 Lokale Definitionen (%d) [%s]:\n%s",
+  "10": "Kein Raumkontext.",
+  "2": "❌ Keine Definitionen gefunden.",
+  "3": "%s — %d Erwähnungen",
+  "4": "❌ Nicht gefunden.",
+  "5": "%s:\n%s\n— Hinzugefügt von %s (%s)",
+  "6": "❌ '%s' nicht gefunden.",
+  "7": "Global: %d Definitionen.",
+  "8": "Lokal: %d Definitionen [%s].",
+  "9": "'%s' existiert global, kann nicht überschrieben werden."
+}

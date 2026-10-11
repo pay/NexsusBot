@@ -31,7 +31,19 @@ KNOWN = (
     "en",   # English
     "id",   # Bahasa Indonesia
     "ru",   # Russian
-    "fi",   # Finnish
+    "de",   # German
+    "fr",   # French
+    "ar",   # Arabic
+    "hi",   # Hindi
+    "zh",   # Chinese
+    "jv",   # Javanese
+    "es",   # Spanish
+    "pt",   # Portuguese
+    "pl",   # Polish
+    "it",   # Italian
+    "fa",   # Persian
+    "tr",   # Turkish
+    "ua",   # Ukrainian
 )
 
 # Nama yang sering diketik orang tapi bukan kode bahasa.
@@ -46,14 +58,43 @@ ALIASES = {
     "inggris": "en",
     "russian": "ru",
     "rusia": "ru",
+    "german": "de",
+    "deutsch": "de",
+    "french": "fr",
+    "francais": "fr",
+    "arabic": "ar",
+    "hindi": "hi",
+    "javanese": "jv",
+    "jawa": "jv",
+    "portuguese": "pt",
+    "portugues": "pt",
+    "polish": "pl",
+    "polski": "pl",
+    "italian": "it",
+    "italiano": "it",
+    "persian": "fa",
+    "farsi": "fa",
+    "ukrainian": "ua",
 }
 
 # Nama untuk pesan error/warning.
 NAMES = {
     "en": "English",
     "id": "Bahasa Indonesia",
-    "ru": "Russian",
-    "fi": "Finnish",
+    "ru": "Русский",
+    "de": "Deutsch",
+    "fr": "Français",
+    "ar": "العربية",
+    "hi": "हिन्दी",
+    "zh": "中文",
+    "jv": "Basa Jawa",
+    "es": "Español",
+    "pt": "Português",
+    "pl": "Polski",
+    "it": "Italiano",
+    "fa": "فارسی",
+    "tr": "Türkçe",
+    "ua": "Українська",
 }
 
 

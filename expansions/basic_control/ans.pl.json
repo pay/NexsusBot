@@ -1,0 +1,20 @@
+{
+  "0": "📋 [join] %s (%s) poprosił o dołączenie do %s",
+  "1": " (powód: %s)",
+  "10": "✅ Opuszczono %s.",
+  "11": "ℹ️ Przeładowanie na prośbę %s...",
+  "12": "ℹ️ Wyłączanie na prośbę %s...",
+  "13": " (aktywny licznik ponownego połączenia)",
+  "14": "❌ Dyspozytor jest offline.",
+  "15": "❌ Nie można utworzyć katalogu dla %s.",
+  "16": "❌ Błąd wątku dyspozytora.",
+  "17": "❌ Nieznany dyspozytor: %s",
+  "2": "✅ Pomyślnie dołączono do %s.",
+  "3": "❌ Nie udało się dołączyć do %s.",
+  "4": "✅ Gotowe.",
+  "5": "ℹ️ Już jesteś w tym pokoju.",
+  "6": "❌ Nieprawidłowy JID pokoju: %s",
+  "7": "ℹ️ Cześć! Jestem %s, zaproszony przez %s.",
+  "8": "ℹ️ Opuszczam na prośbę %s.",
+  "9": "✅ Opuszczono %s."
+}

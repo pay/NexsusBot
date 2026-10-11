@@ -1,0 +1,15 @@
+{
+  "0": "✅ Aktualisiert: %s",
+  "1": "Nichts zu aktualisieren.",
+  "10": "Bereits verbunden.",
+  "11": "❌ Client nicht gefunden: %s",
+  "12": "Client offline: %s",
+  "2": "Aktuelle Konfiguration:\n",
+  "3": "❌ Keine zusätzlichen Clients konfiguriert.",
+  "4": "ℹ️ Räume werden verlassen...",
+  "5": "ℹ️ Verbindung wird getrennt...",
+  "6": "Neuer primärer Dispatcher: %s",
+  "7": "❌ Der einzige Client kann nicht entfernt werden.",
+  "8": "❌ Thread-Fehler.",
+  "9": "Verbindung fehlgeschlagen."
+}

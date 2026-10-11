@@ -1,0 +1,20 @@
+{
+  "0": "📋 Expansion-Info:",
+  "1": "existiert",
+  "10": "Expansion '%s' geladen.",
+  "11": "❌ '%s' konnte nicht geladen werden: %s",
+  "13": "✅  Vorherige Version wiederhergestellt.",
+  "14": "Verfügbare Handler: %s",
+  "15": "❌ Keine Handler in '%s'.",
+  "16": "ℹ️ Befehl '%s' ist bereits aktiviert.",
+  "17": "ℹ️ Befehl '%s' ist bereits deaktiviert.",
+  "18": "✅ Alle Befehle sind aktiviert.",
+  "2": "❌ fehlt",
+  "3": "geladen",
+  "4": "✅ Erledigt.",
+  "5": " Handler: %s",
+  "6": "❌ nicht geladen",
+  "7": "❌ Nicht gefunden.",
+  "8": "📋 Expansionen:",
+  "9": "\nNicht geladen (%d):\n%s"
+}

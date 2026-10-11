@@ -1,0 +1,16 @@
+{
+  "0": "❌ '%s' ist offline.",
+  "1": "'%s' wird bereits verwendet.",
+  "10": "Verfügbare Präfixe: '%s'",
+  "11": "Aktuelles Präfix: '%s'",
+  "12": "❌ Kein Präfix.",
+  "13": "❌ Unbekannter Zustand: '%s'",
+  "2": "❌ Unbekannter Dispatcher: '%s'.",
+  "3": "✅ Betreten erneut...",
+  "4": "✅ Nick gesetzt auf: %s",
+  "5": "❌ Nick zu lang (max. 16).",
+  "6": "Präfix entfernt.",
+  "7": "❌ Kein Präfix gesetzt.",
+  "8": "✅ Präfix gesetzt auf: '%s'",
+  "9": "Präfix '%s' ist bereits gesetzt."
+}
