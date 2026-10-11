@@ -28,7 +28,7 @@ class expansion_temp(expansion):
 						try:
 							composeThr(connectAndDispatch, thrName, (disp_str,)).start()
 						except Exception:
-							delivery("Connection lost: %s" % disp_str)
+							delivery(gAnsBase[50] % disp_str)
 				elif self.name in expansions:
 					client.aKeeper.plus()
 					# Ping via slixmpp xep_0199

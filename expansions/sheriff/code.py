@@ -130,7 +130,7 @@ class expansion_temp(expansion):
 			return "Invalid number."
 
 		if source[1] not in Chats:          # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 
 		if not body:
 			laws = ChatsAttrs[source[1]]["laws"]

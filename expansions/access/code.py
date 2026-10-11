@@ -112,10 +112,10 @@ class expansion_temp(expansion):
 								sUser.calc_acc()
 
 		if not body:
-			return Answer("No arguments.", stype, source, disp)
+			return Answer(gAnsBase[1], stype, source, disp)
 		parts = body.split(None, 1)
 		if len(parts) != 2:
-			return Answer("Invalid arguments.", stype, source, disp)
+			return Answer(gAnsBase[2], stype, source, disp)
 		access_str, Nick = parts
 		Nick     = Nick.strip()
 		instance = None
@@ -165,10 +165,10 @@ class expansion_temp(expansion):
 		if source[1] not in Chats:
 			return Answer(self.AnsBase[2] % source[1], stype, source, disp)
 		if not body:
-			return Answer("No arguments.", stype, source, disp)
+			return Answer(gAnsBase[1], stype, source, disp)
 		parts = body.split(None, 1)
 		if len(parts) != 2:
-			return Answer("Invalid arguments.", stype, source, disp)
+			return Answer(gAnsBase[2], stype, source, disp)
 		access_str, Nick = parts
 		Nick     = Nick.strip()
 		instance = None

@@ -35,7 +35,7 @@ class expansion_temp(expansion):
 			connect = str(online(disp_))
 			ls += "\n%d) %s - %s - %s" % (numb, disp_, connect, alive)
 		if stype == sBase[1]:
-			Answer("Sent to PM.", stype, source, disp)
+			Answer(gAnsBase[11], stype, source, disp)
 		Message(source[0], ls, disp)
 
 	def command_chatslist(self, stype, source, body, disp):
@@ -55,7 +55,7 @@ class expansion_temp(expansion):
 				numb, cName, conf.nick, disp_, cPref, online_count, role_str))
 		if ls:
 			if stype == sBase[1]:
-				Answer("Sent to PM.", stype, source, disp)
+				Answer(gAnsBase[11], stype, source, disp)
 			ls.insert(0, self.AnsBase[5])
 			Message(source[0], "\n".join(ls), disp)
 		else:
@@ -63,7 +63,7 @@ class expansion_temp(expansion):
 
 	def command_inmuc(self, stype, source, body, disp):
 		if source[1] not in Chats:                     # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		ls     = self.AnsBase[8]
 		numb   = 0
 		access = enough_access(source[1], source[2], 4)
@@ -91,13 +91,13 @@ class expansion_temp(expansion):
 					numb += 1
 					ls += "\n%d) %s" % (numb, x)
 		if stype == sBase[1]:
-			Answer("Sent to PM.", stype, source, disp)
+			Answer(gAnsBase[11], stype, source, disp)
 		Message(source[0], ls, disp)
 
 	def command_visitors(self, stype, source, body, disp):
 		answer = None
 		if source[1] not in Chats:                     # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		cmd = body.lower() if body else ""
 		# Fix: "сегодня".decode("utf-8") → literal string
 		if cmd in ("today", "сегодня"):
@@ -174,7 +174,7 @@ class expansion_temp(expansion):
 
 	def command_search(self, stype, source, body, disp):
 		if not body:
-			return Answer("No query.", stype, source, disp)
+			return Answer(gAnsBase[44], stype, source, disp)
 		answer = None
 		ls     = []
 		access = enough_access(source[1], source[2], 7)

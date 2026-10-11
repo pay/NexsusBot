@@ -44,6 +44,15 @@ if DefLANG in ("RU", "UA"):
 		"ℹ️ Алиас «%s» не найден.", # 39
 		"Ростер включён.", # 40
 		"Ростер отключён.", # 41
+		"❌ Укажите поисковый запрос.", # 42
+		"❌ Укажите определение.", # 43
+		"❌ Нет запроса.", # 44
+		"❌ Это не чат.", # 45
+		"❌ Использование: botstatus <room|here|everywhere> <state> <text>", # 46
+		"📤 Покинул %s: %s (%s)", # 47
+		"❌ Команда '%s' сейчас недоступна!", # 48
+		"❌ Отказано в доступе.", # 49
+		"📡 Соединение потеряно: %s", # 50
 	)
 else:
 	AnsBase = (
@@ -89,4 +98,13 @@ else:
 		"ℹ️ No alias named '%s'.", # 39
 		"Roster is enabled.", # 40
 		"Roster is disabled.", # 41
+		"❌ Provide a search term.", # 42
+		"❌ Provide a definition.", # 43
+		"❌ No query.", # 44
+		"❌ Not in a chat.", # 45
+		"❌ Usage: botstatus <room|here|everywhere> <state> <text>", # 46
+		"📤 Left %s: %s (%s)", # 47
+		"❌ Command '%s' is currently unavailable.", # 48
+		"❌ Access denied.", # 49
+		"📡 Connection lost: %s", # 50
 	)

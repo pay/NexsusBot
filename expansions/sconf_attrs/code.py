@@ -60,7 +60,7 @@ class expansion_temp(expansion):
 
 	def command_botnick(self, stype, source, body, disp):
 		if source[1] not in Chats:             # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if body:
 			# Fix: xmpp.XMLescape() → tidak ada, cukup strip karakter berbahaya
 			Nick = body.replace(chr(32), chr(95)).replace(chr(10), "").replace(chr(13), "").replace(chr(9), "").strip()
@@ -77,7 +77,7 @@ class expansion_temp(expansion):
 
 	def command_prefix(self, stype, source, body, disp):
 		if source[1] not in Chats:             # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if body:
 			if enough_access(source[1], source[2], 6):
 				body = body.lower()
@@ -113,7 +113,7 @@ class expansion_temp(expansion):
 
 	def command_status(self, stype, source, body, disp):
 		if not body:
-			return Answer("Usage: botstatus <room|here|everywhere> <state> <text>", stype, source, disp)
+			return Answer(gAnsBase[46], stype, source, disp)
 		parts = body.split(None, 2)
 		if len(parts) == 3:
 			state  = parts.pop(1).lower()
@@ -149,7 +149,7 @@ class expansion_temp(expansion):
 
 	def command_password(self, stype, source, body, disp):
 		if source[1] not in Chats:             # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if body:
 			# Fix: "нет".decode() → literal
 			if body in ("none", "нет"):

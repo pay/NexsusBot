@@ -33,7 +33,7 @@ class expansion_temp(expansion):
 
 	def command_user_stats(self, stype, source, body, disp):
 		if source[1] not in Chats:                  # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if not body:
 			body = get_source(source[1], source[2])
 		elif Chats[source[1]].isHere(body):
@@ -52,7 +52,7 @@ class expansion_temp(expansion):
 
 	def command_here(self, stype, source, nick, disp):
 		if source[1] not in Chats:                  # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if not nick:
 			nick = source[2]
 		if Chats[source[1]].isHereTS(nick):

@@ -78,7 +78,7 @@ class expansion_temp(expansion):
 
 		elif arg0 in ("search", "искать"):
 			if not ls:
-				return Answer("Provide a search term.", stype, source, disp)
+				return Answer(gAnsBase[42], stype, source, disp)
 			query  = ls[0].lower()
 			found  = []
 			with self._db(self.Base) as db:
@@ -138,7 +138,7 @@ class expansion_temp(expansion):
 
 	def command_def(self, stype, source, body, disp):
 		if not body:
-			return Answer("Provide a definition.", stype, source, disp)
+			return Answer(gAnsBase[43], stype, source, disp)
 
 		ls   = body.split(None, 1)
 		arg0 = ls.pop(0).lower()
@@ -146,7 +146,7 @@ class expansion_temp(expansion):
 		# Fix: decode → literal
 		if arg0 in ("globally", "глобально"):
 			if not enough_access(source[1], source[2], 7):
-				return Answer("Access denied.", stype, source, disp)
+				return Answer(gAnsBase[10], stype, source, disp)
 			if ls and self.sep in ls[0]:
 				parts      = ls[0].split(self.sep, 1)
 				name, data = parts[0].rstrip().lower(), parts[1].lstrip()

@@ -1965,7 +1965,7 @@ def _handle_presence(disp_key, presence):
             if Chat.nick == nick and ("301" in status_codes or "307" in status_codes):
                 sc = "301" if "301" in status_codes else "307"
                 Chat.full_leave(sCodesDesc.get(sc, sc))
-                delivery("Left %s: %s (%s)" % (conf, sc, sCodesDesc.get(sc, "")))
+                delivery(gAnsBase[47] % (conf, sc, sCodesDesc.get(sc, "")))
                 return
 
             if "303" in status_codes:
@@ -2172,9 +2172,9 @@ class Command:
                 if src:
                     self.desc.add(src)
             else:
-                answer = "Command '%s' is currently unavailable." % self.name
+                answer = gAnsBase[48] % self.name
         else:
-            answer = "Access denied."
+            answer = gAnsBase[49]
         if answer:
             Answer(answer, stype, source, disp)
 
@@ -2605,6 +2605,12 @@ def load_nexsus():
                 # Rusia apa pun bahasa aktif user.
                 AnsBase = _wrap_answers(g2["AnsBase"], "__global__",
                                         os.path.dirname(insc_path))
+                # Alias yang dijamin tidak pernah ter-shadow. Ekspansi yang
+                # punya AnsBase sendiri meng-assign `AnsBase` ke namespace-nya
+                # saat exec(), jadi `AnsBase[N]` di dalam ekspansi itu menunjuk
+                # tabel LOKAL, bukan global. Call site yang memang butuh tabel
+                # global harus pakai `gAnsBase`.
+                globals()["gAnsBase"] = AnsBase
         except Exception:
             exc_info_()
             PrintWarn("Could not load static/insc.py")

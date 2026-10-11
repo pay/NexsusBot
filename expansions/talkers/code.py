@@ -28,15 +28,15 @@ class expansion_temp(expansion):
 
 	def command_talkers(self, stype, source, body, disp):
 		if source[1] not in Chats:                 # Fix: has_key → in
-			return Answer("Not in a room.", stype, source, disp)
+			return Answer(gAnsBase[8], stype, source, disp)
 		if not body:
-			return Answer("Not enough arguments.", stype, source, disp)
+			return Answer(gAnsBase[1], stype, source, disp)
 
 		ls  = body.split()
 		a1  = ls.pop(0).lower()
 
 		if len(ls) < 1:
-			return Answer("Not enough arguments.", stype, source, disp)
+			return Answer(gAnsBase[1], stype, source, disp)
 
 		# Fix: all .decode("utf-8") → literals
 		if a1 in ("top", "топ"):

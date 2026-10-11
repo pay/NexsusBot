@@ -72,7 +72,7 @@ class expansion_temp(expansion):
 	def command_more(self, stype, source, body, disp):
 		Chat = Chats.get(source[1])
 		if not Chat:
-			return Answer("Not in a chat.", stype, source, disp)
+			return Answer(gAnsBase[45], stype, source, disp)
 		if Chat.more:
 			body = "[&&] %s" % Chat.more
 			Chat.more = ""
@@ -115,7 +115,7 @@ class expansion_temp(expansion):
 
 	def command_echo(self, stype, source, body, disp):
 		if not body:
-			return Answer("No arguments.", stype, source, disp)
+			return Answer(gAnsBase[1], stype, source, disp)
 		if ConfLimit >= len(body):
 			Message(source[1], body, disp)
 		else:

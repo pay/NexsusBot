@@ -78,7 +78,7 @@ class expansion_temp(expansion):
 		parts   = body.split(None, 1)
 		command = parts.pop(0).lower()
 		if command not in Cmds:                  # Fix: has_key → in
-			return Answer("Unknown command.", stype, source, disp)
+			return Answer(gAnsBase[6], stype, source, disp)
 		if parts:
 			# Explicit :help <cmd> <lang> - user asked for a specific language.
 			lang = parts.pop(0).lower()
@@ -174,7 +174,7 @@ class expansion_temp(expansion):
 			access_str = str(access)
 		answer += self.AnsBase[16] % access_str
 		if stype == sBase[1]:
-			Answer("Sent to PM.", stype, source, disp)
+			Answer(gAnsBase[11], stype, source, disp)
 		Message(source[0], answer, disp)
 
 	commands = (
