@@ -32,7 +32,18 @@ if DefLANG in ("RU", "UA"):
 		"Помощь по команде «ХЕЛП» (последнее действие - %s)", # 27
 		"Клиент «%s» упал!", # 28
 		"JID «%s» используется в другом клиенте! (отключаю его)", # 29
-		"Это не число." # 30
+		"Это не число.", # 30
+		"📋 Алиасы отключены.", # 31
+		"❌ Недостаточно прав для этой команды.", # 32
+		"❌ Неверный синтаксис алиаса.", # 33
+		"❌ Неверный синтаксис условия.", # 34
+		"❌ Слишком много условий (максимум 8).", # 35
+		"❌ Атрибуты, условия, клаузы и флаги должны быть одной длины.", # 36
+		"❌ Атрибуты и условия должны быть одной длины.", # 37
+		"ℹ️ Для этой макрокоманды нет справки.", # 38
+		"ℹ️ Алиас «%s» не найден.", # 39
+		"Ростер включён.", # 40
+		"Ростер отключён.", # 41
 	)
 else:
 	AnsBase = (
@@ -66,5 +77,16 @@ else:
 		"Type 'HELP' to know more (the last action - %s)", # 27
 		"Client '%s' fell!", # 28
 		"JID '%s' used in another client! (I have to disconnect it)", # 29
-		"This is not a number." # 30
+		"This is not a number.", # 30
+		"📋 Aliases are disabled.", # 31
+		"❌ You do not have access to that command.", # 32
+		"❌ Invalid alias syntax.", # 33
+		"❌ Invalid condition syntax.", # 34
+		"❌ Too many conditions (max 8).", # 35
+		"❌ Attributes, conditions, clauses and flags must have the same length.", # 36
+		"❌ Attributes and conditions must have the same length.", # 37
+		"ℹ️ No help text is stored for this macro.", # 38
+		"ℹ️ No alias named '%s'.", # 39
+		"Roster is enabled.", # 40
+		"Roster is disabled.", # 41
 	)

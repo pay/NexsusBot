@@ -31,7 +31,7 @@ class expansion_temp(expansion):
 							Answer(AnsBase[11], stype, source, disp)
 						Message(source[0], exc, disp)
 					except Exception:
-						answer = self.AnsBase[20]
+						answer = self.AnsBase[7]
 				else:
 					answer = self.AnsBase[21] % body
 			else:
@@ -51,7 +51,7 @@ class expansion_temp(expansion):
 				", ".join(sorted(Info["alls"]))
 			)
 		elif not OSList.windows:
-			answer += self.AnsBase[17]
+			pass
 		Answer(answer, stype, source, disp)
 
 	def command_session(self, stype, source, body, disp):

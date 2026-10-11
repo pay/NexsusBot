@@ -118,20 +118,20 @@ class expansion_temp(expansion):
 				if not Roster["on"]:
 					Roster["on"] = True
 					cat_file(self.RosterFile, str(True))
-					answer = AnsBase[4]
+					answer = AnsBase[41]
 				else:
-					answer = self.AnsBase[3]
+					answer = self.AnsBase[7]
 			elif body in ("off", "0", "выкл"):
 				if Roster["on"]:
 					Roster["on"] = False
 					cat_file(self.RosterFile, str(False))
-					answer = AnsBase[4]
+					answer = AnsBase[40]
 				else:
-					answer = self.AnsBase[4]
+					answer = self.AnsBase[41]
 			else:
 				answer = AnsBase[2]
 		else:
-			answer = self.AnsBase[3] if Roster["on"] else self.AnsBase[4]
+			answer = self.AnsBase[40] if Roster["on"] else self.AnsBase[41]
 		Answer(answer, stype, source, disp)
 
 	def init_roster_state(self):

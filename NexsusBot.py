@@ -2598,8 +2598,13 @@ def load_nexsus():
             g2 = {"DefLANG": DefLANG}
             exec(open(insc_path, encoding="utf-8").read(), g2)
             if "AnsBase" in g2:
-                AnsBase = g2["AnsBase"]
-                pass
+                # Bungkus juga tabel global. Enam ekspansi (alias, dns, muc,
+                # extra_control, roster_control, session_stats) tidak punya
+                # AnsBase sendiri dan jatuh ke tabel ini, jadi tanpa pembungkus
+                # :subject / :ban / :kick / :turbo tetap keluar dalam bahasa
+                # Rusia apa pun bahasa aktif user.
+                AnsBase = _wrap_answers(g2["AnsBase"], "__global__",
+                                        os.path.dirname(insc_path))
         except Exception:
             exc_info_()
             PrintWarn("Could not load static/insc.py")

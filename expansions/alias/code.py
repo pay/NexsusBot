@@ -533,7 +533,7 @@ class expansion_temp(expansion):
         if not enough_access(source[1], source[2], 8):
             return self.AnsBase[10]
         if not self.On:
-            return self.AnsBase[3]
+            return self.AnsBase[31]
         self.On = False
         self.save_alias(True, source[1])
         self.clear_handlers()
@@ -588,7 +588,7 @@ class expansion_temp(expansion):
             return self._alias_del(source, alias, event, desc, glob)
 
         if len(alias) > 16:
-            return self.AnsBase[22]
+            return self.AnsBase[5]
 
         if arg0 == "show":
             return self._alias_show(alias, event, rest, desc)
@@ -639,7 +639,7 @@ class expansion_temp(expansion):
             if access < 8:
                 cmds = [temp.name for temp in Cmds.values() if temp.access > access]
                 if any(t in cmds or t in self.get_names() for t in body_.lower().split()):
-                    return self.AnsBase[27]
+                    return self.AnsBase[32]
             desc[self.macro][alias] = (command, body_, Cmds[command].access)
             self.save_alias(glob, source[1])
             return self.AnsBase[4]
@@ -649,7 +649,7 @@ class expansion_temp(expansion):
 
         clauses = self.compile_quote.findall(rest)
         if not clauses:
-            return self.AnsBase[20]
+            return self.AnsBase[33]
         stripped = self.compile_quote.sub(chr(32), rest)
         sub = stripped.split(None, 5)
         if len(sub) < 5:
@@ -666,8 +666,8 @@ class expansion_temp(expansion):
             if atype == self.command:
                 return AnsBase[6]
             elif atype == self.set:
-                return self.AnsBase[18]
-            return self.AnsBase[19]
+                return self.AnsBase[34]
+            return self.AnsBase[34]
 
         if atype == self.command and not enough_access(source[1], source[2], (8 if func in self.get_names() else Cmds[func].access)):
             return AnsBase[10]
@@ -686,19 +686,19 @@ class expansion_temp(expansion):
         if "re" in conds_ls and not enough_access(source[1], source[2], 8):
             return AnsBase[10]
         if len(conds_ls) > 8:
-            return self.AnsBase[15]
+            return self.AnsBase[35]
 
         attrs_ls = attrs.split(chr(47))
         flags_ls = flags.split(chr(47))
         if not (len(attrs_ls) == len(conds_ls) == len(clauses) == len(flags_ls)):
-            return self.AnsBase[14]
+            return self.AnsBase[36]
 
         attrs_ls = [self.null if conds_ls[i] == self.null else a
                     for i, a in enumerate(attrs_ls) if self.checkAttr(event, a, conds_ls[i])]
         clauses = [int(c) if conds_ls[i].startswith("len") else c for i, c in enumerate(clauses)
                    if not conds_ls[i].startswith("len") or (isNumber(c) and 3 < int(c) < 10241)]
         if not (len(attrs_ls) == len(conds_ls) == len(clauses)):
-            return self.AnsBase[13]
+            return self.AnsBase[37]
 
         limit = (192 if enough_access(source[1], source[2], 8) else 64)
         if not all(isinstance(c, int) or len(c) <= 64 for c in clauses):
@@ -812,7 +812,7 @@ class expansion_temp(expansion):
             cmd, args_, access = desc
             if help_:
                 return self.AnsBase[25] % (help_[0], access)
-            return self.AnsBase[26]
+            return self.AnsBase[7]
         return self.AnsBase[7]
 
     def _macro_list_all(self, source):
