@@ -7,6 +7,21 @@
 #  Original © (2010-2013) by WitcherGeralt [alkorgun@gmail.com]
 #  Ported to Python 3 / slixmpp by Nexsus Project 2026
 
+def _active_help_lang():
+	"""Language code for the active thread, or None when unknown.
+
+	Help files are plain text rather than reply strings, so this reads the
+	per-thread localization context directly instead of going through
+	LocalizedAnswers.
+	"""
+	try:
+		from library.nxs_l10n import LocalizationContext
+		lang = LocalizationContext.get()
+	except Exception:
+		lang = None
+	return lang.lower() if lang else None
+
+
 class expansion_temp(expansion):
 
 	def __init__(self, name):
@@ -57,21 +72,6 @@ class expansion_temp(expansion):
 
 	mark = "{command}"
 
-
-def _active_help_lang():
-	"""Language code for the active thread, or None when unknown.
-
-	Help files are plain text rather than reply strings, so this reads the
-	per-thread localization context directly instead of going through
-	LocalizedAnswers.
-	"""
-	try:
-		from library.nxs_l10n import LocalizationContext
-		lang = LocalizationContext.get()
-	except Exception:
-		lang = None
-	return lang.lower() if lang else None
-
 	def command_help(self, stype, source, body, disp):
 		if not body:
 			return Answer(self.AnsBase[5], stype, source, disp)
@@ -80,6 +80,7 @@ def _active_help_lang():
 		if command not in Cmds:                  # Fix: has_key → in
 			return Answer("Unknown command.", stype, source, disp)
 		if parts:
+			# Explicit :help <cmd> <lang> - user asked for a specific language.
 			lang = parts.pop(0).lower()
 			if len(lang) == 2 and lang.isalpha():
 				helpf = os.path.join(ExpsDir, Cmds[command].exp.name,
