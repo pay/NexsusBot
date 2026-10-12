@@ -2325,13 +2325,21 @@ class expansion:
                 AnsBase_temp = None
             exec(open(self.file, encoding="utf-8").read(), g)
             exp_inst = g.get("expansion_temp", lambda n: None)(self.name)
-            if exp_inst and AnsBase_temp:
+            if exp_inst:
+                # `insc.py` boleh meng-override AnsBase (mis. versi RU/UA
+                # saat DefLANG tertentu).  Kalau ekspansi tidak punya
+                # `insc.py`, pakai AnsBase milik code.py sendiri supaya
+                # file locale ans.<lang>.json tetap terbaca - dulu
+                # ekspansi tanpa `insc.py` tidak pernah ke-wrap sama
+                # sekali, jadi locale-nya mati total.
                 # Bungkus tuple polos jadi LocalizedAnswers supaya
                 # `self.AnsBase[i]` tetap jalan (kode ekspansi existing
                 # tidak berubah) tapi bisa memilih string per bahasa.
                 # Kalau kelasnya tidak tersedia, jatuh ke tuple biasa.
-                exp_inst.AnsBase = _wrap_answers(AnsBase_temp,
-                                                 self.name, self.path)
+                base = AnsBase_temp or getattr(exp_inst, "AnsBase", None)
+                if base:
+                    exp_inst.AnsBase = _wrap_answers(base,
+                                                     self.name, self.path)
         except Exception:
             exc_info_()
             return (None, exc_info())
