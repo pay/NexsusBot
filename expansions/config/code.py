@@ -9,18 +9,18 @@ class expansion_temp(expansion):
 
 	AnsBase = (
 		"\u2705 Updated: %s",                        # 0
-		"Nothing to update.",                 # 1
+		"\u2139\ufe0f Nothing to update.",                 # 1
 		"Current config:\n",                  # 2
 		"\u274c No extra clients configured.",       # 3
 		"\u2139\ufe0f Leaving rooms...",                   # 4
 		"\u2139\ufe0f Disconnecting...",                   # 5
-		"New primary dispatcher: %s",         # 6
+		"\u21aa\ufe0f New primary dispatcher: %s",         # 6
 		"\u274c Can't remove the only client.",      # 7
 		"\u274c Thread error.",                      # 8
-		"Connection failed.",                 # 9
-		"Already connected.",                 # 10
+		"\u274c Connection failed.",                 # 9
+		"\u2139\ufe0f Already connected.",                 # 10
 		"\u274c Client not found: %s",              # 11
-		"Client offline: %s",                # 12
+		"\u26aa\ufe0f Client offline: %s",                # 12
 	)
 
 	def __init__(self, name):

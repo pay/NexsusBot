@@ -14,17 +14,17 @@ class expansion_temp(expansion):
 
 	AnsBase = (
 		"\u274c '%s' is offline.",                     # 0
-		"Already using '%s'.",                  # 1
+		"\u2139\ufe0f Already using '%s'.",                  # 1
 		"\u274c Unknown dispatcher: '%s'.",            # 2
 		"\u2705 Rejoining...",                         # 3
 		"\u2705 Nick set to: %s",                      # 4
 		"\u274c Nick too long (max 16).",              # 5
-		"Prefix removed.",                      # 6
+		"\U0001f9f9 Prefix removed.",                      # 6
 		"\u274c No prefix set.",                       # 7
 		"\u2705 Prefix set to: '%s'",                  # 8
-		"Prefix '%s' already set.",             # 9
-		"Available prefixes: '%s'",             # 10
-		"Current prefix: '%s'",                 # 11
+		"\u2139\ufe0f Prefix '%s' already set.",             # 9
+		"\U0001f4cb Available prefixes: '%s'",             # 10
+		"\U0001f4cb Current prefix: '%s'",                 # 11
 		"\u274c No prefix.",                           # 12
 		"\u274c Unknown state: '%s'",                  # 13
 	)

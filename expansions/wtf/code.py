@@ -20,14 +20,14 @@ class expansion_temp(expansion):
 		"\U0001f4cb Global definitions (%d):\u000a%s",        # 0
 		"\U0001f4cb Local definitions (%d) [%s]:\u000a%s",    # 1
 		"\u274c No definitions found.",               # 2
-		"%s — %d mentions",                    # 3
+		"\U0001f4ca %s — %d mentions",                    # 3
 		"\u274c Not found.",                           # 4
-		"%s:\n%s\n— Added by %s (%s)",         # 5
+		"\U0001f4d6 %s:\n%s\n— Added by %s (%s)",         # 5
 		"\u274c '%s' not found.",                      # 6
-		"Global: %d definitions.",             # 7
-		"Local: %d definitions [%s].",         # 8
-		"'%s' exists globally, can't override.", # 9
-		"No room context.",                    # 10
+		"\U0001f4ca Global: %d definitions.",             # 7
+		"\U0001f4ca Local: %d definitions [%s].",         # 8
+		"\u274c '%s' exists globally, can't override.", # 9
+		"\u274c No room context.",                    # 10
 		"\n",                                  # -1 (separator)
 	)
 

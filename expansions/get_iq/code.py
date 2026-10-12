@@ -29,7 +29,7 @@ class expansion_temp(expansion):
         "\u2139\ufe0f Idle: %s \u2014 %s",                        # 7  server uptime
         "\u2139\ufe0f Idle: %s \u2014 %s",                        # 8  user idle
         "\u274c No matches found.",                    # 9
-        "Empty vCard.",                         # 10
+        "\u2139\ufe0f Empty vCard.",                         # 10
         "\nTotal: %d items.",                   # 11
     )
 

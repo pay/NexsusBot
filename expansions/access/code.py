@@ -21,7 +21,7 @@ class expansion_temp(expansion):
 		"\u274c %s is not in access list.",                # 6
 		"\u274c Access level must be between -1 and 8.",   # 7
 		"\u274c Access level must be between 0 and 6.",    # 8
-		"This user is in global list, use gaccess.", # 9
+		"\u2139\ufe0f This user is in global list, use gaccess.", # 9
 		"\u274c Can't find user %s.",                      # 10
 	)
 

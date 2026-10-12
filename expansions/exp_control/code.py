@@ -23,7 +23,7 @@ class expansion_temp(expansion):
 		"\u274c Not found.",                                             # 7
 		"\U0001f4cb Expansions:",                                            # 8
 		"\nUnloaded (%d):\n%s",                                   # 9
-		"Expansion '%s' loaded.",                                 # 10
+		"\u2705 Expansion '%s' loaded.",                                 # 10
 		"\u274c Failed to load '%s': %s",                               # 11
 		"",                                                       # 12
 		"\u2705  Previous version restored.",                            # 13
