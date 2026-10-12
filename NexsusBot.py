@@ -518,7 +518,9 @@ isSource = lambda jid: bool(isJID.match(str(jid)))
 
 static          = args.static   + "/%s"
 dynamic         = args.dynamic  + "/%s"
-ExpsDir         = args.expansions
+# Absolut sekali di sini: expansions/lang baca ExpsDir global untuk scan
+# locale. Kalau relatif, hasilnya tergantung cwd saat command jalan.
+ExpsDir         = os.path.abspath(args.expansions)
 FailDir         = dynamic % "crash"
 PidFile         = dynamic % "sessions.db"
 GenCrash        = dynamic % "dispatcher.crash"

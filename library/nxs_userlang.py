@@ -72,7 +72,7 @@ def get_user_lang(chat, nick, base="current"):
     return nxs_lang.normalize(raw)
 
 
-def set_user_lang(chat, nick, lang, base="current"):
+def set_user_lang(chat, nick, lang, exp_dir="expansions", base="current"):
     """
     Simpan pilihan bahasa user.  Return (ok, code_or_None).
 
@@ -86,7 +86,7 @@ def set_user_lang(chat, nick, lang, base="current"):
     code = None
     if lang and str(lang).strip().lower() != "auto":
         code = nxs_lang.normalize(lang)
-        if not nxs_lang.is_known(code):
+        if not nxs_lang.is_known(code, exp_dir):
             return (False, None)
     try:
         con = _connect(base)

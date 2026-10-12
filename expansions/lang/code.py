@@ -23,11 +23,11 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"\U0001f4cb Bahasa sekarang: %s\n\U0001f4c4 Dipakai: %s\n\U0001f50d Codes: %s\n\U0001f4a1gdipakai juga nama: %s",  # 0
+		"\U0001f4cb Bahasa sekarang: %s\n\U0001f4c4 Dipakai: %s\n\U0001f50d Codes: %s\n\U0001f4a1 Alias yang bisa dipakai: %s",  # 0
 		"\u2705 Bahasa lo sekarang: %s.",                                                      # 1
 		"\u274c Kode bahasa nggak dikenal: %s.\n\U0001f50d Codes: %s",                       # 2
 		"\u274c Gagal nyimpen pilihan bahasa.",                                                # 3
-		"\u2139\ufe0f Closing the loop: ':lang auto' buat balik ke deteksi otomatis.",       # 4
+		"\u2139\ufe0f Kembali ke deteksi otomatis — ':lang auto' bikin bot baca tag <lang> dari client lo lagi.",       # 4
 		"\U0001f4cb Bahasa di room ini:\n%s",                                                  # 5
 		"\u2139\ufe0f Belum ada yang pilih bahasa di sini.",                                  # 6
 		"\u274c Gagal baca database bahasa.",                                                 # 7
@@ -126,7 +126,7 @@ class expansion_temp(expansion):
 		if nxs_userlang is None:
 			return Answer(self.AnsBase[7], stype, source, disp)
 
-		ok, stored = nxs_userlang.set_user_lang(source[1], source[2], code)
+		ok, stored = nxs_userlang.set_user_lang(source[1], source[2], code, ExpsDir)
 		if not ok:
 			return Answer(self.AnsBase[3], stype, source, disp)
 
