@@ -34,7 +34,7 @@ class expansion_temp(expansion):
     AnsBase = (
         "Mengecek update dari git...",                                        # 0
         "Sudah versi terbaru, tidak ada update baru.",                         # 1
-        "Update tersedia (belum ditarik):\n%s\n\nJalankan 'update pull'.",     # 2
+        "Update tersedia (belum ditarik):\nSekarang: %s\nCommit baru:\n%s\n\nJalankan 'update pull'.",   # 2
         "Menarik update dari git...",                                         # 3
         "Update berhasil ditarik:\n%s\n\n"
         "Jalankan 'update restart' untuk menerapkan (bot akan restart).",     # 4
@@ -48,6 +48,10 @@ class expansion_temp(expansion):
         "baru ulangi 'update pull'.",                                         # 9
         "Usage: update [check|pull|restart|status]",                          # 10
     )
+
+    def _head_short(self):
+        code, out = _run_git(["log", "-1", "--format=%h %cd", "--date=short"])
+        return (out or "?").strip()
 
     def _is_git_repo(self):
         code, _ = _run_git(["rev-parse", "--is-inside-work-tree"])
@@ -92,7 +96,7 @@ class expansion_temp(expansion):
         if not out:
             Answer(self.AnsBase[1], stype, source, disp)
         else:
-            Answer(self.AnsBase[2] % out, stype, source, disp)
+            Answer(self.AnsBase[2] % (self._head_short(), out), stype, source, disp)
 
     def _do_pull(self, stype, source, disp):
         # fix: cegah pull kalau ada perubahan lokal belum di-commit --
