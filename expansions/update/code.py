@@ -32,20 +32,20 @@ class expansion_temp(expansion):
         expansion.__init__(self, name)
 
     AnsBase = (
-        "Mengecek update dari git...",                                        # 0
-        "Sudah versi terbaru, tidak ada update baru.",                         # 1
-        "Update tersedia (belum ditarik):\nSekarang: %s\nCommit baru:\n%s\n\nJalankan 'update pull'.",   # 2
-        "Menarik update dari git...",                                         # 3
-        "Update berhasil ditarik:\n%s\n\n"
-        "Jalankan 'update restart' untuk menerapkan (bot akan restart).",     # 4
-        "Gagal update:\n%s",                                                  # 5
-        "Bot akan restart sekarang untuk menerapkan update...",               # 6
+        "Checking for updates from git...",                                   # 0
+        "Already the latest version, no new updates.",                        # 1
+        "Updates available (not pulled yet):\nNow: %s\nNew commits:\n%s\n\nRun 'update pull'.",  # 2
+        "Pulling update from git...",                                         # 3
+        "Update pulled successfully:\n%s\n\n"
+        "Run 'update restart' to apply (bot will restart).",                  # 4
+        "Update failed:\n%s",                                                 # 5
+        "Bot will restart now to apply the update...",                        # 6
         "Git status:\n%s",                                                    # 7
-        "Bukan git repository, atau git tidak tersedia di device ini.",       # 8
-        "Ada perubahan lokal yang belum di-commit -- update DIBATALKAN demi "
-        "keamanan (supaya tidak menimpa perubahan yang belum disimpan).\n"
-        "Jalankan 'update status' untuk detail, commit/stash dulu manual, "
-        "baru ulangi 'update pull'.",                                         # 9
+        "Not a git repository, or git is not available on this device.",      # 8
+        "There are local changes that have not been committed -- update "
+        "CANCELLED for safety (to avoid overwriting unsaved changes).\n"
+        "Run 'update status' for details, commit/stash first, then retry "
+        "'update pull'.",                                                     # 9
         "Usage: update [check|pull|restart|status]",                          # 10
     )
 

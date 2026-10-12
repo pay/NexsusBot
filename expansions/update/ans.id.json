@@ -1,0 +1,13 @@
+{
+  "0": "Mengecek update dari git...",
+  "1": "Sudah versi terbaru, tidak ada update baru.",
+  "2": "Update tersedia (belum ditarik):\nSekarang: %s\nCommit baru:\n%s\n\nJalankan 'update pull'.",
+  "3": "Menarik update dari git...",
+  "4": "Update berhasil ditarik:\n%s\n\nJalankan 'update restart' untuk menerapkan (bot akan restart).",
+  "5": "Gagal update:\n%s",
+  "6": "Bot akan restart sekarang untuk menerapkan update...",
+  "7": "Git status:\n%s",
+  "8": "Bukan git repository, atau git tidak tersedia di device ini.",
+  "9": "Ada perubahan lokal yang belum di-commit -- update DIBATALKAN demi keamanan (supaya tidak menimpa perubahan yang belum disimpan).\nJalankan 'update status' untuk detail, commit/stash dulu manual, baru ulangi 'update pull'.",
+  "10": "Usage: update [check|pull|restart|status]"
+}
