@@ -41,31 +41,31 @@ else:
                 "Alias enabled.", # 1
                 "Alias already enabled.", # 2
                 "Alias already disabled.", # 3
-                "The list of alias is empty.", # 4
+                "The list of aliases is empty.", # 4
                 "%s\nAccess: %d\nCommand: %s\nArgs: %s", # 5
                 "%s\nEvent: %s\nCondition(s):\n%s\nAction: %s", # 6
-                "There is no alias such like this.", # 7
+                "There is no such alias.", # 7
                 "Args are not suitable for formatting.", # 8
                 "Already there is a global macro with the same name.", # 9
                 "Bad regex!", # 10
-                "Body of the condition can not be empty!", # 11
+                "Body of the condition cannot be empty!", # 11
                 "The length of one condition may not exceed %d characters!", # 12
                 "Vars and/or clauses are invalid!", # 13
                 "Number of conditions, variables, clauses and a set of flags is not the same!", # 14
                 "Number of conditions may not exceed 8.", # 15
-                "Use regular expressions can only superadmin.", # 16
-                "Name '%s' occupied by the command.", # 17
-                "The role of incorrect!", # 18
+                "Only superadmin can use regular expressions.", # 16
+                "Name '%s' is occupied by a command.", # 17
+                "The role is incorrect!", # 18
                 "The message type is invalid!", # 19
                 "No clause!", # 20
                 "Access should not be less than 1 and more than %d.", # 21
-                "Alias name length can not exceed 16 characters.", # 22
+                "Alias name length cannot exceed 16 characters.", # 22
                 "There is no help.", # 23
-                "The full list of macro:", # 24
+                "The full list of macros:", # 24
                 r"->\nDescription:\n\t%s\nAccess: %d", # 25
                 "Help has not been set.", # 26
                 "In the parameters of the macro can't contain commands to which you do not have access and command to control aliases.", # 27
                 "Macro '%s' allowed.", # 28
                 "Macro '%s' forbidden.", # 29
-                "There are no forbidden macro." # 30
+                "There are no forbidden macros." # 30
         )

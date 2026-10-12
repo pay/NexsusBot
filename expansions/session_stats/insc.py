@@ -52,6 +52,6 @@ else:
 		"\nCommand '%s' usage statistics:\nTotal used - %s times (%d users).", # 18
 		"\n[#][Command][Used][Users]\n",                            # 19
 		"Unable to send error, look for crash logs.",               # 20
-		"Exception #%s isn't exists!",                              # 21
+		"Exception #%s doesn't exist!",                              # 21
 		"Total %d exceptions happened.",                            # 22
 	)

@@ -188,12 +188,12 @@ else:
 	AnsBase_temp = (
 		"No access to the resource.", # 0
 		"Trouble with the marking...", # 1
-		"There are no your requests in the cache.", # 2
+		"There are no requests from you in the cache.", # 2
 		"I can't find your requests in the cache, because I don't know your JID.", # 3
-		'\n\n** There are %d another results (type "google *").', # 4
+		'\n\n** There are %d other results (type "google *").', # 4
 		"No result...", # 5
 		"This language is not supported.", # 6
-		'\n\n** There are %d another translations (type "tr *").', # 7
+		'\n\n** There are %d other translations (type "tr *").', # 7
 		"Supported languages:\n", # 8
 		"loaded - {0}%", # 9
 		"Download can take several minutes...", # 10
