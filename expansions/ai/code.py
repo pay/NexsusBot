@@ -9,6 +9,7 @@ import urllib.error
 import json
 import threading
 import os as _os
+import re
 
 # ── Groq config ──────────────────────────────────────────────
 GROQ_API_BASE    = "https://api.groq.com/openai/v1/chat/completions"
@@ -57,10 +58,12 @@ SYSTEM_PROMPT = (
     "temen yang ramah, agak jahil, dan suka ngeledekin dengan gemas (bukan "
     "menghina beneran). Boleh sarkas dikit, boleh nyeletuk, boleh balas becanda "
     "kalau diajak becanda -- tapi tetap sayang sama semua orang di grup, bukan "
-    "toxic. Jawab pakai Bahasa Indonesia sehari-hari yang santai, singkat, dan "
-    "to the point, maksimal sekitar 10-15 baris. Pakai emoji secukupnya yang "
-    "sesuai sama emosi/nada obrolan (jangan spam emoji, cukup 1-3 per pesan "
-    "kalau memang pas)."
+    "toxic. Jawab dalam bahasa yang sama dengan bahasa pesan user -- kalau "
+    "user bahasa Indonesia, jawab bahasa Indonesia; kalau user bahasa "
+    "Inggris, jawab bahasa Inggris; kalau user bahasa Arab, jawab bahasa "
+    "Arab, dst. Gaya bicara santai, singkat, dan to the point, maksimal "
+    "sekitar 10-15 baris. Pakai emoji secukupnya yang sesuai sama emosi/nada "
+    "obrolan (jangan spam emoji, cukup 1-3 per pesan kalau memang pas)."
     "\n\n"
     "Kalau ditanya serius (info, bantuan, pertanyaan faktual), tetap jawab "
     "dengan benar dan jujur -- jahilnya taruh di gaya bicara, bukan di isi "
@@ -102,6 +105,98 @@ def _load_groq_key():
 
 class expansion_temp(expansion):
     name = "ai"
+
+    AnsBase = (
+        "AI is currently disabled.",                                          # 0
+        "Your conversation history has been deleted.",                        # 1
+        "[Nexsus] AI is ready! (%s)\n"                                        # 2
+        "Provider: %s\n"
+        "History : %d/%s messages\n"
+        "Use     : ai <question>\n"
+        "Reset   : ai reset",
+        "[Nexsus] %s",                                                        # 3
+        "AI %s (global).",                                                    # 4
+        "AI is enabled in this room.",                                        # 5
+        "AI is disabled in this room.",                                       # 6
+        "AI %s.",                                                             # 7
+        "enabled",                                                            # 8
+        "disabled",                                                           # 9
+        "Ollama has been removed from this bot \u2014 provider is now fixed to Groq.\n"
+        "Switch model: aiset model [1-7]",                                    # 10
+        "Model Groq \u2192 %s\n%s",                                           # 11
+        "Groq options: %s",                                                   # 12
+        "No custom limit.",                                                   # 13
+        "Custom history limit:",                                              # 14
+        "  %s -> %s",                                                         # 15
+        "Usage: aiset ulimit <jid/nick> <number>|reset\n"
+        "       aiset ulimit list",                                           # 16
+        "Custom limit for %s removed.",                                       # 17
+        "%s doesn't have a custom limit.",                                    # 18
+        "Custom limit %s -> %d messages.",                                    # 19
+        "Value must be a positive number.",                                   # 20
+        "All user history deleted. (%d keys)",                                # 21
+        "Use: aiset reset all",                                               # 22
+        "History, ulimit, & room log saved.",                                 # 23
+        "History reloaded. (%d keys, %d room logs)",                          # 24
+        "History Info\n"                                                      # 25
+        "Dir      : %s\n"
+        "Size     : %.1f KB history / %.1f KB ulimit / %.1f KB room log\n"
+        "Keys     : %d user, %d room (history)\n"
+        "Msg      : %d total\n"
+        "Room log : %d rooms recorded, last %d messages as context\n"
+        "Dirty    : history=%s room_log=%s",
+        "History & room log deleted.\n"                                       # 26
+        "RAM  : %d history keys, %d room logs\n"
+        "Disk : %s",
+        "Usage: aiset history save|load|info|clear",                          # 27
+        "[Nexsus] Failed to fetch quota data.",                               # 28
+        "Groq Quota \u2014 %s\n"                                              # 29
+        "\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n"
+        "Model       : %s\n"
+        "Requests    : %s / %s\n"
+        "Tokens      : %s / %s\n"
+        "Reset Req   : %s\n"
+        "Reset Token : %s\n"
+        "\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\n"
+        "(data from last request)",
+        "Fetching quota data from Groq...",                                   # 30
+        "Groq: %s",                                                           # 31
+        "key OK",                                                             # 32
+        "key not set",                                                        # 33
+        "Groq key reloaded: %s",                                              # 34
+        "OK (%s...)",                                                         # 35
+        "NOT FOUND",                                                          # 36
+        "[Nexsus] AI Info %s\n"                                               # 37
+        "Global  : %s\n"
+        "Provider: groq (fixed \u2014 Ollama removed)\n"
+        "Model   : %s%s\n"
+        "Groq    : %s\n"
+        "Users   : %d user, %d room\n"
+        "Messages: %d total\n"
+        "Ulimit  : %d custom\n"
+        "Room log: %d rooms recorded (last %d messages as context)\n\n"
+        "Commands:\n"
+        "ai <question> | ai reset\n"
+        "aiset on|off [global]\n"
+        "aiset model [1-7]\n"
+        "aiset ulimit <jid> <val>|reset|list\n"
+        "aiset reset all\n"
+        "aiset history save|load|info|clear\n"
+        "aiset quota | ping | reloadkey | info",
+        "Usage: aiset on|off [global] | model | ulimit | reset all | "        # 38
+        "history | quota | ping | reloadkey | info",
+        "Model Groq available:",                                              # 39
+        "\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501",  # 40
+        "%s %s) %-14s %s",                                                    # 41
+        "Switch: aiset model [%s]",                                           # 42
+        "Groq API key not set. Run: ~/groq.sh setkey",                        # 43
+        "Groq error: %s",                                                     # 44
+        "Groq returned no response.",                                         # 45
+        "Groq HTTP %d: %s",                                                   # 46
+        "Cannot connect to Groq: %s",                                         # 47
+        "Error: %s",                                                          # 48
+        "All Groq models are rate limited. Try again later.",                 # 49
+    )
 
     def __init__(self, name):
         expansion.__init__(self, name)
@@ -376,6 +471,111 @@ class expansion_temp(expansion):
                 return user.source.lower(), target
         return target.lower(), target
 
+
+    # ── Deteksi bahasa otomatis dari isi pesan ──
+    _LANG_SCRIPTS = {
+        "ar": "\u0600-\u06FF",       # Arab
+        "he": "\u0590-\u05FF",       # Ibrani
+        "hi": "\u0900-\u097F",       # Devanagari (Hindi/Marathi)
+        "zh": "\u4E00-\u9FFF",       # CJK Han (Chinese/Japanese)
+        "ru": "\u0400-\u04FF",       # Cyrillic (Russian/Ukrainian/Bulgarian)
+        "uk": "\u0400-\u04FF",
+        "bg": "\u0400-\u04FF",
+        "el": "\u0370-\u03FF",       # Greek
+        "th": "\u0E00-\u0E7F",       # Thai
+        "hi_k": None,
+    }
+
+    # Kata umum per bahasa untuk deteksi Latin-script
+    _LANG_KEYWORDS = {
+        "id": ("yang", "dan", "ini", "itu", "tidak", "bukan", "saya", "aku",
+               "kamu", "kita", "mereka", "dengan", "untuk", "dari", "ada",
+               "apa", "kenapa", "bagaimana", "boleh", "gimana", "nggak",
+               "udah", "lah", "dong", "sih", "kok", "banget", "makasih"),
+        "jv": ("sing", "lan", "iki", "iku", "ora", "dadi", "kowe", "aku",
+               "karo", "saka", "ana", "apa", "jare", "piye", "gak", "wis",
+               "mbak", "mas", "ndak", "mbuh", "lur", "cak"),
+        "en": ("the", "and", "this", "that", "what", "how", "why", "who",
+               "where", "when", "is", "are", "was", "were", "you", "your",
+               "my", "me", "we", "they", "can", "could", "should", "would",
+               "please", "thanks", "hello", "hey", "bro", "dude"),
+        "es": ("que", "como", "por", "para", "con", "una", "pero", "mas",
+               "muy", "gracias", "hola", "bueno", "donde", "cuando", "quien",
+               "este", "esta", "eso", "tambien", "puede", "tiene"),
+        "pt": ("que", "como", "para", "com", "uma", "mas", "muito", "obrigado",
+               "ola", "bom", "onde", "quando", "quem", "este", "esta", "isso",
+               "tambem", "pode", "tem", "nao", "voce", "mais"),
+        "fr": ("que", "comment", "pour", "avec", "une", "mais", "plus",
+               "tres", "merci", "bonjour", "bon", "ou", "quand", "qui",
+               "ce", "cette", "aussi", "peut", "etre", "dans", "vous",
+               "est", "sont", "pas", "mais", "bien"),
+        "de": ("das", "wie", "und", "ist", "nicht", "ein", "eine", "auch",
+               "noch", "danke", "hallo", "gut", "wo", "wann", "wer",
+               "dies", "diese", "kann", "muss", "soll", "von", "mit",
+               "auf", "für", "aber", "sehr"),
+        "it": ("che", "come", "per", "con", "una", "ma", "piu", "grazie",
+               "ciao", "bene", "dove", "quando", "chi", "questo", "questa",
+               "anche", "puo", "essere", "nel", "non", "piu", "siamo"),
+        "ru": ("и", "что", "это", "не", "на", "я", "ты", "он", "она",
+               "мы", "вы", "они", "как", "а", "но", "по", "из", "для",
+               "при", "о", "от", "до", "же", "бы", "так", "вот", "тут"),
+        "tr": ("bir", "bu", "su", "icin", "ile", "ama", "daha", "cok",
+               "tesekkur", "merhaba", "iyi", "nerede", "ne zaman", "kim",
+               "bu", "simdi", "de", "da", "mi", "mı", "sana", "ben"),
+        "ar": ("في", "من", "على", "أن", "هل", "ما", "هذا", "هذه",
+               "التي", "مع", "عن", "لا", "نعم", "شكرا", "مرحبا",
+               "أنا", "أنت", "هو", "هي", "نحن", "هم"),
+        "hi": ("है", "के", "का", "की", "में", "से", "को", "पर",
+               "यह", "वह", "क्या", "कैसे", "क्यों", "नमस्ते", "धन्यवाद",
+               "मैं", "तुम", "हम", "वे", "और", "लेकिन", "हां", "नहीं"),
+        "zh": ("的", "了", "是", "在", "我", "你", "他", "她",
+               "它", "们", "这", "那", "什么", "怎么", "为什么",
+               "请", "谢谢", "你好", "是的", "不是", "有", "没"),
+        "ja": ("の", "に", "は", "を", "た", "が", "で", "て",
+               "これ", "それ", "あれ", "なに", "どう", "なぜ",
+               "ありがとう", "こんにちは", "はい", "いいえ"),
+        "ko": ("의", "에", "는", "을", "이", "가", "에서", "으로",
+               "이것", "그것", "무엇", "어떻게", "왜",
+               "감사합니다", "안녕하세요", "네", "아니요"),
+        "fa": ("در", "از", "بر", "که", "این", "آن", "چه", "چطور",
+               "چرا", "ممنون", "سلام", "من", "تو", "او", "ما", "آنها",
+               "و", "اما", "با", "برای", "هست", "نیست"),
+    }
+
+    def _detect_lang(self, text):
+        """Deteksi bahasa dari teks. Kembalikan kode bahasa atau None."""
+        if not text or len(text.strip()) < 3:
+            return None
+        # 1. Cek script non-Latin (lebih reliable)
+        for code, rng in self._LANG_SCRIPTS.items():
+            if rng and re.search('[' + rng + ']', text):
+                return code
+        # 2. Cek Latin-script: hitung keyword per bahasa
+        words = set(re.findall(r'[a-zA-Z\']+',
+                               text.lower()))
+        if not words:
+            return None
+        best_code, best_score = None, 0
+        for code, kws in self._LANG_KEYWORDS.items():
+            score = len(words & set(kws))
+            if score > best_score:
+                best_score = score
+                best_code = code
+        return best_code if best_score >= 2 else None
+
+    def _reply_lang(self, text, stype, source, disp):
+        """Kirim reply dengan bahasa yang terdeteksi dari teks user."""
+        lang = self._detect_lang(text)
+        if lang and lang != "en":
+            try:
+                locale = self._locale.get(lang)
+                if locale:
+                    # pakai bahasa terdeteksi
+                    pass
+            except Exception:
+                pass
+        return lang
+
     # ── Groq call ─────────────────────────────────────────────
     # fix: model_key sekarang parameter eksplisit, bukan baca self._groq_model_key.
     # Ini menghindari race condition saat beberapa thread (tiap /ai dan tiap
@@ -385,7 +585,7 @@ class expansion_temp(expansion):
         if model_key is None:
             model_key = self._groq_model_key
         if not self._groq_key:
-            return None, "Groq API key belum diset. Jalankan: ~/groq.sh setkey"
+            return None, self.AnsBase[43]
         if len(prompt) > 1200:
             prompt = prompt[:1200] + "..."
         with self._lock:
@@ -431,7 +631,7 @@ class expansion_temp(expansion):
                 }
                 data = json.loads(resp.read().decode("utf-8"))
             if "error" in data:
-                return None, "Groq error: %s" % data["error"].get("message", "unknown")
+                return None, self.AnsBase[44] % data["error"].get("message", "unknown")
             result = data["choices"][0]["message"]["content"].strip()
             # strip blok <think>...</think> (Qwen3 chain-of-thought)
             import re as _re
@@ -440,7 +640,7 @@ class expansion_temp(expansion):
             if len(result) > 1500:
                 result = result[:1497] + "..."
             if not result:
-                return None, "Groq tidak menghasilkan respons."
+                return None, self.AnsBase[45]
             self._add_history(user_id, "user",      prompt, limit)
             self._add_history(user_id, "assistant", result, limit)
             return result, None
@@ -454,11 +654,11 @@ class expansion_temp(expansion):
                 # fix: pakai model_key parameter lokal, bukan self._groq_model_key
                 # yang bisa sudah berubah ditimpa thread lain saat ini dibaca.
                 return None, "__RATE_LIMIT__:%s" % model_key
-            return None, "Groq HTTP %d: %s" % (e.code, msg)
+            return None, self.AnsBase[46] % (e.code, msg)
         except urllib.error.URLError as e:
-            return None, "Tidak bisa terhubung ke Groq: %s" % e.reason
+            return None, self.AnsBase[47] % e.reason
         except Exception as e:
-            return None, "Error: %s" % str(e)
+            return None, self.AnsBase[48] % str(e)
 
     # ── Dispatch provider ─────────────────────────────────────
     # Ollama sudah dihapus — tidak ada lagi fallback ke provider lain.
@@ -488,7 +688,7 @@ class expansion_temp(expansion):
 
             if not next_key:
                 # semua model Groq kena rate limit — tidak ada provider lain lagi
-                return None, "Semua model Groq kena rate limit. Coba lagi nanti."
+                return None, self.AnsBase[49]
 
             print("[nexsus:ai] Rate limit model %s, fallback ke model %s" % (failed_key, next_key))
             tried.add(next_key)
@@ -526,11 +726,31 @@ class expansion_temp(expansion):
         # _call_ai akan add_history ke history_key, bukan user_id
         history_key    = room_key if room_key else user_id
         tagged_prompt  = ("[%s]: %s" % (nick, prompt)) if nick else prompt
-        result, err    = self._call_ai(history_key, tagged_prompt, limit, room_context=room_context)
-        if err:
-            Answer("[Nexsus] %s" % err, stype, source, disp)
-            return
-        self._send_chunked(result, stype, source, disp)
+
+        # fix: deteksi bahasa dari pesan user, set locale context thread ini
+        # supaya reply (termasuk error message) ikut bahasa user.
+        detected_lang = self._detect_lang(prompt)
+        locale_ctx = None
+        if detected_lang and detected_lang != "en":
+            try:
+                from nxs_l10n import LocalizationContext
+                locale_ctx = LocalizationContext(detected_lang)
+                locale_ctx.__enter__()
+            except Exception:
+                locale_ctx = None
+
+        try:
+            result, err = self._call_ai(history_key, tagged_prompt, limit, room_context=room_context)
+            if err:
+                Answer(self.AnsBase[3] % err, stype, source, disp)
+                return
+            self._send_chunked(result, stype, source, disp)
+        finally:
+            if locale_ctx:
+                try:
+                    locale_ctx.__exit__(None, None, None)
+                except Exception:
+                    pass
 
     # ── /ai ───────────────────────────────────────────────────
     def command_ai(self, stype, source, body, disp):
@@ -540,7 +760,7 @@ class expansion_temp(expansion):
         if self._is_room(stype) and source[1] in self._disabled_rooms:
             return
         if not self._ai_enabled:
-            Answer("AI sedang dinonaktifkan.", stype, source, disp)
+            Answer(self.AnsBase[0], stype, source, disp)
             return
 
         user_id = self._get_user_id(source)
@@ -549,18 +769,14 @@ class expansion_temp(expansion):
 
         if cmd.lower() == "reset":
             self._reset_history(user_id)
-            Answer("History percakapanmu telah dihapus.", stype, source, disp)
+            Answer(self.AnsBase[1], stype, source, disp)
             return
 
         if not cmd:
             history_count = len(self._get_history(user_id)) // 2
             limit_str     = "unlimited" if limit >= 9999 else str(limit)
             Answer(
-                "[Nexsus] AI siap! (%s)\n"
-                "Provider: %s\n"
-                "History : %d/%s pesan\n"
-                "Gunakan : ai <pertanyaan>\n"
-                "Reset   : ai reset" % (
+                self.AnsBase[2] % (
                     AI_VERSION,
                     self._get_provider_label(),
                     history_count,
@@ -647,66 +863,58 @@ class expansion_temp(expansion):
                 self._ai_enabled = is_on
                 if is_on:
                     self._disabled_rooms.clear()
-                Answer("AI %s (global)." % ("diaktifkan" if is_on else "dinonaktifkan"),
+                Answer(self.AnsBase[4] % (self.AnsBase[8] if is_on else self.AnsBase[9]),
                        stype, source, disp)
             elif self._is_room(stype):
                 room = source[1]
                 if is_on:
                     self._disabled_rooms.discard(room)
-                    Answer("AI diaktifkan di room ini.", stype, source, disp)
+                    Answer(self.AnsBase[5], stype, source, disp)
                 else:
                     self._disabled_rooms.add(room)
-                    Answer("AI dinonaktifkan di room ini.", stype, source, disp)
+                    Answer(self.AnsBase[6], stype, source, disp)
             else:
                 self._ai_enabled = is_on
-                Answer("AI %s." % ("diaktifkan" if is_on else "dinonaktifkan"),
+                Answer(self.AnsBase[7] % (self.AnsBase[8] if is_on else self.AnsBase[9]),
                        stype, source, disp)
 
         # -- provider (deprecated, Ollama dihapus) ─────────────
         elif cmd == "provider":
-            Answer(
-                "Ollama sudah dihapus dari bot ini — provider sekarang fixed ke Groq.\n"
-                "Ganti model: aiset model [1-7]",
-                stype, source, disp
-            )
+            Answer(self.AnsBase[10], stype, source, disp)
 
         # -- model ────────────────────────────────────────────
         elif cmd == "model":
             valid_keys = "|".join(sorted(GROQ_MODELS.keys()))
             if not sub:
-                lines = ["Model Groq tersedia:"]
-                lines.append("━━━━━━━━━━━━━━━━━━━━━━")
+                lines = [self.AnsBase[39]]
+                lines.append(self.AnsBase[40])
                 for k in sorted(GROQ_MODELS.keys()):
                     mid, mdesc = GROQ_MODELS[k]
                     marker = ">" if k == self._groq_model_key else " "
-                    lines.append("%s %s) %-14s %s" % (marker, k, mdesc, mid))
+                    lines.append(self.AnsBase[41] % (marker, k, mdesc, mid))
                 lines.append("━━━━━━━━━━━━━━━━━━━━━━")
-                lines.append("Ganti: aiset model [%s]" % valid_keys)
+                lines.append(self.AnsBase[42] % valid_keys)
                 Answer("\n".join(lines), stype, source, disp)
             elif sub in GROQ_MODELS:
                 self._groq_model_key = sub
                 mid, mdesc = GROQ_MODELS[sub]
-                Answer("Model Groq → %s\n%s" % (mdesc, mid), stype, source, disp)
+                Answer(self.AnsBase[11] % (mdesc, mid), stype, source, disp)
             else:
-                Answer("Pilihan Groq: %s" % valid_keys, stype, source, disp)
+                Answer(self.AnsBase[12] % valid_keys, stype, source, disp)
 
         # -- ulimit ───────────────────────────────────────────
         elif cmd == "ulimit":
             if sub == "list":
                 if not self._ulimit:
-                    Answer("Tidak ada custom limit.", stype, source, disp)
+                    Answer(self.AnsBase[13], stype, source, disp)
                 else:
-                    lines = ["Custom history limit:"]
+                    lines = [self.AnsBase[14]]
                     for uid, lim in sorted(self._ulimit.items()):
-                        lines.append("  %s -> %s" % (uid, "unlimited" if lim >= 9999 else str(lim)))
+                        lines.append(self.AnsBase[15] % (uid, "unlimited" if lim >= 9999 else str(lim)))
                     Answer("\n".join(lines), stype, source, disp)
                 return
             if len(args) < 3:
-                Answer(
-                    "Usage: aiset ulimit <jid/nick> <angka>|reset\n"
-                    "       aiset ulimit list",
-                    stype, source, disp
-                )
+                Answer(self.AnsBase[16], stype, source, disp)
                 return
             target  = args[1]
             val_str = args[2].lower()
@@ -715,8 +923,8 @@ class expansion_temp(expansion):
                 removed = self._ulimit.pop(jid, None)
                 self._save_ulimit()
                 Answer(
-                    "Custom limit %s dihapus." % display if removed is not None
-                    else "%s tidak punya custom limit." % display,
+                    self.AnsBase[17] % display if removed is not None
+                    else self.AnsBase[18] % display,
                     stype, source, disp
                 )
             else:
@@ -726,18 +934,18 @@ class expansion_temp(expansion):
                         raise ValueError
                     self._ulimit[jid] = val
                     self._save_ulimit()
-                    Answer("Custom limit %s -> %d pesan." % (display, val), stype, source, disp)
+                    Answer(self.AnsBase[19] % (display, val), stype, source, disp)
                 except ValueError:
-                    Answer("Nilai harus angka positif.", stype, source, disp)
+                    Answer(self.AnsBase[20], stype, source, disp)
 
         # -- reset ────────────────────────────────────────────
         elif cmd == "reset":
             if sub == "all":
                 total = len(self._history)
                 self._reset_all_history()
-                Answer("History semua user dihapus. (%d key)" % total, stype, source, disp)
+                Answer(self.AnsBase[21] % total, stype, source, disp)
             else:
-                Answer("Gunakan: aiset reset all", stype, source, disp)
+                Answer(self.AnsBase[22], stype, source, disp)
 
         # -- history ──────────────────────────────────────────
         elif cmd == "history":
@@ -745,13 +953,12 @@ class expansion_temp(expansion):
                 self._save_history()
                 self._save_ulimit()
                 self._save_room_log()
-                Answer("History, ulimit, & room log disimpan.", stype, source, disp)
+                Answer(self.AnsBase[23], stype, source, disp)
             elif sub == "load":
                 self._load_history()
                 self._load_ulimit()
                 self._load_room_log()
-                Answer(
-                    "History dimuat ulang. (%d key, %d room log)" % (
+                Answer(self.AnsBase[24] % (
                         len(self._history), len(self._room_log)
                     ),
                     stype, source, disp
@@ -760,14 +967,7 @@ class expansion_temp(expansion):
                 h_size = _os.path.getsize(HISTORY_FILE)  if _os.path.exists(HISTORY_FILE)  else 0
                 u_size = _os.path.getsize(ULIMIT_FILE)   if _os.path.exists(ULIMIT_FILE)   else 0
                 r_size = _os.path.getsize(ROOM_LOG_FILE) if _os.path.exists(ROOM_LOG_FILE) else 0
-                Answer(
-                    "History Info\n"
-                    "Dir      : %s\n"
-                    "Size     : %.1f KB history / %.1f KB ulimit / %.1f KB room log\n"
-                    "Keys     : %d user, %d room (history)\n"
-                    "Msg      : %d total\n"
-                    "Room log : %d room direkam, konteks %d pesan terakhir\n"
-                    "Dirty    : history=%s room_log=%s" % (
+                Answer(self.AnsBase[25] % (
                         HISTORY_DIR,
                         h_size / 1024,
                         u_size / 1024,
@@ -796,17 +996,14 @@ class expansion_temp(expansion):
                         removed.append(_os.path.basename(f))
                 self._dirty = False
                 self._room_log_dirty = False
-                Answer(
-                    "History & room log dihapus.\n"
-                    "RAM  : %d key history, %d room log\n"
-                    "Disk : %s" % (
+                Answer(self.AnsBase[26] % (
                         total_ram, total_room,
                         ", ".join(removed) if removed else "tidak ada file",
                     ),
                     stype, source, disp
                 )
             else:
-                Answer("Usage: aiset history save|load|info|clear", stype, source, disp)
+                Answer(self.AnsBase[27], stype, source, disp)
 
         # -- quota ───────────────────────────────────────────
         elif cmd == "quota":
@@ -819,19 +1016,10 @@ class expansion_temp(expansion):
                     self._reset_history("__quota_check__")
                     q = self._groq_quota
                     if not q:
-                        Answer("[Nexsus] Gagal ambil data quota.", stype, source, disp)
+                        Answer(self.AnsBase[28], stype, source, disp)
                         return
                     mid, mdesc = GROQ_MODELS[self._groq_model_key]
-                    Answer(
-                        "Groq Quota — %s\n"
-                        "━━━━━━━━━━━━━━━━━━━━━━\n"
-                        "Model       : %s\n"
-                        "Requests    : %s / %s\n"
-                        "Tokens      : %s / %s\n"
-                        "Reset Req   : %s\n"
-                        "Reset Token : %s\n"
-                        "━━━━━━━━━━━━━━━━━━━━━━\n"
-                        "(data dari request terakhir)" % (
+                    Answer(self.AnsBase[29] % (
                             mdesc,
                             mid,
                             q.get("remain_req", "-"), q.get("limit_req", "-"),
@@ -842,20 +1030,12 @@ class expansion_temp(expansion):
                         stype, source, disp
                     )
                 threading.Thread(target=_fetch_quota, daemon=True).start()
-                Answer("Mengambil data quota dari Groq...", stype, source, disp)
+                Answer(self.AnsBase[30], stype, source, disp)
             else:
                 q = self._groq_quota
                 mid, mdesc = GROQ_MODELS[self._groq_model_key]
                 Answer(
-                    "Groq Quota — %s\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━\n"
-                    "Model       : %s\n"
-                    "Requests    : %s / %s\n"
-                    "Tokens      : %s / %s\n"
-                    "Reset Req   : %s\n"
-                    "Reset Token : %s\n"
-                    "━━━━━━━━━━━━━━━━━━━━━━\n"
-                    "(data dari request terakhir)" % (
+                    self.AnsBase[29] % (
                         mdesc,
                         mid,
                         q.get("remain_req", "-"), q.get("limit_req", "-"),
@@ -869,7 +1049,7 @@ class expansion_temp(expansion):
         # -- ping ─────────────────────────────────────────────
         elif cmd == "ping":
             Answer(
-                "Groq: %s" % ("key OK" if self._groq_key else "key belum diset"),
+                self.AnsBase[31] % (self.AnsBase[32] if self._groq_key else self.AnsBase[33]),
                 stype, source, disp
             )
 
@@ -877,8 +1057,8 @@ class expansion_temp(expansion):
         elif cmd == "reloadkey":
             self._groq_key = _load_groq_key()
             Answer(
-                "Groq key di-reload: %s" % (
-                    "OK (%s...)" % self._groq_key[:8] if self._groq_key else "TIDAK DITEMUKAN"
+                self.AnsBase[34] % (
+                    self.AnsBase[35] % self._groq_key[:8] if self._groq_key else self.AnsBase[36]
                 ),
                 stype, source, disp
             )
@@ -896,24 +1076,7 @@ class expansion_temp(expansion):
                 )
             mid, mdesc = GROQ_MODELS[self._groq_model_key]
             model_str = "groq/%s (%s)" % (mdesc, mid)
-            Answer(
-                "[Nexsus] AI Info %s\n"
-                "Global  : %s\n"
-                "Provider: groq (fixed — Ollama dihapus)\n"
-                "Model   : %s%s\n"
-                "Groq    : %s\n"
-                "Users   : %d user, %d room\n"
-                "Pesan   : %d total\n"
-                "Ulimit  : %d custom\n"
-                "Room log: %d room direkam (konteks %d pesan terakhir)\n\n"
-                "Commands:\n"
-                "ai <pertanyaan> | ai reset\n"
-                "aiset on|off [global]\n"
-                "aiset model [1-7]\n"
-                "aiset ulimit <jid> <val>|reset|list\n"
-                "aiset reset all\n"
-                "aiset history save|load|info|clear\n"
-                "aiset quota | ping | reloadkey | info" % (
+            Answer(self.AnsBase[37] % (
                     AI_VERSION,
                     "ON" if self._ai_enabled else "OFF",
                     model_str,
@@ -930,11 +1093,7 @@ class expansion_temp(expansion):
             )
 
         else:
-            Answer(
-                "Usage: aiset on|off [global] | model | ulimit | reset all | "
-                "history | quota | ping | reloadkey | info",
-                stype, source, disp
-            )
+            Answer(self.AnsBase[38], stype, source, disp)
 
     commands = (
         (command_ai,    "ai",    1,),

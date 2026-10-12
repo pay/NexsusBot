@@ -1,0 +1,22 @@
+{command} <question> | reset | aiset <sub>
+Ask the AI anything. Powered by Groq with a friendly, slightly mischievous personality.
+*/ <question>   - ask the AI anything (auto-detects your language, replies in the same language)
+*/ reset        - clear your conversation history with the AI
+*/ aiset        - AI admin settings (see below)
+
+aiset subcommands (access level 1 for basic, 3 for admin):
+*/ aiset on|off [global]    - toggle AI on/off (in this room or globally)
+*/ aiset model [1-7]        - switch Groq model
+*/ aiset ulimit <jid> <n>   - set per-user history limit (or reset, or list)
+*/ aiset reset all          - wipe all user history
+*/ aiset history <sub>      - save|load|info|clear history & room logs
+*/ aiset quota              - show Groq API quota (requests, tokens, reset times)
+*/ aiset ping               - test Groq connectivity
+*/ aiset reloadkey          - reload Groq API key from file
+*/ aiset info               - full AI status (provider, model, users, messages)
+
+Notes:
+*/ Language detection: the AI auto-detects the language of your message and replies in the same language.
+*/ Room context: when used in a room, the AI also sees recent room messages as context.
+*/ Rate limits: each user has a history limit (default 40 messages). Reset with 'ai reset'.
+*/ Ollama has been removed -- provider is now fixed to Groq.
