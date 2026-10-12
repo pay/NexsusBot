@@ -27,7 +27,7 @@
   "25": "->\\nDescripción:\\n\\t%s\\nAcceso: %d",
   "26": "No se ha establecido ayuda.",
   "27": "En los parámetros del macro no puede haber comandos a los que no tengas acceso ni el comando de control de alias.",
-  "28": "El macro %s está permitido.",
-  "29": "El macro %s está prohibido.",
+  "28": "El macro '%s' está permitido.",
+  "29": "El macro '%s' está prohibido.",
   "30": "No hay macros prohibidos."
 }

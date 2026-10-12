@@ -27,7 +27,7 @@
   "25": "->\\nKeterangan:\\n\\t%s\\nAkses: %d",
   "26": "Help belum di-set.",
   "27": "Di parameter macro nggak boleh ada perintah yang kamu nggak punya akses plus perintah kontrol alias.",
-  "28": "Macro %s diizinkan.",
-  "29": "Macro %s dilarang.",
+  "28": "Macro '%s' diizinkan.",
+  "29": "Macro '%s' dilarang.",
   "30": "Nggak ada macro yang dilarang."
 }

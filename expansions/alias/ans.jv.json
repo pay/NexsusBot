@@ -27,7 +27,7 @@
   "25": "->\\nKeterangan:\\n\\t%s\\nAkses: %d",
   "26": "Pitulung durung diset.",
   "27": "Ing parameter macro ora boleh ana dhawuh sing ora duwe akses plus dhawuh kontrol alias.",
-  "28": "Macro %s diijini.",
-  "29": "Macro %s dilarang.",
+  "28": "Macro '%s' diijini.",
+  "29": "Macro '%s' dilarang.",
   "30": "Ora ana macro sing dilarang."
 }

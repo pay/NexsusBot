@@ -27,7 +27,7 @@
   "25": "->\\nOpis:\\n\\t%s\\nDostęp: %d",
   "26": "Pomoc nie została ustawiona.",
   "27": "W parametrach makra nie mogą znajdować się polecenia, do których nie masz dostępu, ani polecenie sterujące aliasami.",
-  "28": "Makro %s jest dozwolone.",
-  "29": "Makro %s jest zabronione.",
+  "28": "Makro '%s' jest dozwolone.",
+  "29": "Makro '%s' jest zabronione.",
   "30": "Brak zabronionych makr."
 }

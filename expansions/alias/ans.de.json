@@ -27,7 +27,7 @@
   "25": "->\\nBeschreibung:\\n\\t%s\\nZugriff: %d",
   "26": "Es wurde keine Hilfe gesetzt.",
   "27": "In den Parametern des Makros dürfen keine Befehle enthalten sein, auf die du keinen Zugriff hast, sowie kein Befehl zur Steuerung von Aliassen.",
-  "28": "Makro %s ist erlaubt.",
-  "29": "Makro %s ist verboten.",
+  "28": "Makro '%s' ist erlaubt.",
+  "29": "Makro '%s' ist verboten.",
   "30": "Es gibt keine verbotenen Makros."
 }

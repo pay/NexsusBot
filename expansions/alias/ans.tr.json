@@ -27,7 +27,7 @@
   "25": "->\\nAçıklama:\\n\\t%s\\nErişim: %d",
   "26": "Yardım ayarlanmamış.",
   "27": "Makronun parametrelerinde erişimin olmayan komutlar ve takma ad kontrol komutu olamaz.",
-  "28": "%s makrosuna izin var.",
-  "29": "%s makrosu yasak.",
+  "28": "'%s' makrosuna izin var.",
+  "29": "'%s' makrosu yasak.",
   "30": "Yasaklı makro yok."
 }
