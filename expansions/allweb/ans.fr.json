@@ -1,0 +1,14 @@
+{
+  "0": "Pas d'accès à la ressource.",
+  "1": "Problème de balisage...",
+  "2": "Il n'y a aucune requête de ta part dans le cache.",
+  "3": "Je ne trouve pas tes requêtes dans le cache car je ne connais pas ton JID.",
+  "4": "\n\n** Il y a %d autres résultats (tape \"google *\").",
+  "5": "Aucun résultat...",
+  "6": "Cette langue n'est pas prise en charge.",
+  "7": "\n\n** Il y a %d autres traductions (tape \"tr *\").",
+  "8": "Langues prises en charge :\n",
+  "9": "chargé - {0}%",
+  "10": "Le téléchargement peut prendre plusieurs minutes...",
+  "11": "Je suis occupé par un autre chargement. Réessaie plus tard."
+}

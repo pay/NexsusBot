@@ -1,0 +1,14 @@
+{
+  "0": "Nggak ada akses ke sumber daya.",
+  "1": "Masalah di markup...",
+  "2": "Nggak ada permintaan lo di cache.",
+  "3": "Aku nggak nemuin permintaan lo di cache karena aku nggak tau JID lo.",
+  "4": "\n\n** Ada %d hasil lain (ketik \"google *\").",
+  "5": "Nggak ada hasil...",
+  "6": "Bahasa ini nggak didukung.",
+  "7": "\n\n** Ada %d terjemahan lain (ketik \"tr *\").",
+  "8": "Bahasa yang didukung:\n",
+  "9": "terloaded - {0}%",
+  "10": "Download bisa makan waktu beberapa menit...",
+  "11": "Aku lagi sibuk loading yang lain. Coba lagi nanti."
+}

@@ -1,0 +1,14 @@
+{
+  "0": "Kaynağa erişim yok.",
+  "1": "İşaretlemede sorun...",
+  "2": "Önbellekte senden gelen istek yok.",
+  "3": "JID bilmediğim için önbellekte isteklerini bulamıyorum.",
+  "4": "\n\n** %d başka sonuç var (\"google *\") yaz.",
+  "5": "Sonuç yok...",
+  "6": "Bu dil desteklenmiyor.",
+  "7": "\n\n** %d başka çeviri var (\"tr *\") yaz.",
+  "8": "Desteklenen diller:\n",
+  "9": "yüklendi - {0}%",
+  "10": "İndirme birkaç dakika sürebilir...",
+  "11": "Şu anda başka bir yüklemeyle meşgulum. Daha sonra tekrar dene."
+}

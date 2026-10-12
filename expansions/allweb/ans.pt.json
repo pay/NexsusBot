@@ -1,0 +1,14 @@
+{
+  "0": "Sem acesso ao recurso.",
+  "1": "Problema com a marcação...",
+  "2": "Não há pedidos seus no cache.",
+  "3": "Não encontro os seus pedidos no cache porque não conheço o seu JID.",
+  "4": "\n\n** Há %d outros resultados (digite \"google *\").",
+  "5": "Sem resultados...",
+  "6": "Este idioma não é suportado.",
+  "7": "\n\n** Há %d outras traduções (digite \"tr *\").",
+  "8": "Idiomas suportados:\n",
+  "9": "carregado - {0}%",
+  "10": "O download pode levar vários minutos...",
+  "11": "Estou ocupado com outro carregamento. Tente novamente mais tarde."
+}

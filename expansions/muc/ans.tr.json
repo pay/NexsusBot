@@ -1,0 +1,7 @@
+{
+  "0": "Güvenlik protokolleri bu eylemi yasaklıyor.",
+  "1": "Bunu yapmak için yeterli iznim yok.",
+  "2": "Görev %(done)d odada çalıştı, %(fail)d odada reddedildi, %(none)d odadan yanıt yok.",
+  "3": "Görev %(done)d odada çalıştı, %(fail)d odada reddedildi.",
+  "4": "Görev tüm odalarda çalıştı."
+}

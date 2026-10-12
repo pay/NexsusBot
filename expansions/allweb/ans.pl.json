@@ -1,0 +1,14 @@
+{
+  "0": "Brak dostępu do zasobu.",
+  "1": "Problem ze znacznikami...",
+  "2": "W pamięci podręcznej nie ma Twoich żądań.",
+  "3": "Nie znajduję Twoich żądań w pamięci podręcznej, bo nie znam Twojego JID.",
+  "4": "\n\n** Jest %d innych wyników (wpisz \"google *\").",
+  "5": "Brak wyników...",
+  "6": "Ten język nie jest obsługiwany.",
+  "7": "\n\n** Jest %d innych tłumaczeń (wpisz \"tr *\").",
+  "8": "Obsługiwane języki:\n",
+  "9": "załadowano - {0}%",
+  "10": "Pobieranie może zająć kilka minut...",
+  "11": "Jestem zajęty innym ładowaniem. Spróbuj później."
+}

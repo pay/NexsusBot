@@ -1,0 +1,7 @@
+{
+  "0": "Os protocolos de segurança proíbem esta ação.",
+  "1": "Não tenho permissões suficientes para fazer isso.",
+  "2": "A tarefa foi executada em %(done)d, rejeitada em %(fail)d e sem resposta de %(none)d salas.",
+  "3": "A tarefa foi executada em %(done)d, rejeitada em %(fail)d salas.",
+  "4": "A tarefa foi executada em todas as salas."
+}

@@ -1,0 +1,7 @@
+{
+  "0": "Ce JID n'est pas dans le roster de ce client.",
+  "1": "Le roster est vide.",
+  "2": "Ce n'est pas mon JID.",
+  "3": "L'accès au roster est libre.",
+  "4": "L'accès au roster est bloqué."
+}

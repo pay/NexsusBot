@@ -1,0 +1,7 @@
+{
+  "0": "I protocolli di sicurezza vietano questa azione.",
+  "1": "Non ho abbastanza diritti per farlo.",
+  "2": "L'attività è stata eseguita in %(done)d, rifiutata in %(fail)d, senza risposta da %(none)d stanze.",
+  "3": "L'attività è stata eseguita in %(done)d, rifiutata in %(fail)d stanze.",
+  "4": "L'attività è stata eseguita in tutte le stanze."
+}

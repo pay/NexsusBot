@@ -1,0 +1,7 @@
+{
+  "0": "Sicherheitsprotokolle verbieten diese Aktion.",
+  "1": "Ich habe nicht genug Rechte, um das zu tun.",
+  "2": "Die Aufgabe wurde in %(done)d ausgeführt, in %(fail)d abgelehnt, keine Antwort von %(none)d Räumen.",
+  "3": "Die Aufgabe wurde in %(done)d ausgeführt, in %(fail)d Räumen abgelehnt.",
+  "4": "Die Aufgabe wurde in allen Räumen ausgeführt."
+}

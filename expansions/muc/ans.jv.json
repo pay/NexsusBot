@@ -1,0 +1,7 @@
+{
+  "0": "Protokol keamanan nglarang tumindak iki.",
+  "1": "Aku ora duwe hak sing cukup kanggo nglakoni iki.",
+  "2": "Tugas dieksekusi ing %(done)d, ditolak ing %(fail)d, lan ora ana wangsulan saka %(none)d ruang.",
+  "3": "Tugas dieksekusi ing %(done)d, ditolak ing %(fail)d ruang.",
+  "4": "Tugas dieksekusi ing kabeh ruang."
+}

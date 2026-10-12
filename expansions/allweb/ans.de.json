@@ -1,0 +1,14 @@
+{
+  "0": "Kein Zugriff auf die Ressource.",
+  "1": "Problem mit der Markierung...",
+  "2": "Es gibt keine Anfragen von dir im Cache.",
+  "3": "Ich finde deine Anfragen im Cache nicht, weil ich deine JID nicht kenne.",
+  "4": "\n\n** Es gibt %d weitere Ergebnisse (tippe \"google *\").",
+  "5": "Kein Ergebnis...",
+  "6": "Diese Sprache wird nicht unterstützt.",
+  "7": "\n\n** Es gibt %d weitere Übersetzungen (tippe \"tr *\").",
+  "8": "Unterstützte Sprachen:\n",
+  "9": "geladen - {0}%",
+  "10": "Der Download kann mehrere Minuten dauern...",
+  "11": "Ich bin gerade mit einem anderen Laden beschäftigt. Versuch es später."
+}

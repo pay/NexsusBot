@@ -1,0 +1,7 @@
+{
+  "0": "Protokol keamanan melarang aksi ini.",
+  "1": "Aku nggak punya hak yang cukup buat ngelakuin ini.",
+  "2": "Tugas dieksekusi di %(done)d, ditolak di %(fail)d, dan nggak ada respons dari %(none)d room.",
+  "3": "Tugas dieksekusi di %(done)d, ditolak di %(fail)d room.",
+  "4": "Tugas dieksekusi di semua room."
+}

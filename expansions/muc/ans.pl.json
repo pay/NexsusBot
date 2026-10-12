@@ -1,0 +1,7 @@
+{
+  "0": "Protokoły bezpieczeństwa zabraniają tej czynności.",
+  "1": "Nie mam wystarczających uprawnień, aby to zrobić.",
+  "2": "Zadanie wykonano w %(done)d, odrzucono w %(fail)d, brak odpowiedzi z %(none)d pokoi.",
+  "3": "Zadanie wykonano w %(done)d, odrzucono w %(fail)d pokojach.",
+  "4": "Zadanie wykonano we wszystkich pokojach."
+}

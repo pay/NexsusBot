@@ -1,0 +1,7 @@
+{
+  "0": "Les protocoles de sécurité interdisent cette action.",
+  "1": "Je n'ai pas assez de droits pour faire cela.",
+  "2": "La tâche a été exécutée dans %(done)d, refusée dans %(fail)d, sans réponse de %(none)d salons.",
+  "3": "La tâche a été exécutée dans %(done)d, refusée dans %(fail)d salons.",
+  "4": "La tâche a été exécutée dans tous les salons."
+}

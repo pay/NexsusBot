@@ -1,0 +1,14 @@
+{
+  "0": "Sin acceso al recurso.",
+  "1": "Problema con el marcado...",
+  "2": "No hay peticiones tuyas en la caché.",
+  "3": "No encuentro tus peticiones en la caché porque no conozco tu JID.",
+  "4": "\n\n** Hay %d resultados más (escribe \"google *\").",
+  "5": "Sin resultados...",
+  "6": "Este idioma no está soportado.",
+  "7": "\n\n** Hay %d traducciones más (escribe \"tr *\").",
+  "8": "Idiomas compatibles:\n",
+  "9": "cargado - {0}%",
+  "10": "La descarga puede tardar varios minutos...",
+  "11": "Estoy ocupado con otra carga. Inténtalo más tarde."
+}

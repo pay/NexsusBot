@@ -1,0 +1,14 @@
+{
+  "0": "Nessun accesso alla risorsa.",
+  "1": "Problema con il markup...",
+  "2": "Non ci sono richieste tue nella cache.",
+  "3": "Non trovo le tue richieste nella cache perché non conosco il tuo JID.",
+  "4": "\n\n** Ci sono %d altri risultati (scrivi \"google *\").",
+  "5": "Nessun risultato...",
+  "6": "Questa lingua non supportata.",
+  "7": "\n\n** Ci sono %d altre traduzioni (scrivi \"tr *\").",
+  "8": "Lingue supportate:\n",
+  "9": "caricato - {0}%",
+  "10": "Il download può richiedere diversi minuti...",
+  "11": "Sono occupato con un altro caricamento. Riprova più tardi."
+}
