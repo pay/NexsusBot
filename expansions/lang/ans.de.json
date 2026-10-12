@@ -3,7 +3,7 @@
   "1": "✅ Deine Sprache ist jetzt: %s.",
   "2": "❌ Unbekannter Sprachcode: %s.\n🔍 Codes: %s",
   "3": "❌ Speichern der Sprachauswahl fehlgeschlagen.",
-  "4": "ℹ️ Vollständig: ':lang auto' bringt die automatische Erkennung zurück.",
+  "4": "ℹ️ Zurück zur automatischen Erkennung — ':lang auto' lässt den Bot das <lang>-Tag deines Clients wieder lesen.",
   "5": "📋 Sprachen in diesem Raum:\n%s",
   "6": "ℹ️ Hier hat noch niemand eine Sprache gewählt.",
   "7": "❌ Sprachdatenbank konnte nicht gelesen werden."

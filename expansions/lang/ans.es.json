@@ -3,7 +3,7 @@
   "1": "✅ Tu idioma ahora es: %s.",
   "2": "❌ Código de idioma desconocido: %s.\n🔍 Códigos: %s",
   "3": "❌ No se pudo guardar la preferencia de idioma.",
-  "4": "ℹ️ Nota: ':lang auto' vuelve a la detección automática.",
+  "4": "ℹ️ Volver a la detección automática — ':lang auto' hace que el bot lea de nuevo la etiqueta <lang> de tu cliente.",
   "5": "📋 Idiomas en esta sala:\n%s",
   "6": "ℹ️ Aquí nadie ha elegido idioma todavía.",
   "7": "❌ No se pudo leer la base de datos de idiomas."

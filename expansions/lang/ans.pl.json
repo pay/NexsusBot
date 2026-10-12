@@ -3,7 +3,7 @@
  "1": "✅ Twój język to teraz: %s.",
  "2": "❌ Nieznany kod języka: %s.\n🔍 Kody: %s",
  "3": "❌ Nie udało się zapisać wyboru języka.",
- "4": "ℹ️ Zamknięto pętlę: ':lang auto' przywraca wykrywanie automatyczne.",
+ "4": "ℹ️ Powrót do wykrywania automatycznego — ':lang auto' sprawia, że bot znów czyta tag <lang> z Twojego klienta.",
  "5": "📋 Języki w tym pokoju:\n%s",
  "6": "ℹ️ Nikt jeszcze nie wybrał tu języka.",
  "7": "❌ Nie udało się odczytać bazy języków."

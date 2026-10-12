@@ -3,7 +3,7 @@
   "1": "✅ Senin dilin artık: %s.",
   "2": "❌ Bilinmeyen dil kodu: %s.\n🔍 Kodlar: %s",
   "3": "❌ Dil seçimi kaydedilemedi.",
-  "4": "ℹ️ Küçük not: ':lang auto' otomatik algılamaya döndürür.",
+  "4": "ℹ️ Otomatik algılamaya dön — ':lang auto', botun istemcinin <lang> etiketini tekrar okumasını sağlar.",
   "5": "📋 Bu odadaki diller:\n%s",
   "6": "ℹ️ Burada henüz kimse dil seçmedi.",
   "7": "❌ Dil veritabanı okunamadı."

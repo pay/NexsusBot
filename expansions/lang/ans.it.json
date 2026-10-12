@@ -3,7 +3,7 @@
   "1": "✅ La tua lingua attuale: %s.",
   "2": "❌ Codice lingua sconosciuto: %s.\n🔍 Codici: %s",
   "3": "❌ Impossibile salvare la scelta della lingua.",
-  "4": "ℹ️ Chiudendo il cerchio: ':lang auto' per tornare al rilevamento automatico.",
+  "4": "ℹ️ Torno alla rilevazione automatica — ':lang auto' fa rileggere al bot il tag <lang> del tuo client.",
   "5": "📋 Lingue in questa stanza:\n%s",
   "6": "ℹ️ Qui nessuno ha ancora scelto una lingua.",
   "7": "❌ Impossibile leggere il database delle lingue."

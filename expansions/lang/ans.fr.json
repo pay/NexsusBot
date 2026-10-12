@@ -3,7 +3,7 @@
   "1": "✅ Ta langue est maintenant : %s.",
   "2": "❌ Code de langue inconnu : %s.\n🔍 Codes : %s",
   "3": "❌ Impossible d'enregistrer le choix de langue.",
-  "4": "ℹ️ Pour boucler la boucle : ':lang auto' permet de revenir à la détection automatique.",
+  "4": "ℹ️ Retour à la détection automatique — ':lang auto' fait relire la balise <lang> de ton client.",
   "5": "📋 Langue dans ce salon :\n%s",
   "6": "ℹ️ Personne n'a encore choisi de langue ici.",
   "7": "❌ Impossible de lire la base de données des langues."

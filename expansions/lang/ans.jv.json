@@ -3,7 +3,7 @@
   "1": "✅ Basa sampeyan saiki: %s.",
   "2": "❌ Kode basa ora dikenal: %s.\n🔍 Kode: %s",
   "3": "❌ Gagal nyimpen pilihan basa.",
-  "4": "ℹ️ Nutup putaran: ':lang auto' kanggo balik menyang deteksi otomatis.",
+  "4": "ℹ️ Bali menyang deteksi otomatis — ':lang auto' nggawe bot maca tag <lang> saka client sampeyan maneh.",
   "5": "📋 Basa ing ruang iki:\n%s",
   "6": "ℹ️ Durung ana sing milih basa ing kene.",
   "7": "❌ Gagal maca basis data basa."
