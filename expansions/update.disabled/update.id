@@ -1,0 +1,7 @@
+{command} [check|pull|restart|status]
+Update bot langsung dari git repository, dari chat.
+*/ check   - cek apakah ada commit baru di remote (default kalau tanpa argumen)
+*/ pull    - tarik update terbaru dari git (dibatalkan otomatis kalau ada perubahan lokal belum di-commit)
+*/ status  - lihat status git singkat (git status --short --branch)
+*/ restart - restart bot untuk menerapkan update yang sudah ditarik
+Butuh access level 8 (God). Git harus sudah punya credential tersimpan (git config --global credential.helper store) supaya 'pull' tidak macet minta login username/password.

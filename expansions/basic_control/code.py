@@ -26,22 +26,22 @@ class expansion_temp(expansion):
 	compile_chat = compile__(r"^[^\s'\"@<>&]+?@(?:conference|muc|conf|chat|group)\.[\w-]+?\.[\.\w-]+?$")
 
 	AnsBase = (
-		"\U0001f4cb [join] %s (%s) requested joining %s",           # 0
+		"\U0001f4cb [join] %s (%s) wants into %s",           # 0
 		" (reason: %s)",                                  # 1
-		"\u2705 Joined %s successfully.",                        # 2
-		"\u274c Failed to join %s.",                             # 3
+		"\u2705 Joined %s.",                        # 2
+		"\u274c Couldn't join %s.",                             # 3
 		"\u2705 Done.",                                          # 4  (generic ok)
-		"\u2139\ufe0f Already in that room.",                          # 5
-		"\u274c Invalid room JID: %s",                           # 6
-		"\u2139\ufe0f Hello! I am %s, invited by %s.",                 # 7
-		"\u2139\ufe0f Leaving by request of %s.",                      # 8
+		"\u2139\ufe0f Already in there.",                          # 5
+		"\u274c Bad room JID: %s",                           # 6
+		"\u2139\ufe0f Hi, I'm %s — invited by %s.",                 # 7
+		"\u2139\ufe0f Leaving, %s asked for it.",                      # 8
 		"\u2705 Left %s.",                                       # 8 (leave answer)  -- idx 9
 		"\u2705 Left %s.",                                       # 10
-		"\u2139\ufe0f Reloading by request of %s...",                  # 11
-		"\u2139\ufe0f Shutting down by request of %s...",              # 12
+		"\u2139\ufe0f Reloading, %s asked...",                  # 11
+		"\u2139\ufe0f Shutting down, %s asked...",              # 12
 		" (reconnect timer active)",                      # 13
-		"\u274c Dispatcher offline.",                            # 14
-		"\u274c Cannot create directory for %s.",                # 15
+		"\u274c Dispatcher's offline.",                            # 14
+		"\u274c Can't create directory for %s.",                # 15
 		"\u274c Dispatcher thread error.",                       # 16
 		"\u274c Unknown dispatcher: %s",                         # 17
 	)

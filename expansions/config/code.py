@@ -11,11 +11,11 @@ class expansion_temp(expansion):
 		"\u2705 Updated: %s",                        # 0
 		"\u2139\ufe0f Nothing to update.",                 # 1
 		"\U0001f4cb Current config:\n",                  # 2
-		"\u274c No extra clients configured.",       # 3
+		"\u274c No extra clients set up.",       # 3
 		"\u2139\ufe0f Leaving rooms...",                   # 4
 		"\u2139\ufe0f Disconnecting...",                   # 5
 		"\u21aa\ufe0f New primary dispatcher: %s",         # 6
-		"\u274c Can't remove the only client.",      # 7
+		"\u274c Can't drop the only client.",      # 7
 		"\u274c Thread error.",                      # 8
 		"\u274c Connection failed.",                 # 9
 		"\u2139\ufe0f Already connected.",                 # 10

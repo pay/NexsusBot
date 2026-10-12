@@ -1,11 +1,12 @@
 {command} [global] show|add|del|access|state|enable|disable|bold
-Sistem alias custom - jalankan aksi otomatis berdasarkan event chat (join, message, kick, ban, dll).
-*/ show <nama> <event> [bold]           - lihat detail satu alias
-*/ add <nama> <event> <kondisi> <aksi>  - tambah alias baru untuk event tertentu
-*/ add <nama> macro <command> [body]    - tambah macro/shortcut command baru
-*/ access <nama> <level>                - ubah access level macro
-*/ del <nama> <event>                   - hapus alias
-*/ state                                - lihat status aktif/nonaktif sistem alias
-*/ enable / disable                     - aktif/nonaktifkan seluruh sistem alias (access 8)
-*/ bold                                 - lihat semua alias dalam format ringkas (raw)
-Tambahkan 'global' di depan untuk kelola alias yang berlaku di semua room (butuh access 7). Tanpa 'global', yang dikelola cuma alias khusus room ini. Lihat juga: help macro
+Custom alias system - runs actions automatically off chat events (join, message, kick, ban, etc).
+*/ show <name> <event> [bold]          - view one alias in detail
+*/ add <name> <event> <cond> <action>  - add a new alias for an event
+*/ add <name> macro <command> [body]   - add a new macro / command shortcut
+*/ access <name> <level>               - change a macro's access level
+*/ del <name> <event>                  - delete an alias
+*/ state                               - see whether the alias system is on or off
+*/ enable / disable                    - turn the whole alias system on or off (access 8)
+*/ bold                                - list every alias, compact (raw) format
+Put 'global' in front to manage aliases that apply in every room (access 7).
+Without it you only manage aliases for this room. See also: help macro

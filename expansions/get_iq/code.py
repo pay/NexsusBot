@@ -22,14 +22,14 @@ class expansion_temp(expansion):
         "\u2139\ufe0f Pong! %.3f sec",                      # 0  ping ok
         "\u2139\ufe0f Pong! %s \u2014 %.3f sec",                 # 1  ping via version
         "\u274c No response.",                         # 2
-        "\U0001f4ca Ping stats for %s:\n count: %s\n min: %s\n max: %s\n avg: %s",  # 3
+        "\U0001f4ca Ping stats for %s:\n  count: %s\n  min: %s\n  max: %s\n  avg: %s",  # 3
         "\u274c No data.",                             # 4
-        "\u274c %s is not in the room.",               # 5
+        "\u274c %s isn't in the room.",               # 5
         "\u274c Error or no response.",                # 6
         "\u2139\ufe0f Idle: %s \u2014 %s",                        # 7  server uptime
         "\u2139\ufe0f Idle: %s \u2014 %s",                        # 8  user idle
-        "\u274c No matches found.",                    # 9
-        "\u2139\ufe0f Empty vCard.",                         # 10
+        "\u274c Nothing matched.",                    # 9
+        "\u2139\ufe0f vCard's empty.",                         # 10
         "\nTotal: %d items.",                   # 11
     )
 

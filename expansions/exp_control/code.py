@@ -24,14 +24,14 @@ class expansion_temp(expansion):
 		"\U0001f4cb Expansions:",                                            # 8
 		"\nUnloaded (%d):\n%s",                                   # 9
 		"\u2705 Expansion '%s' loaded.",                                 # 10
-		"\u274c Failed to load '%s': %s",                               # 11
+		"\u274c Couldn't load '%s': %s",                               # 11
 		"",                                                       # 12
-		"\u2705  Previous version restored.",                            # 13
+		"\u2705 Previous version restored.",                            # 13
 		"Available handlers: %s",                                 # 14
 		"\u274c No handlers in '%s'.",                                   # 15
-		"\u2139\ufe0f Command '%s' is already enabled.",                       # 16
-		"\u2139\ufe0f Command '%s' is already disabled.",                      # 17
-		"\u2705 All commands are enabled.",                              # 18
+		"\u2139\ufe0f '%s' is already enabled.",                       # 16
+		"\u2139\ufe0f '%s' is already disabled.",                      # 17
+		"\u2705 All commands enabled.",                              # 18
 	)
 
 	def command_expinfo(self, stype, source, body, disp):

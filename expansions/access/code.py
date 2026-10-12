@@ -13,16 +13,16 @@ class expansion_temp(expansion):
 
 	AnsBase = (
 		"\u2139\ufe0f Your access: %s",                          # 0
-		"\u2139\ufe0f Access %s: %s",                         # 1
-		"\u274c %s not found.",                            # 2
+		"\u2139\ufe0f %s access: %s",                         # 1
+		"\u274c Can't find %s.",                            # 2
 		"\u274c Global access list is empty.",             # 3
 		"\u274c Local access list is empty.",              # 4
 		"\U0001f4cb Access list:\u000a",                           # 5
-		"\u274c %s is not in access list.",                # 6
-		"\u274c Access level must be between -1 and 8.",   # 7
-		"\u274c Access level must be between 0 and 6.",    # 8
-		"\u2139\ufe0f This user is in global list, use gaccess.", # 9
-		"\u274c Can't find user %s.",                      # 10
+		"\u274c %s isn't on the list.",                # 6
+		"\u274c Access level has to be between -1 and 8.",   # 7
+		"\u274c Access level has to be between 0 and 6.",    # 8
+		"\u2139\ufe0f They're on the global list, use gaccess.", # 9
+		"\u274c Can't find %s.",                      # 10
 	)
 
 	AccessFile     = dynamic % "access.db"

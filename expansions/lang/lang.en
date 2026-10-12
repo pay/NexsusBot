@@ -1,11 +1,11 @@
-Mengubah bahasa reply bot untuk user ini saja, di room ini saja.
+Change which language the bot replies in, for you only, in this room only.
 
-  :lang          lihat bahasa sekarang + kode yang tersedia
-  :lang id       pakai Bahasa Indonesia
-  :lang en       pakai English
-  :lang auto     kembali ke deteksi otomatis dari client lo
-  :lang list     lihat siapa saja di room ini yang sudah pilih bahasa
+  :lang          see current language + available codes
+  :lang id       use Bahasa Indonesia
+  :lang en       use English
+  :lang auto     go back to detecting from your client
+  :lang list     see who in this room has picked a language
 
-Bot baca tag <lang> dari presence client lo sebagai default otomatis.
-Kalau lo pilih manual dengan :lang <kode>, pilihan itu yang menang sampai
-lo ketik :lang auto atau :lang list.
+The bot reads the <lang> tag from your client's presence as the automatic default.
+If you pick one manually with :lang <code>, that choice sticks until you type
+:lang auto or :lang list.

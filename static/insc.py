@@ -56,55 +56,55 @@ if DefLANG in ("RU", "UA"):
 	)
 else:
 	AnsBase = (
-		"This command is available only in the conferences.", # 0
-		"This command implies arguments using.", # 1
-		"Invalid syntax.", # 2
-		"There is no '%s' in the chats-list.", # 3
+		"Only works in a room.", # 0
+		"This one takes arguments.", # 1
+		"Syntax looks off.", # 2
+		"No '%s' in my chats list.", # 3
 		"Done.", # 4
-		"Parameters should be shorter.", # 5
-		"Such command isn't exist.", # 6
-		"I can't.", # 7
-		"There is no such conference in my list.", # 8
-		"Type is invalid.", # 9
-		"You need to access higher.", # 10
-		"You should look into private.", # 11
+		"Those arguments are too long.", # 5
+		"No such command.", # 6
+		"Nope, can't.", # 7
+		"I'm not in that room.", # 8
+		"Bad type.", # 9
+		"You need a higher access level.", # 10
+		"Check your private messages.", # 11
 		"# %d. - %s", # 12
 		"command '%s' (%s)", # 13
-		"prosess '%s'", # 14
-		"When execut %s --> error happend!", # 15
-		"Type --> 'excinfo %d' to show error (crashfile --> %s)", # 16
-		"Type --> 'excinfo %d' or 'sh cat %s' to show error", # 17
-		"%s[...]\n\n** %d symbols limit! Type 'more' to show rest of the text.", # 18
-		"Command '%s' is unavailable now!", # 19
-		"Error %s (%s) - conference: '%s'.", # 20
-		"Error %s (%s), full exit from '%s'.", # 21
-		"Error %s (%s), I leaved '%s'.", # 22
-		"The service without admin's affilation is unavailable!", # 23
-		"I disable all functions until I'll become an admin!", # 24
-		"Obtaining rights...", # 25
-		"sCode '%s' in %s (%s). Full leave!", # 26
-		"Type 'HELP' to know more (the last action - %s)", # 27
-		"Client '%s' fell!", # 28
-		"JID '%s' used in another client! (I have to disconnect it)", # 29
-		"This is not a number.", # 30
+		"process '%s'", # 14
+		"Running %s hit an error!", # 15
+		"Run 'excinfo %d' to see the error (crashfile: %s)", # 16
+		"Run 'excinfo %d' or 'sh cat %s' to see the error", # 17
+		"%s[...]\n\n** %d char limit. Type 'more' for the rest.", # 18
+		"'%s' is unavailable right now.", # 19
+		"Error %s (%s) in room '%s'.", # 20
+		"Error %s (%s), fully leaving '%s'.", # 21
+		"Error %s (%s), I left '%s'.", # 22
+		"Can't run without admin rights.", # 23
+		"Turning everything off until I'm admin.", # 24
+		"Getting admin rights...", # 25
+		"Status code '%s' in %s (%s). Full leave!", # 26
+		"Type 'HELP' for more (last action: %s)", # 27
+		"Client '%s' fell over!", # 28
+		"JID '%s' is in use elsewhere, disconnecting it.", # 29
+		"That's not a number.", # 30
 		"📋 Aliases are disabled.", # 31
-		"❌ You do not have access to that command.", # 32
+		"❌ You don't have access to that.", # 32
 		"❌ Invalid alias syntax.", # 33
 		"❌ Invalid condition syntax.", # 34
 		"❌ Too many conditions (max 8).", # 35
 		"❌ Attributes, conditions, clauses and flags must have the same length.", # 36
 		"❌ Attributes and conditions must have the same length.", # 37
-		"ℹ️ No help text is stored for this macro.", # 38
-		"ℹ️ No alias named '%s'.", # 39
-		"Roster is enabled.", # 40
-		"Roster is disabled.", # 41
+		"ℹ️ No help stored for this macro.", # 38
+		"ℹ️ No alias called '%s'.", # 39
+		"Roster on.", # 40
+		"Roster off.", # 41
 		"❌ Provide a search term.", # 42
 		"❌ Provide a definition.", # 43
 		"❌ No query.", # 44
 		"❌ Not in a chat.", # 45
 		"❌ Usage: botstatus <room|here|everywhere> <state> <text>", # 46
 		"📤 Left %s: %s (%s)", # 47
-		"❌ Command '%s' is currently unavailable.", # 48
+		"❌ '%s' is unavailable right now.", # 48
 		"❌ Access denied.", # 49
 		"📡 Connection lost: %s", # 50
 	)

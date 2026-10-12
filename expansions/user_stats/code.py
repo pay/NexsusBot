@@ -27,7 +27,7 @@ class expansion_temp(expansion):
 		"\nNicks: %s",                              # 2
 		"\u274c No data.",                                 # 3
 		"\u2139\ufe0f %s has been here for %s.",                 # 4
-		"\u2139\ufe0f You have been here for %s.",               # 5
+		"\u2139\ufe0f You've been here for %s.",               # 5
 		"\u274c Not here.",                                # 6
 	)
 

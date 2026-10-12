@@ -39,21 +39,21 @@ class expansion_temp(expansion):
 		"",                                             # 1
 		"",                                             # 2
 		"",                                             # 3
-		"\u274c Advertising is not allowed here.",             # 4
+		"\u274c No advertising here.",             # 4
 		"",                                             # 5
 		"",                                             # 6
 		"",                                             # 7
-		"\u274c Obscene language is not allowed here.",        # 8
-		"\u274c Presence/status is too long.",                 # 9
-		"\u274c %s: Auto-banned after %d kicks.",              # 10
-		"\u274c %s: You are devoiced, wait.",                  # 11
-		"\u26a0\ufe0f %s: Anti-wipe triggered.",                     # 12
+		"\u274c No obscene language here.",        # 8
+		"\u274c Presence/status too long.",                 # 9
+		"\u274c %s: auto-banned after %d kicks.",              # 10
+		"\u274c %s: you're devoiced, hold on.",                  # 11
+		"\u26a0\ufe0f %s: anti-wipe triggered.",                     # 12
 		"\u274c Flood detected.",                              # 13
-		"\u274c You are devoiced. Wait: %s",                   # 14
+		"\u274c You're devoiced. Wait: %s",                   # 14
 		"",                                             # 15
 		"",                                             # 16
-		"\u274c %s: Please verify yourself.",                  # 17
-		"\u2139\ufe0f %s: Answer this question to join: %s",         # 18
+		"\u274c %s: verify yourself first.",                  # 17
+		"\u2139\ufe0f %s: answer this to join: %s",         # 18
 		# questions format: "question|answer\nquestion2|answer2"
 		"What is 2+2?|4\nWhat color is the sky?|blue",  # 19
 		"",                                             # 20
@@ -70,9 +70,9 @@ class expansion_temp(expansion):
 		"Msg max len: %d\nAcaps: ",                     # 31
 		"Presence max len: %d\nSPARTA: ",               # 32
 		"",                                             # 33
-		"\u274c Server already in list.",                      # 34
-		"\u274c Server not in list.",                          # 35
-		"\u274c Invalid server (must contain a dot).",         # 36
+		"\u274c Server already in the list.",                      # 34
+		"\u274c Server not in the list.",                          # 35
+		"\u274c Bad server (needs a dot).",         # 36
 	)
 
 	class Convict(object):

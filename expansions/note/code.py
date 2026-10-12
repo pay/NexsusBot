@@ -16,15 +16,15 @@ class expansion_temp(expansion):
 	NoteFile = dynamic % "notepad.db"
 
 	AnsBase = (
-		"\u274c Notepad is empty.",         # 0
+		"\u274c Notepad's empty.",         # 0
 		"\u274c Note too long (max 512).",  # 1
-		"\u274c Invalid argument.",         # 2
-		"\u274c Notepad is full (16 lines).", # 3
+		"\u274c Bad argument.",         # 2
+		"\u274c Notepad's full (16 lines).", # 3
 		"\u2705 Done.",                     # 4  (generic ok)
 		"\u274c Line is empty.",            # 5
 		"\U0001f4cb Your notes:\u000a",             # 6
 		"\u2705 Saved to line %s.",         # 7
-		"\u274c Line already empty.",       # 8
+		"\u274c That line's already empty.",       # 8
 	)
 
 	def command_note(self, stype, source, body, disp):

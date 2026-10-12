@@ -21,14 +21,14 @@ class expansion_temp(expansion):
 	AnsBase = (
 		"\u2139\ufe0f Executing cron: %s",           # 0
 		"\u274c No cron with id %d.",          # 1
-		"\u274c Interval too short or repeats too few.",  # 2
+		"\u274c Interval too short or too few repeats.",  # 2
 		" (+%d more repeats hidden)",   # 3
 		"\U0001f4cb Schedule:\u000a%s",                # 4
 		"\u274c Body too long.",               # 5
 		"\u2705 Scheduled: %s",                # 6
 		"\u274c No cron tasks.",               # 7
 		"\U0001f4cb Cron tasks:\n%s",              # 8
-		"\u274c Invalid date.",                # 9
+		"\u274c Bad date.",                # 9
 	)
 
 	def def_cron(self):

@@ -9,13 +9,13 @@ class expansion_temp(expansion):
 
 	AnsBase = (
 		"\u2139\ufe0f Clearing...",                        # 0
-		"\u2705 All systems operational.",           # 1
-		"\u274c %s, errors detected: %d",            # 2
+		"\u2705 All systems go.",           # 1
+		"\u274c %s, %d errors found",            # 2
 		"\u274c Errors: %d",                         # 3
 		"",                                   # 4 (unused)
 		"%s: %s",                             # 5
 		"\u2139\ufe0f Already here.",                      # 6
-		"\u274c Can't find user.",                   # 7
+		"\u274c Can't find that user.",                   # 7
 		"\u23f1\ufe0f Cooldown: %s",                       # 8
 		"\u274c Nothing to clear.",                  # 9
 	)

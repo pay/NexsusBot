@@ -1,8 +1,8 @@
 {command} [taboo|help] [args]
-Jalankan macro (shortcut command) yang sudah didaftarkan lewat 'alias add <nama> macro'.
-*/ macro                    - lihat daftar semua macro yang tersedia, dikelompokkan per access level
-*/ macro taboo              - lihat daftar macro yang di-nonaktifkan di room ini
-*/ macro taboo <command>    - aktif/nonaktifkan satu macro di room ini (access 6)
-*/ macro help <command>     - lihat teks bantuan sebuah macro
-*/ macro help <command> <teks> - set teks bantuan untuk macro (perlu akses ke macro tsb)
-Nama macro yang sudah didaftarkan otomatis jadi command baru - ketik langsung nama macro-nya seperti command biasa.
+Run a macro (command shortcut) registered through 'alias add <name> macro'.
+*/ macro                    - list every macro, grouped by access level
+*/ macro taboo              - list macros disabled in this room
+*/ macro taboo <command>    - toggle one macro in this room (access 6)
+*/ macro help <command>     - view a macro's help text
+*/ macro help <command> <text> - set a macro's help text (needs access to that macro)
+Macro names are registered as real commands - just type the macro's name like any command.
