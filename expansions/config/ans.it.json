@@ -11,5 +11,5 @@
   "9": "Connessione fallita.",
   "10": "Già connesso.",
   "11": "❌ Client non trovato: %s",
-  "12": "Client offline: %s"
+  "12": "⚪️ Client offline: %s"
 }

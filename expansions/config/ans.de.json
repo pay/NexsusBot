@@ -3,7 +3,7 @@
   "1": "Nichts zu aktualisieren.",
   "10": "Bereits verbunden.",
   "11": "❌ Client nicht gefunden: %s",
-  "12": "Client offline: %s",
+  "12": "⚪️ Client offline: %s",
   "2": "Aktuelle Konfiguration:\n",
   "3": "❌ Keine zusätzlichen Clients konfiguriert.",
   "4": "ℹ️ Räume werden verlassen...",
