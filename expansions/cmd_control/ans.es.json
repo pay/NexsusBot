@@ -1,0 +1,6 @@
+{
+  "0": "El comando '%s' está permitido.",
+  "1": "El comando '%s' está prohibido.",
+  "2": "Este comando no se puede prohibir.",
+  "3": "No hay comandos prohibidos."
+}

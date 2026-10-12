@@ -1,0 +1,6 @@
+{
+  "0": "Polecenie '%s' jest dozwolone.",
+  "1": "Polecenie '%s' jest zakazane.",
+  "2": "Tego polecenia nie można zakazać.",
+  "3": "Brak zakazanych poleceń."
+}
