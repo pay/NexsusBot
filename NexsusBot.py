@@ -94,7 +94,7 @@ _lang_warn = None
 # ── Localization ───────────────────────────────────────────────
 # Bungkus AnsBase tuple polos jadi LocalizedAnswers supaya reply bisa
 # memakai string per bahasa tanpa mengubah satu baris pun di 16 ekspansi.
-# Import 실패 (mis. library/ hilang) tidak boleh menjatuhkan bot:
+# Import gagal (mis. library/ hilang) tidak boleh menjatuhkan bot:
 # _wrap_answers() akan mengembalikan tuple apa adanya.
 try:
     from nxs_locale import LocalizedAnswers
@@ -577,6 +577,8 @@ sCmds       = []
 Chats       = {}
 Guard       = {}
 Clients     = {}       # jid_str -> NexusClient instance
+NxLoop      = None     # satu shared asyncio loop (pola xmpp-platform)
+_NX_RECONNECT_DELAY = {}  # disp -> detik backoff berikut, 5..300
 ChatsAttrs  = {}
 Handlers    = {
     "01eh": [], "02eh": [], "03eh": [], "04eh": [],
@@ -939,27 +941,18 @@ def call_efunctions(ls, lst=()):
 # slixmpp berjalan di asyncio event loop di thread terpisah.
 # Helper ini memungkinkan pemanggilan coroutine dari thread biasa.
 
-def _get_client_loop(disp):
-    """Dapatkan asyncio loop dari NexusClient."""
-    key    = disp if isinstance(disp, str) else get_disp(disp)
-    client = Clients.get(key)
-    if client and hasattr(client, "_loop") and client._loop:
-        return client._loop
-    for c in Clients.values():
-        if hasattr(c, "_loop") and c._loop and c._loop.is_running():
-            return c._loop
+def _get_client_loop(disp=None):
+    """Shared loop (pola xmpp-platform). Argumen disp dipertahankan
+    supaya call site lama tidak perlu diubah."""
+    loop = globals().get("NxLoop")
+    if loop is not None and loop.is_running():
+        return loop
     return None
 
 
 def run_coro(coro, disp=None):
     """Jalankan coroutine dari thread manapun secara blocking."""
-    loop = _get_client_loop(disp) if disp else None
-    if not loop:
-        for c in Clients.values():
-            lp = getattr(c, "_loop", None)
-            if lp and lp.is_running():
-                loop = lp
-                break
+    loop = _get_client_loop(disp)
     if loop is None:
         return None
     future = asyncio.run_coroutine_threadsafe(coro, loop)
@@ -981,13 +974,7 @@ def schedule_coro(coro, disp=None):
         except Exception:
             pass
         return
-    loop = _get_client_loop(disp) if disp else None
-    if not loop:
-        for c in Clients.values():
-            lp = getattr(c, "_loop", None)
-            if lp and lp.is_running():
-                loop = lp
-                break
+    loop = _get_client_loop(disp)
     if loop and loop.is_running():
         asyncio.run_coroutine_threadsafe(coro, loop)
 
@@ -1092,6 +1079,20 @@ class NexusClient(ClientXMPP):
         self._roster_obj  = None
         self.RespExp      = {}          # IQ response callbacks
 
+        # Pola xmpp-platform: stream harus terbukti hidup. Tanpa ini,
+        # socket idle di-reap server/NAT dalam hitungan menit dan bot
+        # mengira masih connect (silent disconnect).
+        self.enable_starttls = True
+        self.enable_direct_tls = False
+        self.enable_plaintext = False
+        self.whitespace_keepalive = True
+        self.whitespace_keepalive_interval = 60
+
+        # Pola xmpp-platform: tolak stream yang menawarkan SASL tanpa
+        # STARTTLS. Tanpa ini, slixmpp lanjut ke SASL di atas plaintext,
+        # lalu mati dengan "No appropriate login method" yang menyesatkan.
+        # (mech PLAIN butuh encrypted=True; encrypted butuh starttls/SSL.)
+
         # Register slixmpp plugins
         self.register_plugin("xep_0030")  # Service Discovery
         self.register_plugin("xep_0045")  # MUC
@@ -1124,6 +1125,20 @@ class NexusClient(ClientXMPP):
     async def _on_ssl_invalid_chain(self, event):
         PrintWarn('"%s" cert trust chain invalid — lanjut tanpa verifikasi penuh.' % self._nx_jid)
         # Tidak memanggil disconnect() — biarkan slixmpp lanjut handshake
+
+    async def _handle_stream_features(self, features):
+        # Pola xmpp-platform: tolak stream yang menawarkan SASL tanpa
+        # STARTTLS. Tanpa ini, slixmpp lanjut ke SASL di atas plaintext,
+        # lalu mati dengan "No appropriate login method" yang menyesatkan.
+        offered = features["features"]
+        if (
+            "mechanisms" in offered
+            and "starttls" not in offered
+            and "starttls" not in self.features
+        ):
+            self.disconnect(wait=0, reason="STARTTLS required before authentication")
+            return True
+        return await super()._handle_stream_features(features)
 
 
     # ── slixmpp event handlers ─────────────────────────────────
@@ -1182,11 +1197,11 @@ class NexusClient(ClientXMPP):
         self._connected = False
         PrintWarn('"%s" disconnected!' % self._nx_jid)
         if VarCache["alive"]:
-            composeTimer(60, reverseDisp, "reconn-%s" % self._nx_jid,
+            delay = _NX_RECONNECT_DELAY.get(self._nx_jid, 5)
+            composeTimer(delay, reverseDisp, "reconn-%s" % self._nx_jid,
                          (self._nx_jid,)).start()
-        loop = getattr(self, "_loop", None)
-        if loop and loop.is_running():
-            loop.call_soon_threadsafe(loop.stop)
+            _NX_RECONNECT_DELAY[self._nx_jid] = min(delay * 2, 300)
+        # Loop milik bersama (NxLoop) — jangan stop di sini.
 
     async def _on_subscription(self, presence):
         """Handle subscribe/unsubscribe."""
@@ -1228,9 +1243,9 @@ class NexusClient(ClientXMPP):
         return self._connected
 
     def nx_disconnect(self):
-        """Disconnect dengan cara yang benar untuk versi slixmpp apapun."""
+        """Disconnect via shared loop."""
         try:
-            loop = getattr(self, "_loop", None)
+            loop = globals().get("NxLoop")
             if not loop or not loop.is_running():
                 return
             import inspect
@@ -1242,8 +1257,8 @@ class NexusClient(ClientXMPP):
             pass
 
     def _schedule(self, coro):
-        """Schedule coroutine ke loop asyncio milik client ini."""
-        loop = getattr(self, "_loop", None)
+        """Schedule coroutine ke shared loop."""
+        loop = globals().get("NxLoop")
         if loop and loop.is_running():
             asyncio.run_coroutine_threadsafe(coro, loop)
         else:
@@ -2371,13 +2386,21 @@ Macro = _MacroStub()
 
 def connect_client(inst, attrs):
     """
-    Buat NexusClient dan jalankan di asyncio loop di thread daemon-nya sendiri.
-    Blocking sampai session_start atau timeout.
+    Construct setelah NxLoop jadi current loop (jebakan slixmpp-gotchas #1),
+    connect disubmit ke shared NxLoop. Blocking sampai session_start/timeout.
     """
     (server, cport, host, user, password) = attrs
     PrintInfo('"%s" connecting...' % inst)
     try:
+        loop = globals().get("NxLoop")
+        if loop is None:
+            PrintErr('"%s" no shared loop (NxLoop belum start).' % inst)
+            return (False, None)
+        asyncio.set_event_loop(loop)
         client = NexusClient(inst, password, server, cport, GenResource)
+        client.enable_starttls = ConTls
+        client.enable_direct_tls = False
+        client.enable_plaintext = False
 
         ready   = threading.Event()
         failed  = threading.Event()
@@ -2399,66 +2422,15 @@ def connect_client(inst, attrs):
         client.del_event_handler("disconnected", client._on_disconnected)
         client.add_event_handler("disconnected", _patched_disc)
 
-        def _run_client():
-            """Jalankan client di loop asyncio dedicated per-client."""
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            client._loop = loop
-
-            async def _start():
-                # slixmpp 1.15.0 — inspect connect() signature at runtime
-                # supaya tidak hardcode parameter yang mungkin berbeda antar versi
-                import inspect as _inspect
-                try:
-                    sig    = _inspect.signature(client.connect)
-                    params = set(sig.parameters.keys())
-                    kwargs = {}
-                    if "host"             in params: kwargs["host"]             = server
-                    if "port"             in params: kwargs["port"]             = cport
-                    if "use_ssl"          in params: kwargs["use_ssl"]          = False
-                    if "force_starttls"   in params: kwargs["force_starttls"]   = ConTls
-                    if "disable_starttls" in params: kwargs["disable_starttls"] = not ConTls
-                    # Jika tidak ada satupun keyword, pakai positional
-                    if not kwargs:
-                        await client.connect(server, cport)
-                    else:
-                        await client.connect(**kwargs)
-                except Exception as e:
-                    PrintErr('"%s" connect() error: %s' % (inst, e))
-                    failed.set()
-
+        async def _do_connect():
             try:
-                loop.run_until_complete(_start())
-                if not failed.is_set():
-                    loop.run_forever()
-                    try:
-                        pending = asyncio.all_tasks(loop)
-                        if pending:
-                            loop.run_until_complete(
-                                asyncio.wait(pending, timeout=2))
-                    except Exception:
-                        pass
-            except Exception:
-                exc_info_()
+                await client.connect(host=server, port=cport)
+                await client.wait_until("session_start", timeout=40)
+            except Exception as e:
+                PrintErr('"%s" connect() error: %s' % (inst, e))
                 failed.set()
-            finally:
-                try:
-                    pending = asyncio.all_tasks(loop)
-                    for task in pending:
-                        task.cancel()
-                    if pending:
-                        try:
-                            loop.run_until_complete(
-                                asyncio.gather(*pending, return_exceptions=True))
-                        except Exception:
-                            pass
-                    loop.close()
-                except Exception:
-                    pass
 
-        t = threading.Thread(target=_run_client,
-                             name="NxClient-%s" % inst, daemon=True)
-        t.start()
+        asyncio.run_coroutine_threadsafe(_do_connect(), loop)
 
         which = None
         for _ in range(80):
@@ -2591,7 +2563,7 @@ def load_nexsus():
 
     _print_banner()
 
-    global AnsBase
+    global AnsBase, NxLoop
     insc_path = static % "insc.py"
     if os.path.isfile(insc_path):
         try:
@@ -2623,6 +2595,14 @@ def load_nexsus():
     check_copies()
     ok_count, err_count = load_expansions()
     call_sfunctions("00si")
+    # Satu shared loop (pola xmpp-platform). Client di-construct SETELAH
+    # ini di main thread, jadi Future internal nempel ke loop yang benar.
+    NxLoop = asyncio.new_event_loop()
+    asyncio.set_event_loop(NxLoop)
+    def _run_nx_loop():
+        asyncio.set_event_loop(NxLoop)
+        NxLoop.run_forever()
+    threading.Thread(target=_run_nx_loop, name="NxLoop", daemon=True).start()
     connect_clients()
 
     waited = 0
@@ -2673,15 +2653,13 @@ def sys_exit(reason="Shutdown"):
         pass
     except Exception:
         pass
-    # Stop semua asyncio loop — tanpa memanggil disconnect()
+    # Stop shared loop — tanpa memanggil disconnect()
     # OS akan cleanup koneksi saat process restart
-    for client in list(Clients.values()):
-        try:
-            loop = getattr(client, "_loop", None)
-            if loop and loop.is_running():
-                loop.call_soon_threadsafe(loop.stop)
-        except Exception:
-            pass
+    try:
+        if NxLoop is not None and NxLoop.is_running():
+            NxLoop.call_soon_threadsafe(NxLoop.stop)
+    except Exception:
+        pass
     try:
         sleep(1)
     except KeyboardInterrupt:

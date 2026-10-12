@@ -11,6 +11,7 @@
 #        asyncio dari thread expansion, hasilnya dikembalikan sync.
 
 import asyncio
+import logging
 
 class expansion_temp(expansion):
 
