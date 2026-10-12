@@ -22,7 +22,7 @@ class expansion_temp(expansion):
         "\u2139\ufe0f Pong! %.3f sec",                      # 0  ping ok
         "\u2139\ufe0f Pong! %s \u2014 %.3f sec",                 # 1  ping via version
         "\u274c No response.",                         # 2
-        "Ping stats for %s:\n count: %s\n min: %s\n max: %s\n avg: %s",  # 3
+        "\U0001f4ca Ping stats for %s:\n count: %s\n min: %s\n max: %s\n avg: %s",  # 3
         "\u274c No data.",                             # 4
         "\u274c %s is not in the room.",               # 5
         "\u274c Error or no response.",                # 6

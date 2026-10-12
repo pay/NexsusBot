@@ -27,7 +27,7 @@ class expansion_temp(expansion):
 		"\u274c Body too long.",               # 5
 		"\u2705 Scheduled: %s",                # 6
 		"\u274c No cron tasks.",               # 7
-		"Cron tasks:\n%s",              # 8
+		"\U0001f4cb Cron tasks:\n%s",              # 8
 		"\u274c Invalid date.",                # 9
 	)
 

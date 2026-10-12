@@ -10,7 +10,7 @@ class expansion_temp(expansion):
 	AnsBase = (
 		"\u2705 Updated: %s",                        # 0
 		"\u2139\ufe0f Nothing to update.",                 # 1
-		"Current config:\n",                  # 2
+		"\U0001f4cb Current config:\n",                  # 2
 		"\u274c No extra clients configured.",       # 3
 		"\u2139\ufe0f Leaving rooms...",                   # 4
 		"\u2139\ufe0f Disconnecting...",                   # 5

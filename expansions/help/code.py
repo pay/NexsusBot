@@ -31,9 +31,9 @@ class expansion_temp(expansion):
 		"\u2139\ufe0f Command '%s' is from expansion: %s",   # 0
 		"\u2139\ufe0f Command '%s' requires access: %d",     # 1
 		"%s\n%s",                                # 2  help header
-		"Usage:",                                # 3
+		"\U0001f4d6 Usage:",                                # 3
 		"\u274c No help file found.",                   # 4
-		"Commands list — use 'commands'.",       # 5
+		"\U0001f4cb Commands list — use 'commands'.",       # 5
 		"\U0001f4cb Commands (prefix '%s'):",               # 6
 		"'%s'",                                  # 7  prefix display
 		"\n\U0001f451 [8/God+] (%d): %s",                  # 8

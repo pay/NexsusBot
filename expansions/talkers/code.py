@@ -22,7 +22,7 @@ class expansion_temp(expansion):
 	AnsBase = (
 		"\U0001f4cb Top talkers:",                             # 0
 		"\u274c No data.",                                 # 1
-		"Messages: %d\nWords: %d\nWords/msg: %s",  # 2
+		"\U0001f4ca Messages: %d\nWords: %d\nWords/msg: %s",  # 2
 		"\n(showing partial results)",              # 3
 	)
 
