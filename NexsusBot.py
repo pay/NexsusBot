@@ -616,21 +616,21 @@ Debug         = []
 # Nilai default (EN) — akan di-override oleh static/insc.py
 AnsBase = (
     "This command is available only in the conferences.", # 0
-    "This command implies arguments using.",              # 1
+    "This command requires arguments.",                  # 1
     "Invalid syntax.",                                    # 2
     "There is no '%s' in the chats-list.",               # 3
     "Done.",                                             # 4
     "Parameters should be shorter.",                     # 5
-    "Such command isn't exist.",                         # 6
+    "Such command doesn't exist.",                       # 6
     "I can't.",                                          # 7
     "There is no such conference in my list.",           # 8
     "Type is invalid.",                                  # 9
-    "You need to access higher.",                        # 10
+    "You need higher access.",                           # 10
     "You should look into private.",                     # 11
     "# %d. - %s",                                        # 12
     "command '%s' (%s)",                                 # 13
-    "prosess '%s'",                                      # 14
-    "When execut %s --> error happend!",                 # 15
+    "process '%s'",                                      # 14
+    "While executing %s --> an error happened!",         # 15
     "Type --> 'excinfo %d' to show error (crashfile --> %s)", # 16
     "Type --> 'excinfo %d' or 'sh cat %s' to show error",    # 17
     "%s[...]\n\n** %d symbols limit! Type 'more' to show rest.", # 18
@@ -638,7 +638,7 @@ AnsBase = (
     "Error %s (%s) - conference: '%s'.",                 # 20
     "Error %s (%s), full exit from '%s'.",               # 21
     "Error %s (%s), I leaved '%s'.",                     # 22
-    "The service without admin's affilation is unavailable!", # 23
+    "The service without admin's affiliation is unavailable!", # 23
     "I disable all functions until I'll become an admin!", # 24
     "Obtaining rights...",                               # 25
     "sCode '%s' in %s (%s). Full leave!",                # 26
