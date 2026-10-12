@@ -1562,6 +1562,7 @@ enough_access = lambda conf, nick, access=0: (access <= get_access(conf, nick))
 def Message(inst, body, disp=None):
     """Kirim pesan ke room atau JID."""
     body = object_encode(body)
+    _Log("reply ke %s: %s" % (inst, body[:120].replace("\n", " | ")), logging.INFO)
     if inst in Chats:
         mtype = sBase[1]  # groupchat
         if not disp:
@@ -2193,6 +2194,7 @@ class Command:
         if enough_access(source[1], source[2], self.access):
             if self.isAvailable and self.handler:
                 Info["cmd"].plus()
+                _Log("cmd %s dari %s di %s" % (self.name, source[2], source[1]), logging.INFO)
                 sThread("command", self.handler,
                         (self.exp, stype, source, body, disp), self.name)
                 self.numb.plus()
