@@ -14,7 +14,7 @@ class expansion_temp(expansion):
 		"\u274c Errors: %d",                         # 3
 		"",                                   # 4 (unused)
 		"%s: %s",                             # 5
-		"\u2139\ufe0f Already here.",                      # 6
+		"\u2139\ufe0f %s already here.",                      # 6
 		"\u274c Can't find that user.",                   # 7
 		"\u23f1\ufe0f Cooldown: %s",                       # 8
 		"\u274c Nothing to clear.",                  # 9

@@ -29,7 +29,6 @@ if DefLANG in ("RU", "UA"):
 		"спок" # 4
 	)])
 	
-	del Char, Rule
 else:
 
 	GameRules = (
