@@ -1,11 +1,9 @@
-Change which language the bot replies in, for you only, in this room only.
-
-  :lang          see current language + available codes
-  :lang id       use Bahasa Indonesia
-  :lang en       use English
-  :lang auto     go back to detecting from your client
-  :lang list     see who in this room has picked a language
-
-The bot reads the <lang> tag from your client's presence as the automatic default.
-If you pick one manually with :lang <code>, that choice sticks until you type
-:lang auto or :lang list.
+change which language the bot replies in - for you only, in this room only
+{command} [auto|list|<code>]
+*/{command} see the current language + every available code
+*/{command} id use Bahasa Indonesia
+*/{command} en use English
+*/{command} auto go back to detecting from your client's <lang> tag
+*/{command} list see who in this room has already picked a language
+the <lang> tag on your client's presence is the automatic default
+a manual pick sticks until you run {command} auto

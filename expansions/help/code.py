@@ -124,7 +124,9 @@ class expansion_temp(expansion):
 							ls.append("%s %s" % (Char, line))
 					answer = "\n".join(ls)
 				else:
-					answer = self.AnsBase[17]
+					# File 2 baris saja (deskripsi + usage) tanpa daftar
+					# contoh - tetap help yang valid, bukan error format.
+					answer = "\n".join(ls)
 			else:
 				answer = self.AnsBase[17]
 		else:
