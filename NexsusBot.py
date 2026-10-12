@@ -2444,6 +2444,7 @@ def connect_client(inst, attrs):
 
         if which == "ready":
             Clients[inst] = client
+            _NX_RECONNECT_DELAY.pop(inst, None)
             PrintOK('"%s" connected and authenticated!' % inst)
             return (True, inst)
         else:
