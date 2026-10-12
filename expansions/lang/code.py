@@ -23,14 +23,14 @@ class expansion_temp(expansion):
 		expansion.__init__(self, name)
 
 	AnsBase = (
-		"\U0001f4cb Bahasa sekarang: %s\n\U0001f4c4 Dipakai: %s\n\U0001f50d Codes: %s\n\U0001f4a1 Alias yang bisa dipakai: %s",  # 0
-		"\u2705 Bahasa lo sekarang: %s.",                                                      # 1
-		"\u274c Kode bahasa nggak dikenal: %s.\n\U0001f50d Codes: %s",                       # 2
-		"\u274c Gagal nyimpen pilihan bahasa.",                                                # 3
-		"\u2139\ufe0f Kembali ke deteksi otomatis — ':lang auto' bikin bot baca tag <lang> dari client lo lagi.",       # 4
-		"\U0001f4cb Bahasa di room ini:\n%s",                                                  # 5
-		"\u2139\ufe0f Belum ada yang pilih bahasa di sini.",                                  # 6
-		"\u274c Gagal baca database bahasa.",                                                 # 7
+		"\U0001f4cb Current language: %s\n\U0001f4c4 Using: %s\n\U0001f50d Codes: %s\n\U0001f4a1 Aliases you can use: %s",  # 0
+		"\u2705 Your language is now: %s.",                                                      # 1
+		"\u274c Unknown language code: %s.\n\U0001f50d Codes: %s",                       # 2
+		"\u274c Could not save your language choice.",                                                # 3
+		"\u2139\ufe0f Back to auto-detection — ':lang auto' makes the bot read the <lang> tag from your client again.",       # 4
+		"\U0001f4cb Languages in this room:\n%s",                                                  # 5
+		"\u2139\ufe0f Nobody here has picked a language yet.",                                  # 6
+		"\u274c Could not read the language database.",                                                 # 7
 	)
 
 	# ── helpers ────────────────────────────────────────────────
@@ -112,7 +112,7 @@ class expansion_temp(expansion):
 				return Answer(self.AnsBase[7], stype, source, disp)
 			if not nxs_userlang.clear_user_lang(source[1], source[2]):
 				return Answer(self.AnsBase[3], stype, source, disp)
-			# Sampe sini baruh yang aktif untuk pesan berikutnya.
+			# Sampe sini baru yang aktif untuk pesan berikutnya.
 			_set_reply_lang(source[1], source[2])
 			return Answer(self.AnsBase[4], stype, source, disp)
 

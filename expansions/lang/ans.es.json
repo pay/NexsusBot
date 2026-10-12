@@ -1,5 +1,5 @@
 {
-  "0": "📋 Idioma actual: %s\n📄 Disponibles: %s\n🔍 Códigos: %s\n💡también se puede usar el nombre: %s",
+  "0": "📋 Idioma actual: %s\n📄 Disponibles: %s\n🔍 Códigos: %s\n💡 también se puede usar el nombre: %s",
   "1": "✅ Tu idioma ahora es: %s.",
   "2": "❌ Código de idioma desconocido: %s.\n🔍 Códigos: %s",
   "3": "❌ No se pudo guardar la preferencia de idioma.",

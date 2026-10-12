@@ -1,7 +1,7 @@
 {
-  "0": "📋 Bahasa sekarang: %s\n📄 Dipakai: %s\n🔍 Codes: %s\n💡 Alias yang bisa dipakai: %s",
+  "0": "📋 Bahasa sekarang: %s\n📄 Dipakai: %s\n🔍 Kode: %s\n💡 Alias yang bisa dipakai: %s",
   "1": "✅ Bahasa lo sekarang: %s.",
-  "2": "❌ Kode bahasa nggak dikenal: %s.\n🔍 Codes: %s",
+  "2": "❌ Kode bahasa nggak dikenal: %s.\n🔍 Kode: %s",
   "3": "❌ Gagal nyimpen pilihan bahasa.",
   "4": "ℹ️ Kembali ke deteksi otomatis — :lang auto bikin bot baca tag <lang> dari client lo lagi.",
   "5": "📋 Bahasa di room ini:\n%s",
