@@ -18,18 +18,3 @@ if DefLANG in ("RU", "UA"):
 		"Не существует локальной базы для ростера.",        # 10
 		"\\->\n",                                           # -1  Fix: raw \-
 	)
-else:
-	AnsBase_temp = (
-		"There are %d definition(s) in global base:\n%s",          # 0
-		"There are %d definition(s) in the base of %s:\n%s",       # 1
-		"The bases are empty.",                                     # 2
-		"%s - %d hit(s).",                                         # 3
-		"No hits in the bases.",                                    # 4
-		"\\->\n%s:\n\t%s\n\nDefined by %s (on %s)",               # 5  Fix: raw \-
-		"There is no '%s' in the base.",                           # 6
-		"There are %d definition(s) in the global base.",          # 7
-		"There are %d definition(s) in the base of %s.",           # 8
-		"'%s' is already in the global base.",                     # 9
-		"There is no local base for the roster.",                  # 10
-		"\\->\n",                                                  # -1  Fix: raw \-
-	)

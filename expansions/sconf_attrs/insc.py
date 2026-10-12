@@ -18,20 +18,3 @@ if DefLANG in ("RU", "UA"):
 		"Префикс не установлен.", # 12
 		"Статус '%s' мне неизвестен." # 13
 	)])
-else:
-	AnsBase_temp = (
-		"I can't, because '%s' is offline.", # 0
-		"'%s' is already owned by this conference.", # 1
-		"'%s' not in available clients.", # 2
-		"Jabber ID changing...", # 3
-		"My new nick is '%s'.", # 4
-		"My nick can't be longer than 16 symbols.", # 5
-		"The prefix was deleted.", # 6
-		"So there is no prefix.", # 7
-		"'%s' is prefix here now.", # 8
-		"So symbol '%s' is prefix here.", # 9
-		"Unavailable symbol for prefix! Available: '%s'.", # 10
-		"'%s' is current prefix here.", # 11
-		"The prefix wasn't set.", # 12
-		"'%s' isn't a status." # 13
-	)

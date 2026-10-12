@@ -13,15 +13,3 @@ if DefLANG in ("RU", "UA"):
 		"Запись добавлена под номером - %s.", # 7
 		"Эта строка итак пуста." # 8
 	)])
-else:
-	AnsBase_temp = (
-		"Your note is empty.", # 0
-		"Length of one line can't be more than 512 symbols.", # 1
-		"No chance. I don't know your jid.", # 2
-		"All of 16 lines are filled.", # 3
-		"There are 16 lines in note.", # 4
-		"This line is empty.", # 5
-		"Your notes:\n", # 6
-		"Recorded in line - %s.", # 7
-		"This line is already empty." # 8
-	)

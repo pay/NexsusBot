@@ -31,11 +31,6 @@ if DefLANG in ("RU", "UA"):
 	
 	del Char, Rule
 else:
-	AnsBase_temp = (
-		"Draw.", # 1
-		"%s\n\t>> I won!", # 2
-		"%s\n\t>> You won." # 3
-	)
 
 	GameRules = (
 		"Scissors cut paper.", # 0
