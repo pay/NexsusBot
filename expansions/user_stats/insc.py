@@ -11,13 +11,3 @@ if DefLANG in ("RU", "UA"):
 		"Ты провёл здесь - %s.", # 5
 		"Здесь нет такого юзера." # 6
 	)])
-else:
-	AnsBase_temp = (
-		"\nTotal joins - %d\nThe Last join-time - %s\nThe last role - %s", # 0
-		"\nThe last leave-time - %s\nExit reason - %s", # 1
-		"\nNicks: %s", # 2
-		"No statistics.", # 3
-		"'%s' spent here - %s.", # 4
-		"You spent here - %s.", # 5
-		"No such user here." # 6
-	)

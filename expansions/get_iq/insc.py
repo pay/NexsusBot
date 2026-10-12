@@ -16,18 +16,3 @@ if DefLANG in ("RU", "UA"):
 		"Вкард не заполнен.", # 10
 		"\n\n** Всего %d пунктов." # 11
 	)])
-else:
-	AnsBase_temp = (
-		"Pong - %s sec.", # 0
-		"No pong. Answer for version (%s) in %s sec.", # 1
-		"No pong, no version...", # 2
-		"\nPing statistics (total %s):\nFastest - %s\nSlowest - %s\nAverage time - %s", # 3
-		"No result.", # 4
-		"«%s» - isn't here now.", # 5
-		"No answer.", # 6
-		"%s's uptime is %s.", # 7
-		"%s's last activity was %s ago.", # 8
-		"No matches.", # 9
-		"The vCard is empty.", # 10
-		"\n\n** Total %d results." # 11
-	)

@@ -57,53 +57,5 @@ if DefLANG in ("RU", "UA"):
 	Obscene = r"(?:бляд|\sблят|\sбля\s|\sблять\s|\sплять\s|хуй|\sибал|\sебал|\sхуи|хуител|хуя|\sхую|\sхуе|\sахуе|\sохуе|хуев|хер|\sпох\s|\sнах\s|писд|пизд|рizd|\sпздц\s|\sеб|\sепана\s|\sепать\s|\sипать\s|\sвыепать\s|\sибаш|\sуеб|проеб|праеб|приеб|съеб|взъеб|взьеб|въеб|вьеб|выебан|перееб|недоеб|долбоеб|долбаеб|\sниибац|\sнеебац|\sнеебат|\sниибат|\sпидар|\sрidаr|\sпидар|\sпидор|педор|пидор|пидарас|пидараз|\sпедар|педри|пидри|\sзаеп|\sзаип|\sзаеб|ебучий|ебучка\s|епучий|епучка\s|\sзаиба|заебан|заебис|\sвыеб|выебан|\sпоеб|\sнаеб|\sнаеб|сьеб|взьеб|вьеб|\sгандон|\sгондон|пахуи|похуис|\sманда\s|мандав|залупа|\sзалупог)"
 
 else:
-	AnsBase_temp = (
-		"too long nickname. (%d - limit)",              # 0
-		"forbidden nickname.",                          # 1
-		"spaces at the edges of nicknames - forbidden.", # 2
-		"unprintable nickname.",                        # 3
-		"advertising - forbidden.",                     # 4
-		"unprintable message.",                         # 5
-		"too long message.",                            # 6
-		"use lowercase.",                               # 7
-		"unprintable status message.",                  # 8
-		"too long status message.",                     # 9
-		"%s: ban after %d kicks.",                      # 10
-		"%s: intruder.",                                # 11
-		"%s: antiwipe.",                                # 12
-		"presence flood.",                              # 13
-		"Ooops! You have earned devoice. Left %s.",     # 14
-		"flood.",                                       # 15
-		"%s devoice in to %d seconds.",                 # 16
-		"%s verification.",                             # 17
-		"To get the voice %s, you have three attempts.", # 18
-		"type: 'codename 47' (without quotes)\t\t|\tcodename 47\n"
-		"type: 'I am not a bot' (without quotes)\t|\tI am not a bot\n"
-		"type: second symbol of English alphabet\t|\tb\n"
-		"type: sixth symbol of English alphabet\t\t|\te\n"
-		"type answer: seven + 127 = ? (integer)\t\t|\t128\n"
-		"type answer: three + 253 = ? (integer)\t\t|\t256\n"
-		"type: capital of England\t\t\t\t\t|\tLondon\n"
-		"type: capital of USA\t\t\t\t\t\t|\tWashington\n"
-		"type: capital of France\t\t\t\t\t|\tParis\n"
-		"type: capital of Russia\t\t\t\t\t|\tMoscow",  # 19
-		"%s: verification passed.",                     # 20
-		"Test passed!",                                 # 21
-		"%s: verification missed.",                     # 22
-		"Wrong answer!",                                # 23
-		"\nConfiguration of security service:\nForbid of the spaces on the edges of nickname: ", # 24
-		"enabled ",                                     # 25
-		"disabled ",                                    # 26
-		"\nMax nickname length: %d\nAntiwipe: ",        # 27
-		"\nNumber of the kick, after that ban follows: %d\nVerification: ", # 28
-		"\nLoyalty: %d\nAntiаdvertising: ",             # 29
-		"\nDevoice-time (seconds): %d\nAntiobscene: ",  # 30
-		"\nMaximum length of message: %d\nAnticaps: ",  # 31
-		"\nMaximum length of presence: %d\nSparta mode: ", # 32
-		"",                                             # 33
-		"Server already in the white list.",            # 34
-		"Server not in extra white list.",              # 35
-		"This is not a server."                         # 36
-	)
 	# Fix: "\s" → r"\s" (raw string)
 	Obscene = r"(?:\sfuck\s|\sshit\s|\sbitch\s|\sfaggot\s|\scock\s|\scunt\s)"
