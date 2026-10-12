@@ -978,6 +978,19 @@ def schedule_coro(coro, disp=None):
     if loop and loop.is_running():
         asyncio.run_coroutine_threadsafe(coro, loop)
 
+
+def client_loop(client):
+    """Loop untuk menjalankan IQ/coroutine milik client.
+
+    Sejak rombak B (shared NxLoop), client tidak lagi menyimpan _loop
+    sendiri — pakai shared loop. Fallback ke atribut lama kalau ada,
+    supaya ekspansi yang belum diupdate tetap jalan.
+    """
+    loop = _get_client_loop()
+    if loop is not None:
+        return loop
+    return getattr(client, "_loop", None)
+
 # ── Config Loader ──────────────────────────────────────────────
 
 def client_config(config, section):

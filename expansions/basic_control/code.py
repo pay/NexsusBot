@@ -161,7 +161,7 @@ class expansion_temp(expansion):
 				if online(Name):
 					try:
 						client = Clients[Name]
-						loop   = getattr(client, "_loop", None)
+						loop   = client_loop(client)
 						if loop and loop.is_running():
 							# slixmpp: disconnect() adalah coroutine
 							# schedule_coro sudah handle asyncio.run_coroutine_threadsafe

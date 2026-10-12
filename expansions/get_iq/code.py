@@ -91,7 +91,7 @@ class expansion_temp(expansion):
 
     def _run_iq(self, client, iq):
         """Jalankan IQ request secara blocking (max 10s)."""
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop or not loop.is_running():
             return None
         future = asyncio.run_coroutine_threadsafe(iq.send(), loop)
@@ -120,7 +120,7 @@ class expansion_temp(expansion):
         iq.enable("ping")
 
         # Gunakan plugin xep_0199 langsung
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
@@ -187,7 +187,7 @@ class expansion_temp(expansion):
         if not client:
             return Answer(self.AnsBase[2], stype, source, disp)
 
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
@@ -247,7 +247,7 @@ class expansion_temp(expansion):
         if not client:
             return Answer(self.AnsBase[2], stype, source, disp)
 
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
@@ -366,7 +366,7 @@ class expansion_temp(expansion):
         if not client:
             return Answer(self.AnsBase[2], stype, source, disp)
 
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
@@ -435,7 +435,7 @@ class expansion_temp(expansion):
     # ── idle / uptime ──────────────────────────────────────────
 
     def _query_last(self, client, instance):
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return None
         async def do_last():
@@ -501,7 +501,7 @@ class expansion_temp(expansion):
         ls    = body.split()
         cmd   = ls.pop(0).lower()
         room  = source[1]
-        loop  = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
@@ -580,7 +580,7 @@ class expansion_temp(expansion):
             else:
                 filter_ = tok
 
-        loop = getattr(client, "_loop", None)
+        loop = client_loop(client)
         if not loop:
             return Answer(self.AnsBase[2], stype, source, disp)
 
