@@ -74,7 +74,7 @@ SYSTEM_PROMPT = (
     "kalau menyapa/ngeledekin balik, jangan pakai nama bot sendiri. Kadang kamu "
     "juga akan diberi cuplikan obrolan room sebelumnya sebagai konteks -- pakai "
     "itu buat nyambung, tapi jangan membalas cuplikan itu satu-satu, cukup "
-    "tanggapi pesan terbaru.\n\n"
+    "tanggapi pesan terbaru. Jawab LANGSUNG isi jawaban tanpa label pembicara apa pun di depan -- jangan pernah memulai jawaban dengan '[nama]:' atau 'nama:', karena bot sudah otomatis mencantumkan nama pembicara di depan pesan yang dikirim ke room.\n\n"
     "Ledekan/sarkasme HANYA buat suasana becanda ringan -- jangan pernah "
     "menghina fisik, SARA, atau hal yang bisa beneran nyakitin orang. Kalau ada "
     "yang kelihatan tersinggung beneran (bukan lagi ikut becanda), langsung "
@@ -196,6 +196,11 @@ class expansion_temp(expansion):
         "Cannot connect to Groq: %s",                                         # 47
         "Error: %s",                                                          # 48
         "All Groq models are rate limited. Try again later.",                 # 49
+        "Key OK",                                                             # 50
+        "Key not set",                                                        # 51
+        "\nRoom ini : %s",                                                    # 52
+        "Cuplikan obrolan room terakhir (buat referensi konteks saja, "      # 53
+        "jangan dibalas satu-satu):",
     )
 
     def __init__(self, name):
@@ -472,6 +477,17 @@ class expansion_temp(expansion):
         return target.lower(), target
 
 
+    # Nama bahasa buat instruksi ke model -- deteksi yang jalan cuma buat
+    # AnsBase (LocalizationContext) itu boilerplate, bahasa JAWA yang
+    # dipakai model ditentukan di sini.
+    _LANG_MODEL_NAMES = {
+        "id": "Indonesia", "jv": "Jawa", "en": "Inggris", "ar": "Arab",
+        "ru": "Rusia", "uk": "Ukraina", "bg": "Bulgaria", "el": "Yunani",
+        "th": "Thailand", "hi": "Hindi", "zh": "Mandarin", "ja": "Jepang",
+        "ko": "Korea", "fa": "Persia", "de": "Jerman", "fr": "Perancis",
+        "es": "Spanyol", "pt": "Portugis", "it": "Italia", "tr": "Turki",
+    }
+
     # ── Deteksi bahasa otomatis dari isi pesan ──
     _LANG_SCRIPTS = {
         "ar": "\u0600-\u06FF",       # Arab
@@ -483,6 +499,7 @@ class expansion_temp(expansion):
         "bg": "\u0400-\u04FF",
         "el": "\u0370-\u03FF",       # Greek
         "th": "\u0E00-\u0E7F",       # Thai
+        "jv": "\ua980-\ua9df",       # Aksara Jawa (Javanese script)
         "hi_k": None,
     }
 
@@ -492,9 +509,12 @@ class expansion_temp(expansion):
                "kamu", "kita", "mereka", "dengan", "untuk", "dari", "ada",
                "apa", "kenapa", "bagaimana", "boleh", "gimana", "nggak",
                "udah", "lah", "dong", "sih", "kok", "banget", "makasih"),
-        "jv": ("sing", "lan", "iki", "iku", "ora", "dadi", "kowe", "aku",
-               "karo", "saka", "ana", "apa", "jare", "piye", "gak", "wis",
-               "mbak", "mas", "ndak", "mbuh", "lur", "cak"),
+        "jv": ("sing", "lan", "iki", "iku", "ora", "dadi", "kowe", "karo",
+               "saka", "jare", "piye", "gak", "wis", "mbak", "ndak", "mbuh",
+               "lur", "cak", "aja", "padha", "cah", "dereng", "mangan",
+               "lunga", "menyang", "saiki", "mengko", "tak", "wae", "tenan",
+               "saestu", "nggih", "ngoten", "menapa", "cuman", "nanging",
+               "dangu", "arep", "krungu", "kula", "panjenengan"),
         "en": ("the", "and", "this", "that", "what", "how", "why", "who",
                "where", "when", "is", "are", "was", "were", "you", "your",
                "my", "me", "we", "they", "can", "could", "should", "would",
@@ -561,7 +581,30 @@ class expansion_temp(expansion):
             if score > best_score:
                 best_score = score
                 best_code = code
-        return best_code if best_score >= 2 else None
+        # Jawa vs Indonesia: banyak kata identik (aku, apa, lan, sing), jadi
+        # kalau skor Jawa sama dengan pemenang sementara, menangin Jawa.
+        # Syaratnya skor Jawa > 0 -- kalau 0 (teks murni bahasa lain),
+        # jangan diambil alih.
+        if best_code != "jv":
+            jv_score = len(words & set(self._LANG_KEYWORDS["jv"]))
+            if jv_score and jv_score >= best_score:
+                best_code, best_score = "jv", jv_score
+        return best_code if best_score >= (1 if best_code == "jv" else 2) else None
+
+    def _lang_hint(self, lang):
+        """Instruksi bahasa buat model. Terdeteksi = HARUS dipakai.
+
+        Sebelumnya SYSTEM_PROMPT cuma nyuruh 'mirror bahasa user', tapi
+        cuplikan room context bisa berbahasa lain dan model ikut kesana --
+        pesan Jawa dijawab Inggris. Dengan instruksi eksplisit di sini,
+        bahasa hasil _detect_lang yang menang.
+        """
+        name = self._LANG_MODEL_NAMES.get(lang)
+        if not name:
+            return None
+        return ("Wajib menjawab SEPENUHNYA dalam bahasa %s, apa pun bahasa "
+                "cuplikan obrolan atau pesan sebelumnya di konteks. "
+                "(Jangan campur bahasa lain kecuali kutipan/kode.)" % name)
 
     def _reply_lang(self, text, stype, source, disp):
         """Kirim reply dengan bahasa yang terdeteksi dari teks user."""
@@ -581,7 +624,8 @@ class expansion_temp(expansion):
     # Ini menghindari race condition saat beberapa thread (tiap /ai dan tiap
     # mention jalan di thread terpisah) saling timpa instance attribute waktu
     # proses fallback rate-limit berlangsung bersamaan.
-    def _call_groq(self, user_id, prompt, limit, model_key=None, room_context=None):
+    def _call_groq(self, user_id, prompt, limit, model_key=None,
+                   room_context=None, lang=None):
         if model_key is None:
             model_key = self._groq_model_key
         if not self._groq_key:
@@ -592,11 +636,15 @@ class expansion_temp(expansion):
             history = list(self._get_history(user_id))
         clean_history = [{"role": e["role"], "content": e["content"]} for e in history]
         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        lang_hint = self._lang_hint(lang)
+        if lang_hint:
+            # system message terpisah, bukan diselipin ke SYSTEM_PROMPT --
+            # SYSTEM_PROMPT dipakai bersama, ini khusus per-pesan.
+            messages.append({"role": "system", "content": lang_hint})
         if room_context:
             messages.append({
                 "role": "system",
-                "content": ("Cuplikan obrolan room terakhir (buat referensi konteks saja, "
-                            "jangan dibalas satu-satu):\n" + "\n".join(room_context))
+                "content": (self.AnsBase[53] + "\n" + "\n".join(room_context))
             })
         messages += clean_history
         messages.append({"role": "user", "content": prompt})
@@ -665,7 +713,7 @@ class expansion_temp(expansion):
     # Urutan fallback antar model Groq: model aktif -> model 2 (8B, limit tinggi) -> dst.
     GROQ_FALLBACK_ORDER = ["7", "6", "3", "4", "5", "2", "1"]  # 7=8B limit tinggi dulu, lalu dari kecil ke besar
 
-    def _call_ai(self, user_id, prompt, limit, room_context=None):
+    def _call_ai(self, user_id, prompt, limit, room_context=None, lang=None):
         # fix: snapshot lokal, BUKAN mutate self._groq_model_key. Sebelumnya
         # fungsi ini mengubah lalu "restore" instance attribute ini untuk
         # logic fallback — tapi karena /ai dan mention jalan di thread
@@ -674,7 +722,8 @@ class expansion_temp(expansion):
         current_key = self._groq_model_key
         tried = set()
 
-        result, err = self._call_groq(user_id, prompt, limit, model_key=current_key, room_context=room_context)
+        result, err = self._call_groq(user_id, prompt, limit, model_key=current_key,
+                                      room_context=room_context, lang=lang)
         tried.add(current_key)
 
         # fallback antar model Groq jika rate limit
@@ -692,9 +741,49 @@ class expansion_temp(expansion):
 
             print("[nexsus:ai] Rate limit model %s, fallback ke model %s" % (failed_key, next_key))
             tried.add(next_key)
-            result, err = self._call_groq(user_id, prompt, limit, model_key=next_key, room_context=room_context)
+            result, err = self._call_groq(user_id, prompt, limit, model_key=next_key,
+                                          room_context=room_context, lang=lang)
 
         return result, err
+
+    # ── Normalisasi jawaban: buang label pembicara buatan model ──
+    # Model Groq sering meniru format room context ("[nick]: pesan") dan
+    # memulai jawabannya dengan "[nick]: ".  Core NexsusBot sudah membalut
+    # jawaban room dengan "senderNick: " (Answer() -> Message()), jadi label
+    # buatan model bikin prefix dobel: "ρay: [ρay]: Halo! ...".
+    # Dipotong HANYA kalau: (a) ada di posisi paling depan, dan (b) isinya
+    # persis nick yang minta atau nick bot di room itu.  Teks biasa yang
+    # kebetulan menyebut nama di tengah kalimat tidak tersentuh.
+    _SPEAKER_PREFIX_RE = re.compile(r"^\s*\[([^\[\]\n]{1,40})\]:\s*")
+
+    def _strip_speaker_prefix(self, text, nicks):
+        if not text:
+            return text
+        allow = {str(n).strip().lower() for n in nicks if n}
+        if not allow:
+            return text
+        m = self._SPEAKER_PREFIX_RE.match(text)
+        if m and m.group(1).strip().lower() in allow:
+            return text[m.end():].lstrip()
+        return text
+
+    # Sisa "[nick]" di mana pun dalam jawaban (biasanya vokatif: "Halo,
+    # [raijo]?") dibikin polos -- kurung siku yang dibuang, nama + tanda
+    # baca sesudahnya dipertahankan.  Hanya nick yang dikenal (yang minta,
+    # nick bot, anggota room yang muncul di room log); "[DONE]", "[1/2]",
+    # atau nick orang lain tidak tersentuh.
+    _NICK_IN_BRACKETS_RE = re.compile(r"\[([^\[\]\n]{1,40})\]")
+
+    def _strip_bracket_labels(self, text, nicks):
+        if not text:
+            return text
+        allow = {str(n).strip().lower() for n in nicks if n}
+        if not allow:
+            return text
+        def _rep(m):
+            inner = m.group(1).strip()
+            return inner if inner.lower() in allow else m.group(0)
+        return self._NICK_IN_BRACKETS_RE.sub(_rep, text)
 
     # ── Chunked sender ────────────────────────────────────────
     def _send_chunked(self, text, stype, source, disp):
@@ -740,9 +829,33 @@ class expansion_temp(expansion):
                 locale_ctx = None
 
         try:
-            result, err = self._call_ai(history_key, tagged_prompt, limit, room_context=room_context)
+            result, err = self._call_ai(history_key, tagged_prompt, limit,
+                                        room_context=room_context,
+                                        lang=detected_lang)
             if err:
                 Answer(self.AnsBase[3] % err, stype, source, disp)
+                return
+            # buang label "[nick]:" buatan model di depan jawaban, supaya
+            # tidak dobel dengan prefix yang ditambahkan core (Answer()),
+            # lalu buang sisa kurung siku di sekitar nick yang dikenal.
+            bot_nick = None
+            room_jid = source[1] if self._is_room(stype) else None
+            if room_jid:
+                try:
+                    if room_jid in Chats:
+                        bot_nick = get_nick(room_jid)
+                except Exception:
+                    bot_nick = None
+            known_nicks = [nick, source[2], bot_nick]
+            if room_jid:
+                try:
+                    known_nicks += [e.get("nick") for e in self._room_log.get(room_jid, [])]
+                except Exception:
+                    pass
+            result = self._strip_speaker_prefix(result, known_nicks)
+            result = self._strip_bracket_labels(result, known_nicks)
+            if not result:
+                Answer(self.AnsBase[45], stype, source, disp)
                 return
             self._send_chunked(result, stype, source, disp)
         finally:
@@ -892,7 +1005,7 @@ class expansion_temp(expansion):
                     mid, mdesc = GROQ_MODELS[k]
                     marker = ">" if k == self._groq_model_key else " "
                     lines.append(self.AnsBase[41] % (marker, k, mdesc, mid))
-                lines.append("━━━━━━━━━━━━━━━━━━━━━━")
+                lines.append(self.AnsBase[40])
                 lines.append(self.AnsBase[42] % valid_keys)
                 Answer("\n".join(lines), stype, source, disp)
             elif sub in GROQ_MODELS:
@@ -1068,10 +1181,10 @@ class expansion_temp(expansion):
             total_users   = sum(1 for k in self._history if not k.startswith("room:"))
             total_rooms   = sum(1 for k in self._history if k.startswith("room:"))
             total_msgs    = sum(len(v) for v in self._history.values()) // 2
-            groq_status   = "key OK" if self._groq_key else "key BELUM DISET"
+            groq_status   = self.AnsBase[50] if self._groq_key else self.AnsBase[51]
             room_str = ""
             if self._is_room(stype):
-                room_str = "\nRoom ini : %s" % (
+                room_str = self.AnsBase[52] % (
                     "OFF" if source[1] in self._disabled_rooms else "ON"
                 )
             mid, mdesc = GROQ_MODELS[self._groq_model_key]
