@@ -11,9 +11,50 @@ import threading
 import os as _os
 import re
 
-# ── Groq config ──────────────────────────────────────────────
-GROQ_API_BASE    = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_CONFIG_FILE = _os.path.join(_os.path.dirname(_os.path.abspath(ExpsDir)), "config", "groq_config")
+# ── Environment / Groq config ────────────────────────────────
+try:
+    from dotenv import load_dotenv as _load_dotenv
+except ImportError:
+    _load_dotenv = None
+
+NXSUS_ROOT = _os.path.dirname(_os.path.abspath(ExpsDir))
+if _load_dotenv is not None:
+    _load_dotenv(
+        dotenv_path=_os.path.join(NXSUS_ROOT, ".env"),
+        override=False,
+    )
+
+GROQ_CONFIG_FILE = _os.path.join(NXSUS_ROOT, "config", "groq_config")
+
+
+def _env_int(name, default, minimum=1):
+    try:
+        return max(minimum, int(_os.environ.get(name, str(default)).strip()))
+    except (TypeError, ValueError):
+        return default
+
+
+def _env_float(name, default, minimum=0.0, maximum=2.0):
+    try:
+        value = float(_os.environ.get(name, str(default)).strip())
+        return min(maximum, max(minimum, value))
+    except (TypeError, ValueError):
+        return default
+
+
+def _groq_endpoint():
+    base = _os.environ.get(
+        "NXSUS_GROQ_ENDPOINT",
+        "https://api.groq.com/openai/v1",
+    ).strip().rstrip("/")
+    if not base:
+        base = "https://api.groq.com/openai/v1"
+    if base.endswith("/chat/completions"):
+        return base
+    return base + "/chat/completions"
+
+
+GROQ_API_BASE = _groq_endpoint()
 GROQ_MODELS = {
     "1": ("openai/gpt-oss-120b",                              "GPT-OSS 120B"),
     "2": ("meta-llama/llama-4-scout-17b-16e-instruct",        "Llama 4 Scout"),
@@ -23,23 +64,29 @@ GROQ_MODELS = {
     "6": ("openai/gpt-oss-20b",                               "GPT-OSS 20B"),
     "7": ("llama-3.1-8b-instant",                             "Llama 3.1 8B"),
 }
-GROQ_MODEL_DEFAULT = "1"
+GROQ_MODEL_DEFAULT = _os.environ.get("NXSUS_GROQ_MODEL", "1").strip()
+if GROQ_MODEL_DEFAULT not in GROQ_MODELS:
+    GROQ_MODEL_DEFAULT = "1"
 
-TIMEOUT    = 60
-CHUNK_SIZE = 800   # fix: dinaikkan dari 400
+TIMEOUT     = _env_int("NXSUS_GROQ_TIMEOUT", 60)
+MAX_TOKENS  = _env_int("NXSUS_AI_MAX_TOKENS", 800)
+TEMPERATURE = _env_float("NXSUS_AI_TEMPERATURE", 0.7)
+PROMPT_CAP  = _env_int("NXSUS_AI_PROMPT_CAP", 1200)
+RESULT_CAP  = _env_int("NXSUS_AI_RESULT_CAP", 1500, minimum=4)
+CHUNK_SIZE  = _env_int("NXSUS_AI_CHUNK_SIZE", 800)
 
 # ── Persistensi ──────────────────────────────────────────────
 HISTORY_DIR            = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".nexsus_ai")
 HISTORY_FILE           = _os.path.join(HISTORY_DIR, "history.json")
 ULIMIT_FILE            = _os.path.join(HISTORY_DIR, "ulimit.json")
-HISTORY_MAX_AGE        = 7
+HISTORY_MAX_AGE        = _env_int("NXSUS_AI_HISTORY_MAX_AGE", 7, minimum=0)
 HISTORY_FLUSH_INTERVAL = 300
 
 # ── Room log (rekam semua posting room + konteks ke AI) ──────
 ROOM_LOG_FILE   = _os.path.join(HISTORY_DIR, "room_log.json")
-ROOM_LOG_MAX    = 50    # jumlah pesan mentah disimpan per-room di disk
-ROOM_CTX_LIMIT  = 10    # jumlah pesan terakhir yang disuntik sebagai konteks ke AI
-ROOM_MSG_MAXLEN = 300   # potong pesan mentah yang kepanjangan sebelum disimpan
+ROOM_LOG_MAX    = _env_int("NXSUS_AI_ROOM_LOG_MAX", 50)
+ROOM_CTX_LIMIT  = _env_int("NXSUS_AI_ROOM_CTX_LIMIT", 10, minimum=0)
+ROOM_MSG_MAXLEN = _env_int("NXSUS_AI_ROOM_MSG_MAXLEN", 300)
 
 AI_VERSION  = "v8.2"
 WAITING_MSG = "mohon tunggu... (nexsus:%s)"
@@ -93,6 +140,10 @@ SYSTEM_PROMPT = (
 
 # ── Load Groq API key ────────────────────────────────────────
 def _load_groq_key():
+    # .env/environment diprioritaskan; file lama tetap fallback.
+    env_key = _os.environ.get("NXSUS_GROQ_API_KEY", "").strip()
+    if env_key:
+        return env_key.strip('"').strip("'")
     try:
         with open(GROQ_CONFIG_FILE) as f:
             for line in f:
@@ -630,8 +681,8 @@ class expansion_temp(expansion):
             model_key = self._groq_model_key
         if not self._groq_key:
             return None, self.AnsBase[43]
-        if len(prompt) > 1200:
-            prompt = prompt[:1200] + "..."
+        if len(prompt) > PROMPT_CAP:
+            prompt = prompt[:PROMPT_CAP] + "..."
         with self._lock:
             history = list(self._get_history(user_id))
         clean_history = [{"role": e["role"], "content": e["content"]} for e in history]
@@ -652,8 +703,8 @@ class expansion_temp(expansion):
         payload = json.dumps({
             "model":       model_id,
             "messages":    messages,
-            "max_tokens":  800,
-            "temperature": 0.7,
+            "max_tokens":  MAX_TOKENS,
+            "temperature": TEMPERATURE,
             "stream":      False,
         }).encode("utf-8")
         req = urllib.request.Request(
@@ -685,8 +736,8 @@ class expansion_temp(expansion):
             import re as _re
             result = _re.sub(r"<think>.*?</think>", "", result, flags=_re.DOTALL).strip()
             result = "".join(c for c in result if c >= " " or c in "\n\t")
-            if len(result) > 1500:
-                result = result[:1497] + "..."
+            if len(result) > RESULT_CAP:
+                result = result[:RESULT_CAP - 3] + "..."
             if not result:
                 return None, self.AnsBase[45]
             self._add_history(user_id, "user",      prompt, limit)

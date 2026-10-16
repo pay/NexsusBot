@@ -7,7 +7,7 @@
 ![slixmpp](https://img.shields.io/badge/XMPP-slixmpp%201.17%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-**Versi:** 1.1.0 Core BlackSmith mark.2
+**Versi:** 1.2.0 Core BlackSmith mark.2
 **Basis:** Port Python 3 / slixmpp dari BlackSmith mark.2 (WitcherGeralt)
 **Protokol:** XMPP (Jabber) — client MUC bot
 
@@ -36,8 +36,11 @@ nexsusBot/
 ├── users.db                 # Database user global (SQLite)
 ├── nexsus.log                 # Log runtime (DEBUG level)
 │
+├── .env                     # Semua konfigurasi & secret (chmod 600, TIDAK di-commit)
+├── .env.example             # Template 37 key — aman di-commit, tanpa nilai rahasia
+│
 ├── static/                   # Konfigurasi & teks statis (TIDAK berubah saat runtime)
-│   ├── config.ini            # Config utama: akun, TLS, limit, admin
+│   ├── config.ini            # Fallback config: akun, TLS, limit, admin
 │   ├── clients.ini            # Akun XMPP tambahan (multi-account)
 │   └── insc.py                # AnsBase global (teks jawaban default)
 │
@@ -206,7 +209,9 @@ Update bot langsung dari git lewat chat, tanpa perlu masuk terminal:
 
 ## 5. Konfigurasi
 
-### 5.1 `static/config.ini`
+Sejak 1.2.0 sumber konfigurasi utama adalah **`.env`**. `static/config.ini` dan `config/groq_config` tetap didukung sebagai **fallback** — nilai `.env` menang, nilai kosong di `.env` diabaikan sehingga config lama tidak terhapus.
+
+### 5.1 `static/config.ini` (fallback)
 
 ```ini
 [STATES]
@@ -238,7 +243,9 @@ CHAT_LIST_LENGTH = 100
 
 Multi-account tambahan didaftarkan di `static/clients.ini` dengan format section serupa.
 
-### 5.2 `config/groq_config` (API key untuk expansion `ai`)
+### 5.2 `config/groq_config` (fallback API key untuk expansion `ai`)
+
+`NXSUS_GROQ_API_KEY` di `.env` diprioritaskan. File ini hanya dipakai kalau key env kosong.
 
 ```bash
 cp config/groq_config.example config/groq_config
@@ -248,6 +255,70 @@ nano config/groq_config   # isi GROQ_API_KEY="key_asli_kamu"
 
 Dapatkan API key gratis di [console.groq.com/keys](https://console.groq.com/keys). File `config/groq_config` **sudah masuk `.gitignore`** — jangan pernah paksa-commit file ini, cukup commit `config/groq_config.example` (template tanpa key asli).
 
+### 5.3 `.env` — 37 key
+
+Salin template lalu isi. Key yang dibiarkan kosong diabaikan, sehingga nilai `config.ini`/`groq_config` tetap berlaku.
+
+```bash
+cp .env.example .env && chmod 600 .env && nano .env
+```
+
+**24 key core** — dipetakan ke section `config.ini` oleh `_apply_nxsus_env_overrides` (`NexsusBot.py:1020-1064`):
+
+| Key `.env` | Section.Option `config.ini` |
+|---|---|
+| `NXSUS_XMPP_SERVER` | `CLIENT.serv` |
+| `NXSUS_XMPP_PORT` | `CLIENT.port` |
+| `NXSUS_XMPP_USER` | `CLIENT.user` |
+| `NXSUS_XMPP_HOST` | `CLIENT.host` |
+| `NXSUS_XMPP_PASSWORD` | `CLIENT.pass` |
+| `NXSUS_XMPP_RESOURCE` | `CONFIG.resource` |
+| `NXSUS_NICK` | `CONFIG.nick` |
+| `NXSUS_STATUS` | `CONFIG.status` |
+| `NXSUS_ADMIN_JID` | `CONFIG.admin` |
+| `NXSUS_TLS` | `STATES.tls` |
+| `NXSUS_MSERVE` | `STATES.mserve` |
+| `NXSUS_GETEXC` | `STATES.getexc` |
+| `NXSUS_LANG` | `STATES.lang` |
+| `NXSUS_LOG_LEVEL` | `LOGGING.level` |
+| `NXSUS_LOG_FILE_LEVEL` | `LOGGING.file_level` |
+| `NXSUS_LOG_FILE` | `LOGGING.file` |
+| `NXSUS_LOG_CONSOLE` | `LOGGING.console` |
+| `NXSUS_LOG_MAX_BYTES` | `LOGGING.max_bytes` |
+| `NXSUS_LOG_BACKUP_COUNT` | `LOGGING.backup_count` |
+| `NXSUS_LIMIT_INCOMING` | `LIMITS.incoming` |
+| `NXSUS_LIMIT_CHAT` | `LIMITS.chat` |
+| `NXSUS_LIMIT_PRIVATE` | `LIMITS.private` |
+| `NXSUS_LIMIT_CHAT_LIST` | `LIMITS.chat_list_length` |
+| `NXSUS_LIMIT_MEMORY_MB` | `LIMITS.memory` |
+
+**13 key AI** — dibaca langsung oleh `expansions/ai/code.py` (`:30-89`, `:144`), bukan lewat `config.ini`. Default dan validasi di bawah diambil dari source, bukan perkiraan:
+
+| Key `.env` | Default | Validasi |
+|---|---|---|
+| `NXSUS_GROQ_API_KEY` | *(kosong)* | env diprioritaskan; fallback `config/groq_config`; kosong = AI nonaktif |
+| `NXSUS_GROQ_ENDPOINT` | `https://api.groq.com/openai/v1` | trailing `/` dibuang; `/chat/completions` ditambahkan otomatis bila belum ada |
+| `NXSUS_GROQ_MODEL` | `1` | wajib kunci `GROQ_MODELS`; selain itu jatuh ke `1` |
+| `NXSUS_GROQ_TIMEOUT` | `60` | int, minimum 1 |
+| `NXSUS_AI_MAX_TOKENS` | `800` | int, minimum 1 |
+| `NXSUS_AI_TEMPERATURE` | `0.7` | float, di-clamp ke 0.0–2.0 |
+| `NXSUS_AI_PROMPT_CAP` | `1200` | int, minimum 1 |
+| `NXSUS_AI_RESULT_CAP` | `1500` | int, minimum 4 |
+| `NXSUS_AI_CHUNK_SIZE` | `800` | int, minimum 1 |
+| `NXSUS_AI_HISTORY_MAX_AGE` | `7` | int, minimum 0 (hari) |
+| `NXSUS_AI_ROOM_LOG_MAX` | `50` | int, minimum 1 |
+| `NXSUS_AI_ROOM_CTX_LIMIT` | `10` | int, minimum 0 |
+| `NXSUS_AI_ROOM_MSG_MAXLEN` | `300` | int, minimum 1 |
+
+Nilai yang bukan angka valid tidak membuat crash — `_env_int`/`_env_float` (`ai/code.py:30-42`) menelan `TypeError`/`ValueError` lalu kembali ke default.
+
+**Perilaku `reload` terhadap `.env` — penting.** `os.execl` mewarisi `os.environ` utuh, dan `load_dotenv` memakai `override=False` (`NexsusBot.py:1025`, `ai/code.py:24`). Konsekuensinya:
+
+- `reload` **pertama** → `.env` termuat dan berlaku.
+- Setelah key sempat termuat, **edit `.env` lalu `reload` tidak membaca nilai baru** — key lama masih menempel di `os.environ`. Perubahan `.env` berikutnya butuh proses start ulang dari shell baru.
+
+Ini disengaja, supaya environment yang sudah ter-ekspor (misal dari supervisor) tidak bisa ditimpa oleh `.env`.
+
 ---
 
 ## 6. Instalasi & Menjalankan
@@ -256,11 +327,15 @@ Dapatkan API key gratis di [console.groq.com/keys](https://console.groq.com/keys
 # 1. Install dependencies
 pip install -r requirements.txt
 
-# 2. Edit konfigurasi
+# 2. Edit konfigurasi — .env adalah sumber utama
+cp .env.example .env && chmod 600 .env
+nano .env                       # isi minimal 4 key wajib XMPP
+
+# 3. (Opsional) fallback bila .env dibiarkan kosong
 nano static/config.ini
 cp config/groq_config.example config/groq_config && nano config/groq_config
 
-# 3. Jalankan
+# 4. Jalankan
 python3 NexsusBot.py
 
 # Opsional — custom folder:
@@ -324,7 +399,7 @@ Proyek ini adalah hasil porting dari BlackSmith mark.2 (Python 2, library `xmppp
 
 ## 9. Keamanan & Praktik Baik
 
-- **Jangan commit** `config/groq_config`, `.nexsus_ai/history.json`, atau file backup versi (`*.v3`, `*.v4`, dst) — semua sudah masuk `.gitignore` secara default
+- **Jangan commit** `.env`, `config/groq_config`, `.nexsus_ai/history.json`, atau file backup versi (`*.v3`, `*.v4`, dst) — semua sudah masuk `.gitignore` secara default. `.env.example` sengaja dikecualikan (`!.env.example`) karena hanya berisi template tanpa nilai rahasia
+- File secret (`.env`, `config/groq_config`) sebaiknya `chmod 600` — cuma owner yang bisa baca/tulis. `static/config.ini` kini bersifat **fallback**; kalau semua key sudah diisi di `.env`, file itu boleh dikosongkan dan isinya tidak akan dibaca
 - Gunakan **Personal Access Token (PAT)**, bukan password akun, untuk `git push`/`pull` via HTTPS — GitHub sudah tidak menerima password biasa sejak 2021
 - Akses level 8 (God) setara root — cuma berikan ke JID yang benar-benar dipercaya, terutama karena expansion `update` bisa mengubah kode yang dijalankan bot langsung dari git
-- File secret (`config/groq_config`) sebaiknya `chmod 600` — cuma owner yang bisa baca/tulis

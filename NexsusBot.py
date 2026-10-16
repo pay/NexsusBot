@@ -32,6 +32,11 @@ import logging.handlers
 import sqlite3
 import configparser
 
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
+
 from types          import SimpleNamespace
 from traceback      import print_exc as exc_info__
 from random         import randrange, choice
@@ -402,7 +407,7 @@ def PrintSection(title):
 
 # ── Product Identity ───────────────────────────────────────────
 
-(NxMark, NxVer, NxRev) = (1, 1, 0)
+(NxMark, NxVer, NxRev) = (1, 2, 0)
 ProdName   = "Nexsus Serve"
 ProdCore   = "BlackSmith-M.2"
 ProdVer    = "%d.%d.%d Core:%s" % (NxMark, NxVer, NxRev, ProdCore)
@@ -1012,6 +1017,53 @@ GenCon  = None   # configparser.ConfigParser untuk static/config.ini
 ConDisp = None   # configparser.ConfigParser untuk static/clients.ini
 
 
+def _apply_nxsus_env_overrides(config):
+    """Muat .env tanpa menimpa environment; override config secara selektif."""
+    if load_dotenv is not None:
+        load_dotenv(
+            dotenv_path=os.path.join(NxRoot or os.getcwd(), ".env"),
+            override=False,
+        )
+
+    mapping = {
+        "NXSUS_XMPP_SERVER": ("CLIENT", "serv"),
+        "NXSUS_XMPP_PORT": ("CLIENT", "port"),
+        "NXSUS_XMPP_USER": ("CLIENT", "user"),
+        "NXSUS_XMPP_HOST": ("CLIENT", "host"),
+        "NXSUS_XMPP_PASSWORD": ("CLIENT", "pass"),
+        "NXSUS_TLS": ("STATES", "tls"),
+        "NXSUS_MSERVE": ("STATES", "mserve"),
+        "NXSUS_GETEXC": ("STATES", "getexc"),
+        "NXSUS_LANG": ("STATES", "lang"),
+        "NXSUS_ADMIN_JID": ("CONFIG", "admin"),
+        "NXSUS_NICK": ("CONFIG", "nick"),
+        "NXSUS_STATUS": ("CONFIG", "status"),
+        "NXSUS_XMPP_RESOURCE": ("CONFIG", "resource"),
+        "NXSUS_LOG_LEVEL": ("LOGGING", "level"),
+        "NXSUS_LOG_FILE_LEVEL": ("LOGGING", "file_level"),
+        "NXSUS_LOG_FILE": ("LOGGING", "file"),
+        "NXSUS_LOG_CONSOLE": ("LOGGING", "console"),
+        "NXSUS_LOG_MAX_BYTES": ("LOGGING", "max_bytes"),
+        "NXSUS_LOG_BACKUP_COUNT": ("LOGGING", "backup_count"),
+        "NXSUS_LIMIT_MEMORY_MB": ("LIMITS", "memory"),
+        "NXSUS_LIMIT_INCOMING": ("LIMITS", "incoming"),
+        "NXSUS_LIMIT_CHAT": ("LIMITS", "chat"),
+        "NXSUS_LIMIT_PRIVATE": ("LIMITS", "private"),
+        "NXSUS_LIMIT_CHAT_LIST": ("LIMITS", "chat_list_length"),
+    }
+
+    for env_key, (section, option) in mapping.items():
+        value = os.environ.get(env_key)
+        # Nilai kosong pada template tidak boleh menghapus konfigurasi lama.
+        if value is None or not value.strip():
+            continue
+        if not config.has_section(section):
+            config.add_section(section)
+        # Escape interpolasi ConfigParser untuk semua nilai environment.
+        value = value.replace("%", "%%")
+        config.set(section, option, value)
+
+
 def load_config():
     global GodName, DefNick, DefStatus, GenResource
     global _lang_warn
@@ -1023,12 +1075,17 @@ def load_config():
     try:
         GenCon = configparser.ConfigParser()
         GenCon.read(GenConFile)
+        _apply_nxsus_env_overrides(GenCon)
         GenDisp, Instance  = client_config(GenCon, "CLIENT")
         InstancesDesc      = {GenDisp: Instance}
         ConTls             = GenCon.getboolean("STATES", "TLS",    fallback=True)
         Mserve             = GenCon.getboolean("STATES", "MSERVE", fallback=True)
         GetExc             = GenCon.getboolean("STATES", "GETEXC", fallback=True)
-        DefLANG            = GenCon.get("STATES", "LANG", fallback="EN").upper()[:2]
+        raw_lang = GenCon.get("STATES", "LANG", fallback="EN")
+        if os.environ.get("NXSUS_LANG", "").strip():
+            DefLANG = raw_lang.strip()
+        else:
+            DefLANG = raw_lang.upper()[:2]
         # Normalisasi + validasi kode bahasa.  Nilai lama di-parse dengan
         # .upper()[:2], jadi "Indonesian" jadi "IN" - bukan kode bahasa.
         # normalize() memetakan alias ke kode yang benar; kalau hasilnya

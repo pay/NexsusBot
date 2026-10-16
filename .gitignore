@@ -27,3 +27,16 @@ Thumbs.db
 expansions/ai/code.py.v*
 .nexsus_ai/
 config/groq_config
+
+# NexsusBot environment secrets
+.env
+.env.*
+!.env.example
+
+# ── Backup lokal & skrip audit (jangan di-commit) ─────────────
+*.bak-*
+*.pre-env-*
+*.pre-rel-*
+*.bak
+audit_ai_strings*.py
+patch_ai_locale.py
