@@ -586,6 +586,30 @@ Guard       = {}
 Clients     = {}       # jid_str -> NexusClient instance
 NxLoop      = None     # satu shared asyncio loop (pola xmpp-platform)
 _NX_RECONNECT_DELAY = {}  # disp -> detik backoff berikut, 5..300
+
+# ── Reconnect guard (anti reconnect-storm) ───────────────────
+# Bukti insiden 17.10 12:26-12:29: 23x connect dalam 3 menit,
+# 22 di antaranya TANPA disconnect sebelumnya — timer yatim dari
+# klien lama tetap menyalakan koneksi baru walau sesi sehat, lalu
+# klien baru meng-nonaktifkan resource sama dan me-retrigger
+# handler klien lama.  Tiga guard ditambah:
+#   1. maksimal 1 timer reconnect per JID      -> _RECONN_TIMER
+#   2. maksimal 1 percobaan connect per JID    -> _CONNECTING
+#   3. token per klien, callback lama jadi basi -> _CLIENT_TOKEN
+_RECONN_LOCK  = threading.Lock()
+_RECONN_TIMER = {}    # disp -> threading.Timer (aktif, max 1 per JID)
+_CONNECTING   = set() # disp yang sedang di dalam connect_client
+_CLIENT_TOKEN = {}    # disp -> token klien yang kini dianggap sah
+_CLIENT_SEQ   = [0]   # penomoran token (di bawah _RECONN_LOCK)
+
+# ── Status hasil connect_client() — 3 state, bukan sukses/gagal ─
+# Tuple-nya tetap 2 elemen (ok, status) supaya keempat pemanggil yang
+# memakai `[0]` atau `ok, result = ...` tetap kompatibel tanpa diubah:
+#   basic_control:172 (reconnect), config:155 (client add),
+#   NexsusBot.py:2665 (reverseDisp), NexsusBot.py:2691 (connect_clients)
+CC_CONNECTED  = "connected"   # sesi benar-benar aktif -> aman join
+CC_CONNECTING = "connecting"  # connect lain sedang jalan -> BUKAN sukses
+CC_FAILED     = "failed"      # percobaan selesai dan gagal
 ChatsAttrs  = {}
 Handlers    = {
     "01eh": [], "02eh": [], "03eh": [], "04eh": [],
@@ -926,6 +950,62 @@ def composeTimer(slp, handler, name=None, lst=()):
             collectExc(handler)
     t = threading.Thread(target=runner, name=name, daemon=True)
     return t
+
+
+# ── Reconnect guard helpers ──────────────────────────────────
+# Ditaruh setelah composeTimer sengaja: composeTimer TIDAK dipakai
+# lagi untuk reconnect (5 call site lain tetap pakai, tak diubah).
+
+def _new_client_token():
+    """Token unik per NexusClient — untuk membuang callback klien lama."""
+    with _RECONN_LOCK:
+        _CLIENT_SEQ[0] += 1
+        return _CLIENT_SEQ[0]
+
+
+def _cancel_reconn(disp):
+    """Batalkan timer reconnect aktif milik JID/disp (bila ada)."""
+    with _RECONN_LOCK:
+        timer = _RECONN_TIMER.pop(disp, None)
+    if timer is not None:
+        try:
+            timer.cancel()
+        except Exception:
+            pass
+
+
+def _schedule_reconn(disp, delay, token):
+    """Jadwalkan reconnect dengan 3 syarat, supaya storm mustahil terjadi:
+       - token masih sah (klien pemanggil belum digantikan),
+       - belum ada percobaan connect berjalan,
+       - tidak ada timer aktif lain untuk JID sama (yang lama dibatalkan).
+    """
+    with _RECONN_LOCK:
+        if _CLIENT_TOKEN.get(disp) != token:
+            return                      # callback klien lama -> buang
+        old = _RECONN_TIMER.get(disp)
+        if old is not None:
+            try:
+                old.cancel()            # hanya 1 timer per JID
+            except Exception:
+                pass
+            _RECONN_TIMER.pop(disp, None)
+
+        def _fire():
+            with _RECONN_LOCK:
+                _RECONN_TIMER.pop(disp, None)
+                stale = (_CLIENT_TOKEN.get(disp) != token) or (disp in _CONNECTING)
+            if stale:
+                return                  # sesi sudah berganti / sedang connect
+            cur = Clients.get(disp)
+            if cur is not None and cur.isConnected():
+                return                  # sudah terhubung -> jangan connect lagi
+            reverseDisp(disp)
+
+        timer = threading.Timer(delay, _fire)
+        timer.daemon = True
+        _RECONN_TIMER[disp] = timer
+        timer.start()
 
 
 def sThread(name, inst, lst=(), command=None):
@@ -1269,9 +1349,17 @@ class NexusClient(ClientXMPP):
         self._connected = False
         PrintWarn('"%s" disconnected!' % self._nx_jid)
         if VarCache["alive"]:
+            token = getattr(self, "_nx_token", None)
+            # Callback dari klien yang sudah digantikan tidak boleh
+            # menjadwalkan reconnect tambahan — inilah bahan bakar
+            # reconnect-storm (klien lama di-kick klien baru, lalu
+            # handlernya menyalakan koneksi berikutnya, selamanya).
+            if token is None or _CLIENT_TOKEN.get(self._nx_jid) != token:
+                return
             delay = _NX_RECONNECT_DELAY.get(self._nx_jid, 5)
-            composeTimer(delay, reverseDisp, "reconn-%s" % self._nx_jid,
-                         (self._nx_jid,)).start()
+            # Maksimal 1 timer per JID; timer lama dibatalkan di dalam.
+            _schedule_reconn(self._nx_jid, delay, token)
+            # Backoff tetap dipertahankan: 5 -> 10 -> ... -> 300.
             _NX_RECONNECT_DELAY[self._nx_jid] = min(delay * 2, 300)
         # Loop milik bersama (NxLoop) — jangan stop di sini.
 
@@ -2470,16 +2558,38 @@ def connect_client(inst, attrs):
     """
     Construct setelah NxLoop jadi current loop (jebakan slixmpp-gotchas #1),
     connect disubmit ke shared NxLoop. Blocking sampai session_start/timeout.
+
+    Guard anti-storm: maksimal satu percobaan connect per JID dalam satu
+    waktu.  Permintaan ganda dijawab (True, inst) tanpa membuat NexusClient
+    kedua — NexusClient kedua dengan resource sama justru memicu bentrok
+    resource di server dan mereproduksi reconnect-storm.
     """
+    with _RECONN_LOCK:
+        if inst in _CONNECTING:
+            # CONNECTING, bukan CONNECTED. Mengembalikan True di sini
+            # adalah bug: reverseDisp akan keluar loop dan
+            # connectAndDispatch langsung conf.join() pada sesi yang
+            # belum pernah terbentuk.
+            return (False, CC_CONNECTING)
+        _CONNECTING.add(inst)
+    try:
+        return _connect_client_body(inst, attrs)
+    finally:
+        with _RECONN_LOCK:
+            _CONNECTING.discard(inst)
+
+
+def _connect_client_body(inst, attrs):
     (server, cport, host, user, password) = attrs
     PrintInfo('"%s" connecting...' % inst)
     try:
         loop = globals().get("NxLoop")
         if loop is None:
             PrintErr('"%s" no shared loop (NxLoop belum start).' % inst)
-            return (False, None)
+            return (False, CC_FAILED)
         asyncio.set_event_loop(loop)
         client = NexusClient(inst, password, server, cport, GenResource)
+        client._nx_token = _new_client_token()  # penanda sesi, buat guard
         client.enable_starttls = ConTls
         client.enable_direct_tls = False
         client.enable_plaintext = False
@@ -2525,28 +2635,55 @@ def connect_client(inst, attrs):
             sleep(0.5)
 
         if which == "ready":
+            token = client._nx_token
+            with _RECONN_LOCK:
+                # Tandai klien baru SAH lebih dulu, sebelum klien lama
+                # di-disconnect.  Kalau urutannya kebalik, handler
+                # _on_disconnected klien lama masih dianggap sah dan
+                # menjadwalkan timer reconnect tambahan.
+                _CLIENT_TOKEN[inst] = token
+            _cancel_reconn(inst)            # buang timer yatim klien lama
+            old = Clients.get(inst)
             Clients[inst] = client
             _NX_RECONNECT_DELAY.pop(inst, None)
+            if old is not None and old is not client:
+                try:
+                    # Tutup sesi lama dengan rapi; efek sampingnya aman
+                    # karena tokennya sudah tidak sah (lihat di atas).
+                    old.nx_disconnect()
+                except Exception:
+                    pass
             PrintOK('"%s" connected and authenticated!' % inst)
-            return (True, inst)
+            return (True, CC_CONNECTED)
         else:
             PrintErr('"%s" failed to establish session (timeout/error).' % inst)
             try:
                 client.nx_disconnect()
             except Exception:
                 pass
-            return (False, None)
+            return (False, CC_FAILED)
 
     except Exception as e:
         PrintErr('"%s" connection error: %s' % (inst, e))
         exc_info_()
-        return (False, None)
+        return (False, CC_FAILED)
 
 
 def reverseDisp(disp, rejoin=True):
+    # Guard anti-storm: koneksi sudah sehat -> jangan buat klien baru.
+    cur = Clients.get(disp)
+    if cur is not None and cur.isConnected():
+        return True
     for _ in range(1440):
-        if connect_client(disp, InstancesDesc[disp])[0]:
-            if rejoin:
+        ok, status = connect_client(disp, InstancesDesc[disp])
+        if ok and status == CC_CONNECTED:
+            # Hanya CC_CONNECTED yang dianggap berhasil. CC_CONNECTING
+            # (connect lain sedang berjalan untuk JID yang sama) dihitung
+            # belum berhasil, jadi loop jatuh ke sleep(60) berikutnya —
+            # memakai loop yang sudah ada, tanpa loop tunggu atau timer
+            # baru yang bisa memicu reconnect-storm.
+            cur = Clients.get(disp)
+            if rejoin and cur is not None and cur.isConnected():
                 for conf in list(Chats.values()):
                     if conf.disp == disp:
                         conf.join()
@@ -2558,6 +2695,13 @@ def reverseDisp(disp, rejoin=True):
 def connectAndDispatch(disp):
     if reverseDisp(disp, False):
         sleep(60)
+        # Sinkronkan dulu: reverseDisp boleh saja sukses, tapi sesi bisa
+        # belum aktif (CONNECTING) atau sudah putus lagi di tengah
+        # sleep(60). Join hanya kalau sesi yang sama benar-benar hidup.
+        cur = Clients.get(disp)
+        if cur is None or not cur.isConnected():
+            delivery('"%s" failed to reconnect.' % disp)
+            return
         for conf in Chats.values():
             if disp == conf.disp:
                 conf.join()
@@ -2725,7 +2869,7 @@ def load_nexsus():
                 pass
 
 
-def sys_exit(reason="Shutdown"):
+def sys_exit(reason="Shutdown", restart=True):
     VarCache["alive"] = False
     # INFO, bukan WARNING: shutdown karena Ctrl+C adalah hal normal,
     # bukan kondisi yang perlu diwaspadai.
@@ -2747,7 +2891,16 @@ def sys_exit(reason="Shutdown"):
         sleep(1)
     except KeyboardInterrupt:
         pass
-    Exit("Reloading in 30s...  (Ctrl+C to quit)\n", False, 30)
+    if restart:
+        Exit("Reloading in 30s...  (Ctrl+C to quit)\n", False, 30)
+    else:
+        # Jalur berhenti TANPA os.execl — dipakai oleh Ctrl+C.
+        # Dulu semua sys_exit berakhir di Exit(..., False, 30) ->
+        # os.execl, jadi Ctrl+C melahirkan proses baru 30 detik
+        # kemudian dan terbaca sebagai "restart sendiri".
+        # Pemanggil lain (watchdog, memory, reload, update, SIGTERM)
+        # tetap memakai default restart=True.
+        os._exit(0)
 
 
 if __name__ == "__main__":
@@ -2756,7 +2909,9 @@ if __name__ == "__main__":
         load_nexsus()
     except KeyboardInterrupt:
         try:
-            sys_exit("Interrupted (Ctrl+C)")
+            # restart=False -> os._exit(0): Ctrl+C benar-benar berhenti,
+            # bukan reload 30 detik kemudian.
+            sys_exit("Interrupted (Ctrl+C)", restart=False)
         except KeyboardInterrupt:
             PrintErr("Force quit.")
             os._exit(0)
