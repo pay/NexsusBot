@@ -35,8 +35,7 @@ config/groq_config
 
 # ── Backup lokal & skrip audit (jangan di-commit) ─────────────
 *.bak-*
-*.pre-env-*
-*.pre-rel-*
+*.pre-*
 *.bak
 audit_ai_strings*.py
 patch_ai_locale.py
