@@ -963,6 +963,20 @@ def _new_client_token():
         return _CLIENT_SEQ[0]
 
 
+def _reconn_log(fmt, *args):
+    """Log diagnostik jalur reconnect (level DEBUG -> hanya ke nexsus.log,
+    tidak memenuhi console karena FILE_LEVEL=DEBUG).
+
+    Aturan keras: kegagalan MENULIS log tidak boleh menggagalkan reconnect.
+    Kalau _Log melempar exception di sini dan dibiarkan, satu bug logging
+    berarti bot tidak pernah reconnect lagi. Semua ditelan di sini.
+    """
+    try:
+        _Log(fmt % args if args else fmt, logging.DEBUG)
+    except Exception:
+        pass
+
+
 def _cancel_reconn(disp):
     """Batalkan timer reconnect aktif milik JID/disp (bila ada)."""
     with _RECONN_LOCK:
@@ -972,6 +986,8 @@ def _cancel_reconn(disp):
             timer.cancel()
         except Exception:
             pass
+        _reconn_log("[reconn] timer cancelled jid=%s (new connection already succeeded)",
+                    disp)
 
 
 def _schedule_reconn(disp, delay, token):
@@ -982,6 +998,12 @@ def _schedule_reconn(disp, delay, token):
     """
     with _RECONN_LOCK:
         if _CLIENT_TOKEN.get(disp) != token:
+            # Bahan bakar storm sebelumnya: klien lama masih bisa bikin
+            # timer baru. Sekarang dibuang, dan dicatat supaya peristiwa
+            # seperti 18.10 00:02:51 bisa ditafsirkan dari log.
+            _reconn_log("[reconn] timer NOT scheduled jid=%s: "
+                        "stale token (timer=%s, active=%s)",
+                        disp, token, _CLIENT_TOKEN.get(disp))
             return                      # callback klien lama -> buang
         old = _RECONN_TIMER.get(disp)
         if old is not None:
@@ -990,22 +1012,43 @@ def _schedule_reconn(disp, delay, token):
             except Exception:
                 pass
             _RECONN_TIMER.pop(disp, None)
+            _reconn_log("[reconn] previous timer cancelled jid=%s", disp)
 
         def _fire():
+            t0 = time.time()
             with _RECONN_LOCK:
                 _RECONN_TIMER.pop(disp, None)
                 stale = (_CLIENT_TOKEN.get(disp) != token) or (disp in _CONNECTING)
             if stale:
+                _reconn_log("[reconn] timer fired jid=%s -> ABORT "
+                            "(active token=%s timer token=%s in-flight=%s, "
+                            "%.3fs after creation)",
+                            disp, _CLIENT_TOKEN.get(disp), token,
+                            disp in _CONNECTING, time.time() - t0)
                 return                  # sesi sudah berganti / sedang connect
             cur = Clients.get(disp)
             if cur is not None and cur.isConnected():
+                _reconn_log("[reconn] timer fired jid=%s -> ABORT "
+                            "(already connected, %.3fs after creation)",
+                            disp, time.time() - t0)
                 return                  # sudah terhubung -> jangan connect lagi
+            # Titik krusial: jarak antara "timer fire" dan "connecting..."
+            # di _connect_client_body menunjukkan di mana jeda 39 detik
+            # pada peristiwa 18.10 00:02 itu terjadi.
+            _reconn_log("[reconn] timer fired jid=%s -> reverseDisp "
+                        "(%.3fs after creation)", disp, time.time() - t0)
             reverseDisp(disp)
+            _reconn_log("[reconn] reverseDisp finished jid=%s "
+                        "(%.3fs after timer fired)", disp, time.time() - t0)
 
         timer = threading.Timer(delay, _fire)
         timer.daemon = True
         _RECONN_TIMER[disp] = timer
         timer.start()
+        # delay riil harus sama dengan delay yang diminta; kalau beda,
+        # berarti timer thread-nya tertahan (kandidat penyebab jeda aneh).
+        _reconn_log("[reconn] timer created jid=%s delay=%ss token=%s",
+                    disp, delay, token)
 
 
 def sThread(name, inst, lst=(), command=None):
@@ -1349,14 +1392,27 @@ class NexusClient(ClientXMPP):
         self._connected = False
         PrintWarn('"%s" disconnected!' % self._nx_jid)
         if VarCache["alive"]:
-            token = getattr(self, "_nx_token", None)
+            token   = getattr(self, "_nx_token", None)
+            current = _CLIENT_TOKEN.get(self._nx_jid)
+            # LOG RECONNECT: bedakan "klien AKTIF benar-benar putus"
+            # dari "klien LAMA di-teardown setelah klien baru sukses".
+            # Peristiwa 18.10 00:02:51 (disconnected 0 dtk setelah
+            # authenticated) tidak mungkin ditafsirkan tanpa baris ini.
+            _reconn_log("[reconn] disconnected jid=%s this_client_token=%s "
+                        "active_token=%s", self._nx_jid, token, current)
             # Callback dari klien yang sudah digantikan tidak boleh
             # menjadwalkan reconnect tambahan — inilah bahan bakar
             # reconnect-storm (klien lama di-kick klien baru, lalu
             # handlernya menyalakan koneksi berikutnya, selamanya).
-            if token is None or _CLIENT_TOKEN.get(self._nx_jid) != token:
+            if token is None or current != token:
+                _reconn_log("[reconn] ignored: stale client callback "
+                            "jid=%s -> NO reconnect scheduled",
+                            self._nx_jid)
                 return
             delay = _NX_RECONNECT_DELAY.get(self._nx_jid, 5)
+            _reconn_log("[reconn] scheduling reconnect jid=%s delay=%ss "
+                        "next_backoff=%ss",
+                        self._nx_jid, delay, min(delay * 2, 300))
             # Maksimal 1 timer per JID; timer lama dibatalkan di dalam.
             _schedule_reconn(self._nx_jid, delay, token)
             # Backoff tetap dipertahankan: 5 -> 10 -> ... -> 300.
@@ -2560,8 +2616,10 @@ def connect_client(inst, attrs):
     connect disubmit ke shared NxLoop. Blocking sampai session_start/timeout.
 
     Guard anti-storm: maksimal satu percobaan connect per JID dalam satu
-    waktu.  Permintaan ganda dijawab (True, inst) tanpa membuat NexusClient
-    kedua — NexusClient kedua dengan resource sama justru memicu bentrok
+    waktu.  Permintaan ganda dijawab (False, CC_CONNECTING) — BUKAN sukses.
+    Menjawab True di sini membuat reverseDisp keluar loop dan
+    connectAndDispatch langsung conf.join() pada sesi yang belum pernah
+    terbentuk.  NexusClient kedua dengan resource sama juga memicu bentrok
     resource di server dan mereproduksi reconnect-storm.
     """
     with _RECONN_LOCK:
@@ -2570,6 +2628,8 @@ def connect_client(inst, attrs):
             # adalah bug: reverseDisp akan keluar loop dan
             # connectAndDispatch langsung conf.join() pada sesi yang
             # belum pernah terbentuk.
+            _reconn_log("[reconn] connect rejected jid=%s: another attempt "
+                        "in progress (CC_CONNECTING)", inst)
             return (False, CC_CONNECTING)
         _CONNECTING.add(inst)
     try:
@@ -2647,12 +2707,20 @@ def _connect_client_body(inst, attrs):
             Clients[inst] = client
             _NX_RECONNECT_DELAY.pop(inst, None)
             if old is not None and old is not client:
+                # Kunci untuk menafsirkan peristiwa 18.10 00:02:51:
+                # "disconnected" tepat setelah "authenticated" berarti
+                # teardown klien LAMA (wajar), bukan klien baru gagal.
+                _reconn_log("[reconn] old client torn down jid=%s "
+                            "old_token=%s new_token=%s",
+                            inst, getattr(old, "_nx_token", None), token)
                 try:
                     # Tutup sesi lama dengan rapi; efek sampingnya aman
                     # karena tokennya sudah tidak sah (lihat di atas).
                     old.nx_disconnect()
                 except Exception:
                     pass
+            _reconn_log("[reconn] success jid=%s token=%s (backoff reset)",
+                        inst, token)
             PrintOK('"%s" connected and authenticated!' % inst)
             return (True, CC_CONNECTED)
         else:
@@ -2673,9 +2741,14 @@ def reverseDisp(disp, rejoin=True):
     # Guard anti-storm: koneksi sudah sehat -> jangan buat klien baru.
     cur = Clients.get(disp)
     if cur is not None and cur.isConnected():
+        _reconn_log("[reconn] reverseDisp jid=%s -> skipped, already connected",
+                    disp)
         return True
-    for _ in range(1440):
+    _reconn_log("[reconn] reverseDisp jid=%s started", disp)
+    for i in range(1440):
         ok, status = connect_client(disp, InstancesDesc[disp])
+        _reconn_log("[reconn] reverseDisp jid=%s attempt %d -> %s",
+                    disp, i + 1, status)
         if ok and status == CC_CONNECTED:
             # Hanya CC_CONNECTED yang dianggap berhasil. CC_CONNECTING
             # (connect lain sedang berjalan untuk JID yang sama) dihitung
@@ -2689,6 +2762,8 @@ def reverseDisp(disp, rejoin=True):
                         conf.join()
             return True
         sleep(60)
+    _reconn_log("[reconn] reverseDisp jid=%s FAILED after 1440 attempts",
+                disp)
     return False
 
 
