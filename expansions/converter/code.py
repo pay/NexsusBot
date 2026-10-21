@@ -6,7 +6,43 @@
 #  Id: 31~3c
 #  Code © (2012) by WitcherGeralt [alkorgun@gmail.com]
 
+import json
 import re
+
+try:
+	from library.nxs_l10n import LocalizationContext
+except Exception:
+	LocalizationContext = None
+
+
+def _unit_lang():
+	"""Bahasa aktif untuk nama unit (English / Russian)."""
+	if LocalizationContext is not None:
+		try:
+			lang = LocalizationContext.get()
+		except Exception:
+			lang = "en"
+		if lang and lang.lower() in ("ru", "ua"):
+			return "ru"
+	return "en"
+
+
+def _load_units():
+	"""Nama unit dari units.json (dibangun tools/build_units.py).
+
+	ExpsDir dipakai, bukan __file__: expansion di-exec lewat
+	exec(code, g) sehingga __file__ menunjuk ke NexsusBot.py, bukan
+	ke code.py milik ekspansi ini.
+	"""
+	try:
+		path = os.path.join(ExpsDir, "converter", "units.json")
+		with open(path, encoding="utf-8") as fh:
+			return json.load(fh)
+	except Exception:
+		return {}
+
+
+UNITS = _load_units()
 
 class expansion_temp(expansion):
 
@@ -203,7 +239,7 @@ class expansion_temp(expansion):
 					try:
 						Number = float(ls.pop(0))
 					except ValueError:
-						answer = "Invalid number."
+						answer = self.AnsBase[3]
 					else:
 						Type   = ls.pop(0).lower()
 						ToType = ls.pop(0).lower()
@@ -213,35 +249,28 @@ class expansion_temp(expansion):
 							else:
 								answer = str(self.Convert(Desc, Number, Type, ToType))
 						else:
-							answer = "Unknown unit. Use 'convert %s' to list available units." % Desc
+							answer = self.AnsBase[4] % Desc
 				elif not ls:
-					# List all units in this category, parsed from CrDesc source block.
-					# get_text() doesn't exist in Nexus; replicate with inline re.search.
-					data = get_file(self.file)  # already str in Python 3, no .decode() needed
-					m = compile__(
-						r'\t\t"%s":\s\{(.*?)\t\t\},' % Desc,
-						re.DOTALL
-					).search(data)
-					if m:
-						comp  = compile__(r'\t\t\t"(.+?)":.+?,\s+?#\s(.+?)\n', re.DOTALL)
-						units = comp.findall("\n%s\n" % m.group(1))
-						if units:
-							rows = [Desc + ":"]
-							for unit_key, unit_desc in units:
-								if Desc == "temperature" and unit_key != "c":
-									unit_desc = unit_desc[15:].strip()
-								rows.append(("%s - %s" % (unit_key, unit_desc)).split("!#")[0].strip())
-							answer = "\n".join(rows)
-						else:
-							answer = "No unit info found for: %s" % Desc
+					# Daftar unit dari tabel UNITS (dibangun tools/build_units.py),
+					# bukan dari parsing komentar source yang fragile.
+					units = UNITS.get(Desc, {})
+					if units:
+						lang = "ru" if _unit_lang() == "ru" else "en"
+						rows = [Desc + ":"]
+						for unit_key in self.CrDesc[Desc]:
+							pair = units.get(unit_key)
+							if not pair:
+								continue
+							rows.append("%s - %s" % (unit_key, pair[1 if lang == "ru" else 0]))
+						answer = "\n".join(rows)
 					else:
-						answer = "No unit info found for: %s" % Desc
+						answer = self.AnsBase[5] % Desc
 				else:
-					answer = "Usage: convert <category> <number> <from> <to>"
+					answer = self.AnsBase[6]
 			else:
-				answer = "Unknown category. Available: %s" % ", ".join(sorted(self.CrDesc.keys()))
+				answer = self.AnsBase[7] % ", ".join(sorted(self.CrDesc.keys()))
 		else:
-			answer = ", ".join(sorted(self.CrDesc.keys()))
+			answer = self.AnsBase[8] % ", ".join(sorted(self.CrDesc.keys()))
 		Answer(answer, stype, source, disp)
 
 	commands = ((command_convert, "convert", 2,),)

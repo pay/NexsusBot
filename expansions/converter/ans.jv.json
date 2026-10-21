@@ -1,5 +1,11 @@
 {
   "0": "Satuan salah.",
   "1": "Waduh...",
-  "2": "Kategori salah."
+  "2": "Kategori salah.",
+  "3": "Angka ora valid.",
+  "4": "Satuan ora dingerti. Paké 'convert %s' kanggo dh daftar satuan.",
+  "5": "Info satuan ora ketemu kanggo: %s",
+  "6": "Usage: convert <kategori> <angka> <saka> <neng>",
+  "7": "Kategori ora dingerti. Ana: %s",
+  "8": "Kategori sing ana: %s"
 }

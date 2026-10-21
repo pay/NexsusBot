@@ -1,5 +1,11 @@
 {
   "0": "Unité incorrecte.",
   "1": "Oups...",
-  "2": "Catégorie incorrecte."
+  "2": "Catégorie incorrecte.",
+  "3": "Nombre invalide.",
+  "4": "Unite inconnue. Utilise 'convert %s' pour lister les unites.",
+  "5": "Aucune info d'unite trouvee pour: %s",
+  "6": "Usage : convert <categorie> <nombre> <de> <vers>",
+  "7": "Categorie inconnue. Disponibles : %s",
+  "8": "Categories disponibles : %s"
 }

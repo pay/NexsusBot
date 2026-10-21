@@ -1,5 +1,11 @@
 {
   "0": "Błędna jednostka.",
   "1": "Ups...",
-  "2": "Błędna kategoria."
+  "2": "Błędna kategoria.",
+  "3": "Nieprawidlowa liczba.",
+  "4": "Nieznana jednostka. Uzyj 'convert %s' aby wypisac jednostki.",
+  "5": "Brak informacji o jednostkach dla: %s",
+  "6": "Uzycie: convert <kategoria> <liczba> <z> <na>",
+  "7": "Nieznana kategoria. Dostepne: %s",
+  "8": "Dostepne kategorie: %s"
 }

@@ -1,5 +1,11 @@
 {
   "0": "Satuan salah.",
   "1": "Ups...",
-  "2": "Kategori salah."
+  "2": "Kategori salah.",
+  "3": "Angka tidak valid.",
+  "4": "Satuan tidak dikenal. Pakai 'convert %s' untuk daftar satuan.",
+  "5": "Info satuan tidak ditemukan untuk: %s",
+  "6": "Usage: convert <kategori> <angka> <dari> <ke>",
+  "7": "Kategori tidak dikenal. Tersedia: %s",
+  "8": "Kategori yang tersedia: %s"
 }

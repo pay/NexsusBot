@@ -1,5 +1,11 @@
 {
   "0": "Yanlış birim.",
   "1": "Hay aksi...",
-  "2": "Yanlış kategori."
+  "2": "Yanlış kategori.",
+  "3": "Gecersiz sayi.",
+  "4": "Bilinmeyen birim. Birimleri listelemek icin 'convert %s' kullan.",
+  "5": "%s icin birim bilgisi bulunamadi",
+  "6": "Kullanim: convert <kategori> <sayi> <kaynak> <hedef>",
+  "7": "Bilinmeyen kategori. Mevcut: %s",
+  "8": "Mevcut kategoriler: %s"
 }
