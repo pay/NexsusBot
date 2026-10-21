@@ -13,6 +13,23 @@
 import asyncio
 import logging
 
+
+def _err_detail(exc):
+    """Ringkasan detail error IQ: [etype/condition] + text.
+
+    Tanpa ini log cuma bisa lihat "IqError" — nggak ketahuan apakah
+    server nolak karena service-unavailable, forbidden, atau item-not-found.
+    """
+    parts = [p for p in (getattr(exc, "etype", None),
+                         getattr(exc, "condition", None)) if p]
+    if not parts:
+        return ""
+    out = " [%s]" % "/".join(parts)
+    txt = getattr(exc, "text", None)
+    if txt:
+        out += " %r" % (str(txt)[:60],)
+    return out
+
 class expansion_temp(expansion):
 
     def __init__(self, name):
@@ -79,8 +96,11 @@ class expansion_temp(expansion):
         for target in cands:
             try:
                 result = await query_func(target)
-            except Exception:
+            except Exception as e:
                 result = None
+                _Log("iq %s: %s%s (trying next candidate)"
+                     % (target, type(e).__name__, _err_detail(e)),
+                     logging.DEBUG)
             if result is not None:
                 return result
         return None
@@ -133,8 +153,9 @@ class expansion_temp(expansion):
                     # Candidate gagal = normal.  Bare JID sering tidak di-ping
                     # server; full JID resource yang berhasil.  Ini bukan error,
                     # jadi jangan sampai mengotori log level ERROR.
-                    _Log("ping %s: %s (trying next candidate)"
-                         % (target, type(e).__name__), logging.DEBUG)
+                    _Log("ping %s: %s%s (trying next candidate)"
+                         % (target, type(e).__name__, _err_detail(e)),
+                         logging.DEBUG)
                     continue
             return False
 

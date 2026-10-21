@@ -6,6 +6,8 @@
 #  Id: 31~3c
 #  Code © (2012) by WitcherGeralt [alkorgun@gmail.com]
 
+import re
+
 class expansion_temp(expansion):
 
 	def __init__(self, name):
