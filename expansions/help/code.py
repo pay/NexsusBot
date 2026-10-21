@@ -79,6 +79,11 @@ class expansion_temp(expansion):
 		command = parts.pop(0).lower()
 		if command not in Cmds:                  # Fix: has_key → in
 			return Answer(gAnsBase[6], stype, source, disp)
+		# Help ikut gate yang sama dengan dispatcher (Cmd.execute): kalau
+		# peminta kurang akses, usage dan isi help tidak boleh bocor.
+		if not enough_access(source[1], source[2], Cmds[command].access):
+			return Answer(self.AnsBase[1] % (command, Cmds[command].access),
+			              stype, source, disp)
 		if parts:
 			# Explicit :help <cmd> <lang> - user asked for a specific language.
 			lang = parts.pop(0).lower()
