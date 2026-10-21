@@ -27,6 +27,32 @@ class expansion_temp(expansion):
 	def __init__(self, name):
 		expansion.__init__(self, name)
 
+	# Penanda baris di help. "*/cmd" (contoh perintah) pakai BULLET,
+	# baris sisanya (catatan, sub-item) pakai DASH dengan indentasi.
+	BULLET = "▸ "
+	DASH   = "  • "
+	# Lebar wrap untuk deskripsi panjang (XMPP client ~= 72 kolom).
+	WIDTH  = 72
+
+	def _wrap(self, text, prefix):
+		"""Bungkus teks panjang; baris pertama diawali prefix, sisanya
+		disejajarkan di bawah teks (bukan di bawah prefix)."""
+		try:
+			import textwrap
+		except ImportError:
+			return [prefix + text]
+		avail = self.WIDTH - len(prefix)
+		if avail < 20:
+			avail = 20
+		lines = textwrap.wrap(text, width=avail,
+		                      initial_indent="", subsequent_indent="",
+		                      break_long_words=False,
+		                      break_on_hyphens=False)
+		if not lines:
+			return [prefix.rstrip()]
+		cont = " " * (len(prefix) + 1)
+		return [prefix + lines[0]] + [cont + l for l in lines[1:]]
+
 	AnsBase = (
 		"\u2139\ufe0f '%s' comes from expansion: %s",   # 0
 		"\u2139\ufe0f '%s' needs access: %d",     # 1
@@ -115,18 +141,33 @@ class expansion_temp(expansion):
 				text  = text.format(command=command)
 				lines = text.splitlines()
 				if len(lines) >= 2:
-					ls = [self.AnsBase[2] % (lines.pop(0), lines.pop(0))]
+					head = lines.pop(0)
+					usage = lines.pop(0)
+					ls = []
+					for hl in self._wrap(head, ""):
+						ls.append(hl)
+					for ul in self._wrap(usage, ""):
+						ls.append(ul)
+					ls = [self.AnsBase[2] % (ls[0], ls[1])] + ls[2:] \
+						if len(ls) >= 2 else [self.AnsBase[2] % (head, usage)]
 					if lines:
 						ls.append(self.AnsBase[3])
 						for line in lines:
 							line = line.strip()
+							if not line:
+								# Baris kosong: jangan jadi bullet kosong.
+								ls.append("")
+								continue
 							if line.startswith("*/"):
-								# Fix: unichr(187) → chr(187)
-								Char = chr(187) * 3
-								line = line[2:].lstrip()
+								# "*/cmd" = contoh perintah (kebanyakan).
+								# "*/ Catatan: ..." = catatan; di file help yang
+								# ada, catatan selalu diawali huruf kapital.
+								rest = line[2:].strip()
+								Char = (self.DASH if rest[:1].isupper()
+								        else self.BULLET)
+								ls.extend(self._wrap(rest, Char))
 							else:
-								Char = chr(9) + chr(42)
-							ls.append("%s %s" % (Char, line))
+								ls.extend(self._wrap(line, self.DASH))
 					answer = "\n".join(ls)
 				else:
 					# File 2 baris saja (deskripsi + usage) tanpa daftar
