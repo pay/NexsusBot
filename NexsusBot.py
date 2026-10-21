@@ -1299,7 +1299,11 @@ class NexusClient(ClientXMPP):
         self.register_plugin("xep_0199")  # Ping
         self.register_plugin("xep_0203")  # Delayed Delivery
         self.register_plugin("xep_0085")  # Chat State Notifications
-        self.register_plugin("xep_0184")  # Message Receipts
+        # XEP-0184: auto_request=True bikin library yang menambahkan
+        # <request/> ke pesan keluar - hanya untuk chat 1-1, dan hanya
+        # kalau JID tujuan benar-benar dukung urn:xmpp:receipts (dicek
+        # via disco cache). Itu lebih aman daripada set manual.
+        self.register_plugin("xep_0184", {"auto_request": True})  # Message Receipts
 
         # Event handlers
         self.add_event_handler("session_start",        self._on_session_start)
@@ -1309,6 +1313,10 @@ class NexusClient(ClientXMPP):
         self.add_event_handler("groupchat_message",    self._on_groupchat_message)
         self.add_event_handler("groupchat_presence",   self._on_groupchat_presence)
         self.add_event_handler("changed_subscription", self._on_subscription)
+        # XEP-0184 / XEP-0085: event yang dipicu plugin. Ditangani supaya
+        # plugin-nya benar-benar terpakai (b sekadar terdaftar).
+        self.add_event_handler("receipt_received",     self._on_receipt)
+        self.add_event_handler("chatstate",            self._on_chatstate)
 
         # Server dengan cert chain tidak lengkap/self-signed (mis. xmpp.jp)
         # akan trigger "ssl_invalid_chain" — tanpa handler ini slixmpp
@@ -1452,6 +1460,25 @@ class NexusClient(ClientXMPP):
         """Pesan MUC."""
         Info["msg"].plus()
         sThread("groupchat_msg", _handle_message, (self._nx_jid, msg))
+
+    async def _on_receipt(self, msg):
+        """XEP-0184: peer mengonfirmasi pesan kita diterima."""
+        try:
+            frm = msg["from"].jid
+        except Exception:
+            frm = "?"
+        _Log("receipt dari %s" % frm, logging.INFO)
+
+    async def _on_chatstate(self, msg):
+        """XEP-0085: peer mengubah status mengetik (composing/active/...)."""
+        try:
+            state = msg["chat_state"]
+            frm = msg["from"].jid
+        except Exception:
+            return
+        # DEBUG: chatstate come per ketikan, jadi level INFO akan
+        # membanjiri log.
+        _Log("chatstate %s dari %s" % (state, frm), logging.DEBUG)
 
     # ── Public API ─────────────────────────────────────────────
 
