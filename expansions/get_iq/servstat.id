@@ -1,0 +1,6 @@
+statistik server jabber
+{command} (server)
+*/{command}
+bot akan menampilkan statistik server JID bot saat ini
+*/{command} jabr.com
+bot akan menampilkan statistik jabr.com

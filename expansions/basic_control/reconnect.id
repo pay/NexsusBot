@@ -1,0 +1,6 @@
+fungsi reconnect client bot
+{command} (jid)
+*/{command}
+bot akan reconnect JID saat ini
+*/{command} bot@jabber.ru
+bot akan reconnect bot@jabber.ru

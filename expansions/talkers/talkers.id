@@ -1,0 +1,18 @@
+statistik pembicara
+{command} [[top] [global/local] (number)]/[[global/local] [mine/nick/jid]]
+*/{command} local mine
+bot akan menampilkan statistik kamu di conference ini
+*/{command} global mine
+bot akan menampilkan statistik kamu di semua conference yang dilayani bot
+*/{command} top local
+bot akan menampilkan top pembicara dari conference ini
+*/{command} top local 50
+bot akan menampilkan 50 pembicara teratas dari conference ini
+*/{command} top global
+bot akan menampilkan top pembicara dari semua conference yang dilayani bot
+*/{command} top global 100
+bot akan menampilkan 100 pembicara teratas dari semua conference yang dilayani bot
+*/{command} local Dude
+bot akan menampilkan statistik Dude di conference ini
+*/{command} global dude@jub.net
+bot akan menampilkan statistik dude@jub.net di semua conference yang dilayani bot

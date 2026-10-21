@@ -1,0 +1,10 @@
+xmpp disco
+{command} [jid] (result's_number) (search_query)
+*/{command} jabber.ru
+bot akan menampilkan daftar service di jabber.ru
+*/{command} conference.jabber.ru 10 witcher
+bot akan cari "witcher" di conference.jabber.ru & tampilkan sampai 10 hasil (maks 24 hasil di chat, maks 256 di private, default 16)
+*/{command} conference.jabber.ru 20
+bot akan menampilkan 20 conference dengan user terbanyak di jabber.ru
+*/{command} example@conference.jabber.ru
+bot akan menampilkan daftar user online di example@conference.jabber.ru

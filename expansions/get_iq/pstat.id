@@ -1,0 +1,8 @@
+statistik xmpp ping
+{command} (nick/jid)
+*/{command}
+bot akan menampilkan statistik kamu
+*/{command} Dude
+bot akan menampilkan statistik Dude
+*/{command} dude@jabr.com
+bot akan menampilkan statistik dari dude@jabr.com

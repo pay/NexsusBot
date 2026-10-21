@@ -1,0 +1,6 @@
+bot mengatur access global
+{command} [!/access] [jid/nick]
+*/{command} 6 Obi-Wan Kenobi
+bot akan mengatur access level 6 untuk Obi-Wan Kenobi
+*/{command} ! obi-wan_kenobi@jab.net
+bot akan menghapus obi-wan_kenobi@jab.net dari daftar access global

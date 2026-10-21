@@ -1,0 +1,8 @@
+xmpp vCard
+{command} (nick/jid)
+*/{command}
+bot akan menampilkan vCard kamu
+*/{command} Dude
+bot akan menampilkan vCard Dude
+*/{command} dude@jabr.com
+bot akan menampilkan vCard dari dude@jabr.com

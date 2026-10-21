@@ -1,0 +1,8 @@
+tampilkan/set (khusus owner) prefix command (daftar: !, @ , #, ., *)
+{command} (symbol/del)
+*/{command}
+bot akan menampilkan prefix saat ini
+*/{command} !
+bot akan mengatur prefix command - "!"
+*/{command} del
+bot akan menghapus prefix

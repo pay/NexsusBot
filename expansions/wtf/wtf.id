@@ -1,0 +1,10 @@
+menampilkan isi wtf-base
+{command} (definition's_name/all/search) (search_key)
+*/{command}
+bot akan menampilkan jumlah definisi
+*/{command} bot
+bot akan menampilkan definisi "bot" (kalau ada di base)
+*/{command} all
+bot akan menampilkan semua nama definisi
+*/{command} search porn
+bot akan cari "porn" di base

@@ -1,0 +1,8 @@
+menjalankan command tertentu secara remote
+{command} ([conference/chats's_number_in_list] [chat/private] [command] (parameters))
+*/{command} witcher@conference.jabber.ru private clean
+menjalankan command seperti yang kamu jalankan di "witcher@conference.jabber.ru", lalu mengirim hasilnya ke kamu secara private
+*/{command} 1 chat ping EdenPowers
+menjalankan command di room dari daftar nomor 1, dan melaporkan hasilnya ke conference ini
+*/{command}
+menampilkan daftar chatroom terurut

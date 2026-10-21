@@ -1,0 +1,8 @@
+pengaturan larangan command di conference
+{command} (command)
+*/{command}
+bot akan menampilkan daftar command terlarang
+*/{command} bash
+bot akan melarang command "bash"
+*/{command} bash
+bot akan mengizinkan command "bash" (kecuali yang memang dilarang)

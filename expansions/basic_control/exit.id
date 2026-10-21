@@ -1,0 +1,8 @@
+shutdown bot
+{command} (reason/silent)
+*/{command}
+bot akan shutdown
+*/{command} silent
+bot akan shutdown tanpa suara
+*/{command} update
+bot akan shutdown dengan status "update"

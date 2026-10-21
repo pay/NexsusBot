@@ -1,0 +1,10 @@
+upload ke Ubuntu Pastebin (paste.ubuntu.com)
+{command} (text_syntax) [text]
+*/{command} js var foo = "bar";
+bot akan upload teks sebagai kode sumber Javascript dan mengembalikan link-nya
+*/{command} pytb NameError: name 'sample' is not defined
+bot akan upload teks sebagai Python Traceback dan mengembalikan link-nya
+*/{command} "Screw you guys, I'm going home!" - Eric Theodore Cartman
+bot akan upload teks apa adanya sebagai teks biasa
+*/{command}
+bot akan menampilkan bahasa pemrograman/scripting/marking yang didukung

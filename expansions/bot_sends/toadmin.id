@@ -1,0 +1,4 @@
+bot kirim pesan ke JID admin utama
+{command} [text]
+*/{command} AAA!!
+bot akan mengirim "AAA!!" ke JID admin

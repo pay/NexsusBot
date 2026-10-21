@@ -1,0 +1,8 @@
+menampilkan waktu lokal user
+{command} (nick/jid)
+*/{command}
+bot akan menampilkan waktu aktif kamu
+*/{command} Dude
+bot akan menampilkan waktu aktif Dude
+*/{command} dude@jabr.com
+bot akan menampilkan waktu aktif dude@jabr.com

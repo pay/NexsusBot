@@ -1,0 +1,6 @@
+bot join ulang ke chatroom
+{command} (conference)
+*/{command}
+bot akan join ulang ke chatroom ini
+*/{command} some_chat@conference.jabber.ru
+bot akan join ulang some_chat@conference.jabber.ru (kalau dia ada di sana)

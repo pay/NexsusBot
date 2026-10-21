@@ -1,0 +1,6 @@
+daftar affiliation
+{command} [owner/admin/member/outcast]/[[search] [text]]
+*/{command} owner
+bot akan menampilkan daftar owner conference
+*/{command} search dude
+bot akan cari "dude" di daftar affiliation chat

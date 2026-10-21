@@ -1,0 +1,4 @@
+menjalankan urutan 2-4 command (user dengan access di atas 7 bisa pakai lebih dari 4 command)
+{command} [[command] (parameters)] [&&] [[command] (parameters)]
+*/{command} ping User#1 && ping User#2 && ping User#3 && ping
+bot akan 'ping' kamu dan tiga user lain

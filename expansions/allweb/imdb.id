@@ -1,0 +1,12 @@
+info tentang film (imdb.com)
+{command} [Name/*/id/top250] (Name/Number of points)
+*/{command} A Beautiful Mind
+bot akan cari film dengan nama "A Beautiful Mind"
+*/{command} 530
+bot akan menampilkan halaman film dengan id 530 (A Beautiful Mind)
+*/{command} * 2012
+bot akan cari film dengan nama "2012"
+*/{command} top250
+bot akan menampilkan IMDb Top 250 Film
+*/{command} top250 25
+bot akan menampilkan 25 pertama dari IMDb Top 250 Film

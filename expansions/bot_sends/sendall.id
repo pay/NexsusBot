@@ -1,0 +1,4 @@
+bot kirim pesan ke semua chat yang dilayani
+{command} [text]
+*/{command} AAA!!
+bot akan mengirim "AAA!!" ke semua chat sebagai: [Pesan dari <nick/resource kamu>:][baris baru][AAA!!]

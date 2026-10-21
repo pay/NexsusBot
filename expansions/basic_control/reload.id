@@ -1,0 +1,8 @@
+bot reload
+{command} (reason/silent)
+*/{command}
+bot akan reload
+*/{command} silent
+bot akan reload tanpa suara
+*/{command} diagnostics
+bot akan reload dengan status "diagnostics"

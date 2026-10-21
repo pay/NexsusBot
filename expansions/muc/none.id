@@ -1,0 +1,4 @@
+hapus affiliation (unban)
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot akan mengambil affiliation Away

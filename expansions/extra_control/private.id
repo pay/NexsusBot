@@ -1,0 +1,4 @@
+menjalankan command tertentu dan mengirim jawaban ke private
+{command} [command] (parameters)
+*/{command} ping
+bot akan mengirim waktu pong ke private

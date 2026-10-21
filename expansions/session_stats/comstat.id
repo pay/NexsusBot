@@ -1,0 +1,6 @@
+statistik command
+{command} (command)
+*/{command}
+bot akan menampilkan statistik 20 command teratas
+*/{command} help
+bot akan menampilkan statistik command "help"

@@ -1,0 +1,4 @@
+bot kirim pesan ke JID tertentu
+{command} [jid] [text]
+*/{command} chel@jabber.com AAA!!
+bot akan mengirim "AAA!!" ke chel@jabber.com sebagai: [Pesan dari <nick/resource kamu>:][baris baru][AAA!!]

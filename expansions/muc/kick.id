@@ -1,0 +1,4 @@
+kick user
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot akan kick dude

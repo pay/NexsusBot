@@ -1,0 +1,4 @@
+tambah global ke outcast
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot akan ban dude secara global

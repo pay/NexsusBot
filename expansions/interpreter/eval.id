@@ -1,0 +1,6 @@
+menghitung kode python
+{command} [code]
+*/{command} get_file(PidFile)
+bot akan membaca PID.txt beserta isinya
+*/{command} ["1", "2"]*3
+jawabannya -> ['1', '2', '1', '2', '1', '2']

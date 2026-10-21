@@ -1,0 +1,10 @@
+sistem kontrol client
+{command} ([del] [jid])/([add] [host] [accout] [password] (port) (server))/([password] [jid] (text))
+*/{command}
+bot akan menampilkan config saat ini
+*/{command} del bs@xmpp.ru
+bot akan menonaktifkan client dengan jid bs@xmpp.ru, dan kapan akan join ulang room yang ditangani jid ini dari client lain
+*/{command} add xmpp.ru bs xxx 5222 jabber.ru
+bot akan mulai client dengan jid bs@xmpp.ru (kalau host=server, nama server opsional, misalnya port kalau port=5222)
+*/{command} password bs@xmpp.ru xxx
+bot akan ganti password JID (password opsional, bot bisa generate sendiri. dengan parameter "set" setelah password, bot hanya menuliskannya)

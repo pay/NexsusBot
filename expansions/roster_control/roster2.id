@@ -1,0 +1,8 @@
+pengatur access roster
+{command} [on/off]
+*/{command}
+bot akan menampilkan status access roster
+*/{command} off
+bot akan blok akses ke roster (gratis hanya untuk admin bot)
+*/{command} on
+bot akan buka akses ke roster (gratis untuk semua user)

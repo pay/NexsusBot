@@ -1,0 +1,4 @@
+ganti nick bot
+{command} [some_nick]
+*/{command} botik
+bot akan ganti nick-nya jadi "botik"

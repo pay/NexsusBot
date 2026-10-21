@@ -1,0 +1,10 @@
+pengatur command
+{command} (command) (on/off)
+*/{command}
+bot akan menampilkan daftar command yang dinonaktifkan
+*/{command} talkers
+bot akan menampilkan status command "talkers"
+*/{command} talkers off
+bot akan menonaktifkan command "talkers"
+*/{command} talkers on
+bot akan menyalakan command

@@ -1,0 +1,4 @@
+bot menampilkan access yang dibutuhkan sebuah command
+{command} [command]
+*/{command} join
+bot memberi tahu bahwa command "join" butuh access 7

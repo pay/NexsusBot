@@ -1,0 +1,4 @@
+memberi hak participant biasa
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot akan membuat dude sebagai member conference

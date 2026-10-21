@@ -1,0 +1,6 @@
+bot menampilkan access kamu atau access user tertentu
+{command} (jid/nick)
+*/{command}
+bot akan menampilkan access kamu
+*/{command} Dude
+bot akan menampilkan access Dude

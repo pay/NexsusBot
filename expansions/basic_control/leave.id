@@ -1,0 +1,6 @@
+bot keluar dari conference
+{command} (conference)
+*/{command}
+bot akan keluar dari chatroom ini
+*/{command} some_chat@conference.jabber.ru
+bot akan keluar dari some_chat@conference.jabber.ru (kalau dia ada di sana)

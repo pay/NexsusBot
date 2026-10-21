@@ -1,0 +1,8 @@
+xmpp version
+{command} (nick/jid)
+*/{command}
+bot akan menampilkan versi client kamu
+*/{command} Dude
+bot akan menampilkan versi client Dude
+*/{command} dude@jabr.com
+bot akan menampilkan versi client dude@jabr.com

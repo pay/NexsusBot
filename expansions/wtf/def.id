@@ -1,0 +1,10 @@
+pengatur wtf-base
+{command} (globally) [name] [=] (definition)
+*/{command} google = Young Skynet
+bot akan menambahkan "google" ke base conference
+*/{command} google =
+bot akan menghapus "google" dari base conference
+*/{command} globally apple = Fruiterer
+bot akan menambahkan "apple" ke base global (access 7)
+*/{command} globally apple =
+bot akan menghapus "apple" dari base global (access 7)

@@ -1,0 +1,8 @@
+bot menampilkan bantuan
+{command} (command) (language)
+*/{command}
+bot akan memberi tahu cara pakainya
+*/{command} join
+bot akan menampilkan info tentang command "join"
+*/{command} join ru
+bot akan menampilkan info tentang command "join" dalam bahasa Rusia

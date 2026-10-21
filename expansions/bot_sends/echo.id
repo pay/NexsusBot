@@ -1,0 +1,4 @@
+bot kirim pesan ke chat saat ini
+{command} [text]
+*/{command} AAA!!
+bot akan kirim: "AAA!!"

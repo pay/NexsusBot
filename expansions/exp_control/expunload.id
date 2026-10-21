@@ -1,0 +1,6 @@
+unloader expansion dan function
+{command} [expansion] (function)
+*/{command} talkers
+bot akan unload expansion "talkers"
+*/{command} talkers calculate_talkers
+bot akan unload kalkulator talkers (unloader sebaiknya cuma untuk user berpengalaman)

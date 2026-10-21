@@ -1,0 +1,8 @@
+pengunduh file
+{command} [url] (folder) (filename)
+*/{command} http://blacksmith-2.googlecode.com/files/Black-2.30.r71.zip
+bot akan unduh Black-2.30.r71.zip (untuk superadmin, ditaruh di folder root bot)
+*/{command} http://blacksmith-2.googlecode.com/files/Black-2.30.r71.zip Zip
+bot akan taruh file di "Zip" (hanya superadmin, selain itu ke "Downloads")
+*/{command} http://blacksmith-2.googlecode.com/files/Black-2.30.r71.zip Downloads Black-2.zip
+bot akan taruh file di "Downloads" dengan nama "Black-2.zip"

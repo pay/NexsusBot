@@ -1,0 +1,8 @@
+set status chatroom bot
+{command} [here/everywhere/catroom's_name] [chat/away/xa/dnd] [status_text]
+*/{command} here xa I'm far far away
+bot akan mengatur status "xa" dengan teks "I'm far far away" di conference ini
+*/{command} everywhere xa I'm far far away
+bot akan mengatur status di semua chat tempat dia aktif
+*/{command} some_chat@c.j.ru xa I'm far far away
+bot akan mengatur status di some_chat@c.j.ru

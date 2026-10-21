@@ -1,0 +1,8 @@
+xmpp ping
+{command} (nick/jid)
+*/{command}
+bot akan menampilkan ping kamu
+*/{command} Dude
+bot akan menampilkan ping Dude
+*/{command} dude@jabr.com
+bot akan menampilkan ping dari dude@jabr.com

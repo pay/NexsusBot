@@ -1,0 +1,6 @@
+ganti JID dari mana bot melayani conference tertentu
+{command} [jid] (conference)
+*/{command} some_name@jab.com chat@conference.jab.com
+bot akan ganti JID-nya di chat@conference.jab.com jadi some_name@jab.com
+*/{command} some_name@jab.com
+bot akan ganti JID-nya di chatroom ini jadi some_name@jab.com

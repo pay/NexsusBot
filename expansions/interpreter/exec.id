@@ -1,0 +1,12 @@
+menjalankan kode python
+{command} ((-l) (-r) (-s)) [code]
+*/{command} delivery("Aaa!!")
+bot akan mengirim "Aaa!!" ke JID Superadmin
+*/{command} -l foo = "bar"
+bot akan jalankan ekspresi memakai namespace lokal
+*/{command} -r foo = "bar"; result = "Done!"
+bot akan jalankan ekspresi dan coba mengembalikan variabel "result"
+*/{command} -s foo = "bar"
+bot akan jalankan ekspresi tanpa pemberitahuan selesai
+*/{command} -l -r foo = 2; bar = 2; result = foo*bar
+bot akan jalankan ekspresi memakai namespace lokal dan mengembalikan "result"

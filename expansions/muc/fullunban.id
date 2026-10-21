@@ -1,0 +1,4 @@
+unban global (hapus affiliation)
+{command} [jid/nick]
+*/{command} dude
+bot akan unban dude secara global

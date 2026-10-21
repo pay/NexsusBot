@@ -1,0 +1,6 @@
+Game "Rock-paper-scissors-lizard-Spock" dari sitcom "The Big Bang Theory"
+{command} (rock/paper/scissors/lizard/spock)
+*/{command}
+bot akan menampilkan aturan
+*/{command} spock
+bot akan main game dengan kamu

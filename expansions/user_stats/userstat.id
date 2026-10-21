@@ -1,0 +1,8 @@
+statistik user conference
+{command} (nick/jid)
+*/{command} dude
+bot akan menampilkan statistik dude
+*/{command} dude@j.ru
+bot akan menampilkan statistik dude
+*/{command}
+bot akan menampilkan statistik kamu

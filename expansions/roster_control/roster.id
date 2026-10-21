@@ -1,0 +1,10 @@
+pengatur roster
+{command} (bot's jid/jid's number) ([+/-] [jid] (nick) (admin))
+*/{command}
+bot akan menampilkan daftar nomor dari user roster-nya
+*/{command} some@jid.com + qwerty@xmpp.ru Qwerty admin
+bot akan menambahkan "qwerty@xmpp.ru" ke grup "Admins" dengan nick "Qwerty"
+*/{command} 1 + qwerty@xmpp.ru
+bot akan menambahkan "qwerty@xmpp.ru" ke grup "Users"
+*/{command} 1 - qwerty@xmpp.ru
+bot akan menghapus "qwerty@xmpp.ru" dari roster

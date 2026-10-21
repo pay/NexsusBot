@@ -1,0 +1,6 @@
+pencarian google
+{command} [text/*]
+*/{command} blah blah
+bot akan menampilkan hasil pencarian pertama
+*/{command} *
+bot akan menampilkan hasil berikutnya

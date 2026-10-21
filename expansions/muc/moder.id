@@ -1,0 +1,4 @@
+memberi hak moderator
+{command} [jid/nick] ([/] [reason])
+*/{command} dude
+bot akan membuat dude sebagai moderator conference

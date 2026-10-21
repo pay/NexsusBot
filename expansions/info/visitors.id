@@ -1,0 +1,12 @@
+bot menampilkan pengunjung conference
+{command} (today/dates/roles/list)
+*/{command}
+bot akan menampilkan semua pengunjung
+*/{command} today
+bot akan menampilkan semua pengunjung yang join hari ini
+*/{command} dates
+bot akan menampilkan semua pengunjung beserta tanggal join
+*/{command} roles
+bot akan menampilkan semua pengunjung beserta role saat keluar
+*/{command} list
+bot akan menampilkan daftar ringkas pengunjung

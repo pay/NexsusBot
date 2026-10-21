@@ -1,0 +1,36 @@
+sistem kontrol keamanan
+{command} ([option] [on/off/number])/([servers] ([add/del] [server]))
+*/{command}
+bot akan menampilkan config saat ini
+*/{command} awipe on
+aktivasi fitur antiwipe
+*/{command} aspace on
+spasi di awal/akhir nick akan dilarang
+*/{command} verif off
+deaktivasi fitur otorisasi
+*/{command} atiser on
+aktivasi proteksi dari advertisement
+*/{command} aobscene off
+deaktivasi proteksi dari obscene
+*/{command} acaps on
+deaktivasi proteksi dari caps-flood
+*/{command} sparta on
+aktivasi "Sparta mode" (bot akan ban semua server baru yang tidak ada di "white list")
+*/{command} lnick 24
+set panjang maksimal nick untuk user (dari 12 sampai 32)
+*/{command} aban 4
+jumlah kick sebelum ban berikutnya (dari 2 sampai 6)
+*/{command} loyalty 2
+level access user yang dilayani security service (dari 1 sampai 5)
+*/{command} devoice 180
+waktu (dalam detik) user kehilangan hak suara karena pelanggaran (60 sampai 360)
+*/{command} msglen 1024
+panjang maksimal pesan yang diizinkan untuk user (dari 512 sampai 2048)
+*/{command} prslen 256
+panjang maksimal pesan status untuk user (dari 128 sampai 512)
+*/{command} servers
+bot akan menampilkan "white list" server
+*/{command} servers add some_server.com
+bot akan menambahkan "some_server.com" ke "white list"
+*/{command} servers del some_server.com
+bot akan menghapus "some_server.com" dari "white list"

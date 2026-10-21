@@ -1,0 +1,6 @@
+sistem kontrol config (perubahan berlaku setelah restart)
+{command} (option=value)
+*/{command}
+bot akan menampilkan config saat ini
+*/{command} RESOURCE=Bot_control_center MEMORY=96
+bot akan set "Bot control center" sebagai resource default dan limit RAM - 96mb

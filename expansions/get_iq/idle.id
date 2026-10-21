@@ -1,0 +1,6 @@
+idle user
+{command} [nick/jid]
+*/{command} Dude
+bot akan menampilkan idle Dude (kalau client mengizinkan)
+*/{command} dude@jabr.com
+bot akan menampilkan idle dari dude@jabr.com

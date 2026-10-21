@@ -1,0 +1,8 @@
+konverter
+{command} (category) ([numer] [unit] [unit])
+*/{command}
+bot akan menampilkan kategori converter
+*/{command} temperature
+bot akan menampilkan satuan dari kategori "temperature"
+*/{command} distance 3 mile metre
+bot akan konversi 3 mil ke meter (4828)

@@ -1,0 +1,4 @@
+mengalihkan hasil eksekusi command ke user lain (ke private)
+{command} [command] (parameters) [>>] [nickname]
+*/{command} chatslist >> Mister Anonymous
+bot akan mengirim daftar chat untuk user dengan nick "Mister Anonymous"

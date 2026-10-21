@@ -1,0 +1,10 @@
+google translate
+{command} (lang_from/auto/*) (lang_to) (text)
+*/{command}
+bot akan menampilkan bahasa yang didukung
+*/{command} en ru hello world
+bot akan terjemahkan "hello world" ke bahasa Rusia
+*/{command} auto ru hello world
+lang_from terdeteksi otomatis
+*/{command} *
+bot akan menampilkan terjemahan berikutnya

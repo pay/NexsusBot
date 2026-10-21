@@ -1,0 +1,6 @@
+menjalankan command shell
+{command} [command]
+*/{command} TASKLIST /FI "IMAGENAME eq python.exe
+bot akan menampilkan (windows) daftar task python & ram terpakai
+*/{command} ps -o rss -p 12154
+bot akan menampilkan (unix) berapa memori yang dipakai proses dengan pid 12154

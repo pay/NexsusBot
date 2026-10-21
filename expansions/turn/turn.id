@@ -1,0 +1,6 @@
+bot terjemahkan layout teks (EN <-> RU)
+{command} (text)
+*/{command}
+bot akan terjemahkan post terakhirmu
+*/{command} some text
+bot akan terjemahkan teks ini

@@ -1,0 +1,6 @@
+kutipan dari bash.org
+{command} (quotes'_number)
+*/{command}
+bot akan menampilkan kutipan acak
+*/{command} 30456
+bot akan menampilkan kutipan nomor 30456

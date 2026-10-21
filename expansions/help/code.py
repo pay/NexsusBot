@@ -7,18 +7,30 @@
 #  Original © (2010-2013) by WitcherGeralt [alkorgun@gmail.com]
 #  Ported to Python 3 / slixmpp by Nexsus Project 2026
 
-def _active_help_lang():
+def _active_help_lang(answers=None):
 	"""Language code for the active thread, or None when unknown.
 
 	Help files are plain text rather than reply strings, so this reads the
 	per-thread localization context directly instead of going through
 	LocalizedAnswers.
+
+	LocalizationContext menyimpan bahasa per-thread, tapi command
+	dieksekusi di thread BARU (sThread), jadi context thread-local sudah
+	hilang waktu command_help jalan. Yang benar adalah bahasa dari
+	LocalizedAnswers yang dipakai: instance-nya shared dan di-update
+	setiap kali context dipasang, jadi masih berisi bahasa user yang
+	benar. Thread-local dipakai sebagai fallback.
 	"""
+	lang = None
 	try:
 		from library.nxs_l10n import LocalizationContext
 		lang = LocalizationContext.get()
 	except Exception:
 		lang = None
+	if answers is not None:
+		shared = getattr(answers, "_lang", None)
+		if shared:
+			lang = shared
 	return lang.lower() if lang else None
 
 
@@ -126,7 +138,7 @@ class expansion_temp(expansion):
 			exp_name  = Cmds[command].exp.name
 			help_base = Cmds[command].default
 			helpf     = None
-			for cand in (_active_help_lang(), "en"):
+			for cand in (_active_help_lang(self.AnsBase), "en"):
 				if not cand:
 					continue
 				probe = os.path.join(ExpsDir, exp_name, "%s.%s" % (help_base, cand))

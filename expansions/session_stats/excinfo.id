@@ -1,0 +1,6 @@
+cache exception
+{command} (number)
+*/{command}
+bot akan menampilkan jumlah exception tak terduga
+*/{command} 1
+bot akan menampilkan exception nomor satu

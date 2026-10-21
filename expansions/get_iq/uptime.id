@@ -1,0 +1,6 @@
+uptime server
+{command} (server)
+*/{command}
+bot akan menampilkan uptime server JID bot saat ini
+*/{command} jabr.com
+bot akan menampilkan uptime jabr.com

@@ -1,0 +1,12 @@
+notepade pribadi kamu berisi 16 baris
+{command} ([+/-/*/clear] (line_number/text))
+*/{command}
+bot akan menampilkan semua catatan kamu
+*/{command} + something important
+bot akan menambahkan catatan baru
+*/{command} - 13
+bot akan menghapus catatan di baris 13
+*/{command} * 7
+bot akan menampilkan catatan dari baris 7
+*/{command} clear
+bot akan menghapus semua catatanmu dari notepade

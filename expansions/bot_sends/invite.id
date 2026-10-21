@@ -1,0 +1,4 @@
+bot kirim undangan untuk user tertentu
+{command} [jid/nick]
+*/{command} someone@jabber.ru
+bot akan mengirim undangan ke someone@jabber.ru
