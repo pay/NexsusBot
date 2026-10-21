@@ -1317,6 +1317,10 @@ class NexusClient(ClientXMPP):
         # plugin-nya benar-benar terpakai (b sekadar terdaftar).
         self.add_event_handler("receipt_received",     self._on_receipt)
         self.add_event_handler("chatstate",            self._on_chatstate)
+        # Log presence keluar yang memuat <c/> (XEP-0115). Presence ke
+        # room (MUC) memang tidak punya <c/> - yang punya cuma presence
+        # ke kontak, karena MUC presence di-from dengan JID room.
+        self.add_filter("out", self._log_presence_caps)
 
         # Server dengan cert chain tidak lengkap/self-signed (mis. xmpp.jp)
         # akan trigger "ssl_invalid_chain" — tanpa handler ini slixmpp
@@ -1346,11 +1350,86 @@ class NexusClient(ClientXMPP):
 
     # ── slixmpp event handlers ─────────────────────────────────
 
+    async def _setup_own_caps(self):
+        """Isi disco#info milik bot sendiri lalu hitung verstring-nya.
+
+        Tanpa ini presence bot tidak pernah memuat <c/> (XEP-0115):
+        library butuh verstring milik JID sendiri, dan verstring itu
+        dihitung dari disco#info bot - yang tadinya tidak pernah diisi,
+        jadi client lain yang menanyakan "apa yang kamu dukung?" dapat
+        <query/> kosong.
+
+        update_caps() dipakai karena dia yang menghitung verstring dari
+        info lokal, menyimpannya di cache, dan mendaftarkannya ke JID
+        sendiri. jid harus full (dengan resource) - presence outgoing
+        juga memakai JID full, jadi verstringnya harus cocok.
+        """
+        d30 = self.plugin.get("xep_0030", None)
+        p115 = self.plugin.get("xep_0115", None)
+        if d30 is None or p115 is None:
+            return
+        info = self.Iq()
+        info["type"] = "result"
+        di = info["disco_info"]
+        di["identities"] = {("client", "bot", None, ProdName)}
+        di["features"] = {
+            "http://jabber.org/protocol/disco#info",
+            "urn:xmpp:ping",
+            "urn:xmpp:receipts",
+        }
+        # Node disco#info didaftarkan untuk BARE dan FULL JID. Client
+        # lain biasanya menanya bare JID, tapi server boleh menulis
+        # ulang atribut 'to' jadi full JID saat mengarahkan query ke
+        # sesi bot - dua-duanya perlu terdaftar, kalau tidak reply-nya
+        # <query/> kosong.
+        for jid in (self.boundjid.bare, self.boundjid.full):
+            await d30.set_info(jid=jid, info=info)
+        # PENTING: node disco#info milik bot sendiri harus dijawab
+        # sendiri. Lookup default StaticDisco memakai key
+        # (jid, node, ifrom) - ifrom adalah JID PEMINTA yang berbeda tiap
+        # kali, jadi node yang terdaftar tidak pernah ditemukan dan
+        # reply-nya <query/> kosong. Handler di bawah menjawab langsung
+        # dengan data yang sudah disiapkan.
+        #
+        # Handler plugin XEP-0030 yang terdaftar di stream dibuat dari
+        # bound method saat plugin_init, jadi menimpa atribut plugin
+        # tidak berpengaruh - handler streamnya yang harus diganti.
+        from slixmpp.xmlstream.handler import CoroutineCallback
+        from slixmpp.xmlstream.matcher import StanzaPath
+
+        async def _own_disco_info(iq):
+            if iq["type"] != "get":
+                return await d30._handle_disco_info(iq)
+            try:
+                reply = iq.reply()
+                # Payload dibangun dari nol, bukan memakai objek `di`:
+                # elemen XML yang sudah punya parent akan dipindah saat
+                # di-set ke reply, jadi object aslinya jadi tidak utuh.
+                new_di = reply["disco_info"]
+                new_di["identities"] = {("client", "bot", None, ProdName)}
+                new_di["features"] = {
+                    "http://jabber.org/protocol/disco#info",
+                    "urn:xmpp:ping",
+                    "urn:xmpp:receipts",
+                }
+                reply.send()
+            except Exception:
+                await d30._handle_disco_info(iq)
+        try:
+            self.remove_handler("Disco Info")
+        except Exception:
+            pass
+        self.register_handler(CoroutineCallback(
+            "Disco Info", StanzaPath("iq/disco_info"), _own_disco_info))
+        await p115.update_caps(jid=self.boundjid.full, broadcast=False)
+        ver = await p115.get_verstring(self.boundjid.full)
+        _Log("caps: verstring sendiri = %s (jid=%s)"
+             % (ver, self.boundjid.full), logging.INFO)
+
     async def _on_session_start(self, event):
         self._connected = True
         self._roster_obj = self.client_roster
         await self.get_roster()
-        self.send_presence(pshow=sList[0], pstatus=DefStatus)
         # Set info yang muncul saat client lain cek IQ version
         try:
             import platform as _plt
@@ -1391,6 +1470,22 @@ class NexusClient(ClientXMPP):
 
         except Exception:
             pass
+
+        # XEP-0115 (Entity Capabilities): tanpa ini presence bot tidak
+        # pernah memuat <c/>, karena library butuh verstring milik
+        # JID sendiri - yang harus dihitung dari disco#info milik bot.
+        # Disco#info sendiri juga belum pernah diisi, jadi client lain
+        # yang menanyakan "apa yang kamu dukung?" dapat <query/> kosong.
+        try:
+            await self._setup_own_caps()
+        except Exception as e:
+            _Log("caps setup GAGAL: %s: %s" % (type(e).__name__, e),
+                 logging.WARNING)
+        # Presence dikirim SETELAH caps setup: filter XEP-0115 membaca
+        # verstring, jadi presence pertama harus menyusul setelah
+        # verstring terdaftar - kalau dibalik, presence pertama tidak
+        # akan memuat <c/>.
+        self.send_presence(pshow=sList[0], pstatus=DefStatus)
         PrintOK('"%s" session started!' % self._nx_jid)
         for conf in list(Chats.values()):
             if conf.disp == self._nx_jid:
@@ -1460,6 +1555,22 @@ class NexusClient(ClientXMPP):
         """Pesan MUC."""
         Info["msg"].plus()
         sThread("groupchat_msg", _handle_message, (self._nx_jid, msg))
+
+    def _log_presence_caps(self, stanza):
+        """Catat presence keluar yang punya <c/> (XEP-0115).
+
+        Presence ke MUC di-from dengan JID room, jadi <c/> tidak
+        diikutkan - yang perlu dicek cuma presence ke kontak.
+        """
+        try:
+            if stanza.xml.tag.endswith("presence"):
+                ver = stanza["caps"]["ver"]
+                if ver:
+                    _Log("presence keluar dengan <c/>: to=%s ver=%s"
+                         % (stanza["to"], ver), logging.DEBUG)
+        except Exception:
+            pass
+        return stanza
 
     async def _on_receipt(self, msg):
         """XEP-0184: peer mengonfirmasi pesan kita diterima."""
