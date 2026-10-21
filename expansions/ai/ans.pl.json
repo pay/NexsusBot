@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Nie można połączyć z Groq: %s",
   "48": "Błąd: %s",
-  "49": "Wszystkie modele Groq mają rate limit. Spróbuj później."
+  "49": "Wszystkie modele Groq mają rate limit. Spróbuj później.",
+  "50": "Key OK",
+  "51": "Key nie ustawiony",
+  "52": "\nTen pokoj : %s",
+  "53": "Fragment ostatnich wiadomosci w pokoju (tylko jako kontekst, nie odpowiadaj na kazda):"
 }

@@ -1,0 +1,13 @@
+{command} <subcommand>
+AI admin settings: toggle the AI, switch models, manage per-user history limits and check the Groq quota.
+*/ aiset on|off [global]  - turn the AI on or off (in this room, or globally)
+*/ aiset model [1-7]      - switch to another Groq model
+*/ aiset ulimit <jid> <n> - set a per-user history limit (also: aiset ulimit list, aiset ulimit <jid> reset)
+*/ aiset reset all        - wipe every user's AI history
+*/ aiset history <sub>    - save|load|info|clear the AI history and room logs
+*/ aiset quota            - show the Groq API quota (requests, tokens, reset times)
+*/ aiset ping             - test the connection to Groq
+*/ aiset reloadkey        - reload the Groq API key from the key file
+*/ aiset info             - full AI status (provider, model, users, messages)
+Needs access level 1 for the basics and 3 for the admin-only subcommands.
+On and off also accept 'global' to apply the change to every room.

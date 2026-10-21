@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Mboten saged nyambung gro Groq: %s",
   "48": "Error: %s",
-  "49": "Sedaya model Groq kena rate limit. Cobi mengko."
+  "49": "Sedaya model Groq kena rate limit. Cobi mengko.",
+  "50": "Key OK",
+  "51": "Key durung di-set",
+  "52": "\nRoom iki : %s",
+  "53": "Potongan obrolan room paling anyar (kanggo referensi konteks wa ora, ora dibalesi sami-sami):"
 }

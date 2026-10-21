@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Tidak bisa terhubung ke Groq: %s",
   "48": "Error: %s",
-  "49": "Semua model Groq kena rate limit. Coba lagi nanti."
+  "49": "Semua model Groq kena rate limit. Coba lagi nanti.",
+  "50": "Key OK",
+  "51": "Key belum di-set",
+  "52": "\nRoom ini : %s",
+  "53": "Cuplikan obrolan room terakhir (buat referensi konteks saja, jangan dibalas satu-satu):"
 }

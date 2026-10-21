@@ -3,6 +3,7 @@
   "1": "✅ Tüm sistemler çalışıyor.",
   "2": "❌ %s, %d hata bulundu",
   "3": "❌ Hatalar: %d",
+  "4": "❌ Geçersiz JID/oda.",
   "5": "%s: %s",
   "6": "%s zaten burada.",
   "7": "❌ Kullanıcı bulunamadı.",

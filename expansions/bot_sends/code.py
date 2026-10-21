@@ -12,7 +12,7 @@ class expansion_temp(expansion):
 		"\u2705 All systems go.",           # 1
 		"\u274c %s, %d errors found",            # 2
 		"\u274c Errors: %d",                         # 3
-		"",                                   # 4 (unused)
+		"\u274c Not a valid JID/room.",             # 4
 		"%s: %s",                             # 5
 		"\u2139\ufe0f %s already here.",                      # 6
 		"\u274c Can't find that user.",                   # 7

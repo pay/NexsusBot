@@ -3,6 +3,7 @@
   "1": "✅ Tous les systèmes sont opérationnels.",
   "2": "❌ %s, %d erreurs détectées",
   "3": "❌ Erreurs : %d",
+  "4": "❌ JID/salon invalide.",
   "5": "%s : %s",
   "6": "%s est déjà ici.",
   "7": "❌ Utilisateur introuvable.",

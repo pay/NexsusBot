@@ -3,6 +3,7 @@
   "1": "✅ Semua sistem normal.",
   "2": "❌ %s, error terdeteksi: %d",
   "3": "❌ Error: %d",
+  "4": "❌ Bukan JID/room yang valid.",
   "5": "%s: %s",
   "6": "ℹ️ %s sudah ada di sini.",
   "7": "❌ User tidak ditemukan.",

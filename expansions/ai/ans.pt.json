@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Não foi possível conectar ao Groq: %s",
   "48": "Erro: %s",
-  "49": "Todos os modelos Groq estão com rate limit. Tente mais tarde."
+  "49": "Todos os modelos Groq estão com rate limit. Tente mais tarde.",
+  "50": "Key OK",
+  "51": "Key nao configurada",
+  "52": "\nEsta sala : %s",
+  "53": "Trecho das ultimas mensagens da sala (so para contexto, nao responda uma a uma):"
 }

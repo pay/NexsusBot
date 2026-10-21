@@ -3,6 +3,7 @@
   "1": "✅ Alle Systeme betriebsbereit.",
   "2": "❌ %s, Fehler erkannt: %d",
   "3": "❌ Fehler: %d",
+  "4": "❌ Ungültige JID/Raum.",
   "5": "%s: %s",
   "6": "%s ist bereits hier.",
   "7": "❌ Benutzer nicht gefunden.",

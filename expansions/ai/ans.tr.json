@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Groq'a bağlanılamıyor: %s",
   "48": "Hata: %s",
-  "49": "Tüm Groq modelleri rate limit'te. Daha sonra tekrar dene."
+  "49": "Tüm Groq modelleri rate limit'te. Daha sonra tekrar dene.",
+  "50": "Key OK",
+  "51": "Key ayarlanmadi",
+  "52": "\nBu oda : %s",
+  "53": "Odadaki son mesajlarin kesiti (yalnizca baglam icin, tek tek yanitlama):"
 }

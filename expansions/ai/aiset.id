@@ -1,0 +1,13 @@
+{command} <subcommand>
+Pengaturan admin AI: nyalakan/matikan AI, ganti model, atur batas riwayat per-user, dan cek kuota Groq.
+*/ aiset on|off [global]  - nyalakan atau matikan AI (di room ini, atau global)
+*/ aiset model [1-7]      - ganti ke model Groq lain
+*/ aiset ulimit <jid> <n> - atur batas riwayat per-user (juga: aiset ulimit list, aiset ulimit <jid> reset)
+*/ aiset reset all        - hapus seluruh riwayat AI semua user
+*/ aiset history <sub>    - save|load|info|clear riwayat AI dan log room
+*/ aiset quota            - tampilkan kuota API Groq (request, token, waktu reset)
+*/ aiset ping             - tes koneksi ke Groq
+*/ aiset reloadkey        - muat ulang API key Groq dari file key
+*/ aiset info             - status AI lengkap (provider, model, user, pesan)
+Butuh access level 1 untuk yang dasar dan 3 untuk subcommand khusus admin.
+on dan off juga menerima 'global' untuk menerapkan ke semua room.

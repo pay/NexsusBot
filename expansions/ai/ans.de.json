@@ -48,5 +48,9 @@
   "46": "Groq HTTP %d: %s",
   "47": "Verbindung zu Groq nicht möglich: %s",
   "48": "Fehler: %s",
-  "49": "Alle Groq-Modelle sind rate-limited. Später erneut versuchen."
+  "49": "Alle Groq-Modelle sind rate-limited. Später erneut versuchen.",
+  "50": "Key OK",
+  "51": "Key nicht gesetzt",
+  "52": "\nDieser Raum : %s",
+  "53": "Auszug der letzten Chat-Nachrichten im Raum (nur als Kontext, nicht einzeln beantworten):"
 }

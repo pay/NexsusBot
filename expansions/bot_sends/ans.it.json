@@ -3,6 +3,7 @@
   "1": "✅ Tutti i sistemi sono operativi.",
   "2": "❌ %s, errori rilevati: %d",
   "3": "❌ Errori: %d",
+  "4": "❌ JID/stanza non valido.",
   "5": "%s: %s",
   "6": "%s è già presente.",
   "7": "❌ Utente non trovato.",
