@@ -292,10 +292,10 @@ class expansion_temp(expansion):
         if self._groq_key:
             self._ai_enabled = True
             mid, mdesc = GROQ_MODELS[self._groq_model_key]
-            print("[nexsus:ai] Groq key found — model=%s" % mid)
+            _Log("[nexsus:ai] Groq key found - model=%s" % mid, logging.INFO)
         else:
-            print("[nexsus:ai] WARNING: Groq key tidak ada (~/.groq_config). AI dinonaktifkan. "
-                  "Jalankan: groq.sh setkey")
+            _Log("[nexsus:ai] WARNING: Groq key tidak ada (~/.groq_config). "
+                 "AI dinonaktifkan. Jalankan: groq.sh setkey", logging.WARNING)
 
     # ── Persistensi ──────────────────────────────────────────
     def _ensure_dir(self):
@@ -311,7 +311,8 @@ class expansion_temp(expansion):
                 k: [e for e in v if e.get("ts", 0) >= cutoff]
                 for k, v in raw.items()
             }
-            print("[nexsus:ai] History dimuat: %d key" % len(self._history))
+            _Log("[nexsus:ai] History dimuat: %d key" % len(self._history),
+                 logging.INFO)
         except Exception:
             self._history = {}
 
@@ -319,7 +320,8 @@ class expansion_temp(expansion):
         try:
             with open(ULIMIT_FILE) as f:
                 self._ulimit = json.load(f)
-            print("[nexsus:ai] Ulimit dimuat: %d entry" % len(self._ulimit))
+            _Log("[nexsus:ai] Ulimit dimuat: %d entry" % len(self._ulimit),
+                 logging.INFO)
         except Exception:
             self._ulimit = {}
 
@@ -327,7 +329,8 @@ class expansion_temp(expansion):
         try:
             with open(ROOM_LOG_FILE) as f:
                 self._room_log = json.load(f)
-            print("[nexsus:ai] Room log dimuat: %d room" % len(self._room_log))
+            _Log("[nexsus:ai] Room log dimuat: %d room" % len(self._room_log),
+                 logging.INFO)
         except Exception:
             self._room_log = {}
 
@@ -343,7 +346,7 @@ class expansion_temp(expansion):
             _os.replace(tmp, HISTORY_FILE)
             self._dirty = False
         except Exception as e:
-            print("[nexsus:ai] Gagal save history: %s" % e)
+            _Log("[nexsus:ai] Gagal save history: %s" % e, logging.ERROR)
 
     def _save_ulimit(self):
         try:
@@ -355,7 +358,7 @@ class expansion_temp(expansion):
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
             _os.replace(tmp, ULIMIT_FILE)
         except Exception as e:
-            print("[nexsus:ai] Gagal save ulimit: %s" % e)
+            _Log("[nexsus:ai] Gagal save ulimit: %s" % e, logging.ERROR)
 
     def _save_room_log(self):
         try:
@@ -368,7 +371,7 @@ class expansion_temp(expansion):
             _os.replace(tmp, ROOM_LOG_FILE)
             self._room_log_dirty = False
         except Exception as e:
-            print("[nexsus:ai] Gagal save room log: %s" % e)
+            _Log("[nexsus:ai] Gagal save room log: %s" % e, logging.ERROR)
 
     def _start_flush_loop(self):
         def _loop():
@@ -790,7 +793,8 @@ class expansion_temp(expansion):
                 # semua model Groq kena rate limit — tidak ada provider lain lagi
                 return None, self.AnsBase[49]
 
-            print("[nexsus:ai] Rate limit model %s, fallback ke model %s" % (failed_key, next_key))
+            _Log("[nexsus:ai] Rate limit model %s, fallback ke model %s"
+                 % (failed_key, next_key), logging.WARNING)
             tried.add(next_key)
             result, err = self._call_groq(user_id, prompt, limit, model_key=next_key,
                                           room_context=room_context, lang=lang)

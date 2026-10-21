@@ -2679,7 +2679,11 @@ def _connect_client_body(inst, attrs):
                 await client.connect(host=server, port=cport)
                 await client.wait_until("session_start", timeout=40)
             except Exception as e:
-                PrintErr('"%s" connect() error: %s' % (inst, e))
+                # str(e) untuk asyncio.TimeoutError kosong, jadi tanpa nama
+                # kelas ekspresi ini cuma jadi '"..." connect() error: ' dan
+                # nggak kelihatan itu timeout atau error lain.
+                detail = str(e) or type(e).__name__
+                PrintErr('"%s" connect() error: %s' % (inst, detail))
                 failed.set()
 
         asyncio.run_coroutine_threadsafe(_do_connect(), loop)
