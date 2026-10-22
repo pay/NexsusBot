@@ -15,7 +15,7 @@ Problems with parsing that at runtime:
   - the raw comment was printed verbatim, so users saw "Gauss; Ггаусс"
 
 This script normalises once, offline, into a plain dict:
-    UNITS[category][key] = (english, russian)
+    UNITS[category][key] = [english, russian, indonesian]
 """
 import json
 import os
@@ -31,6 +31,114 @@ RU_ONLY = {
     "year": "Год", "month": "Месяц", "week": "Неделя", "day": "День",
     "hour": "Час", "minute": "Минута", "second": "Секунда",
     "bit": "Бит", "byte": "Байт",
+}
+
+
+# Nama unit dalam bahasa Indonesia, dipetakan per KATEGORI.
+# Dipetakan manual karena komentar sumber hanya memuat nama Inggris dan
+# Rusia. Per kategori wajib: key 'second' dan 'minute' ada di time DAN
+# angle dengan nama berbeda (Detik vs Detik Busur).
+ID_NAMES = {
+    "angle": {
+        "degree": "Derajat",         "gon": "Gon",
+        "minute": "Menit Busur",         "rad": "Radian",
+        "second": "Detik Busur",         "turn": "Putaran",
+    },
+    "distance": {
+        "angstrom": "Angstrom",         "au": "Unit Astronomi",
+        "centimetre": "Sentimeter",         "decimetre": "Desimeter",
+        "foot": "Kaki",         "inch": "Inch",
+        "kilometre": "Kilometer",         "league": "Liga",
+        "ly": "Tahun Cahaya",         "metre": "Meter",
+        "micrometre": "Mikrometer",         "milimetre": "Milimeter",
+        "mille": "Mil",         "nanometre": "Nanometer",
+        "pc": "Parsec",         "seamile": "Mil Laut",
+        "verst": "Versta",         "yard": "Yard",
+    },
+    "energy": {
+        "btu": "BTU",         "cal": "Kalori",
+        "erg": "Erg",         "ev": "Elektronvolt",
+        "joule": "Joule",         "kcal": "Kilokalori",
+        "kwatt/h": "Kilowatt/Jam",         "mbtu": "Juta BTU",
+        "watt/h": "Watt/Jam",
+    },
+    "info": {
+        "bit": "Bit",         "byte": "Bita",
+        "ebit": "Exabit",         "ebyte": "Exabita",
+        "gbit": "Gigabit",         "gbyte": "Gigabita",
+        "kbit": "Kilobit",         "kbyte": "Kilobita",
+        "mbit": "Megabit",         "mbyte": "Megabita",
+        "pbit": "Petabit",         "pbyte": "Petabita",
+        "tbit": "Terabit",         "tbyte": "Terabita",
+        "ybit": "Yottabit",         "ybyte": "Yottabita",
+        "zbit": "Zettabit",         "zbyte": "Zettabita",
+    },
+    "magnetics": {
+        "etesla": "Exatesla",         "gauss": "Gauss",
+        "gtesla": "Gigatesla",         "ktesla": "Kilotesla",
+        "microtesla": "Mikrotesla",         "militesla": "Militesla",
+        "mtesla": "Megatesla",         "nanotesla": "Nanotesla",
+        "picotesla": "Pikotesla",         "ptesla": "Petatesla",
+        "tesla": "Tesla",         "ttesla": "Teratesla",
+        "ytesla": "Yotatesla",         "ztesla": "Zetatesla",
+    },
+    "power": {
+        "gwatt": "Gigawatt",         "hpwr": "Tenaga Kuda",
+        "kwatt": "Kilowatt",         "mwatt": "Megawatt",
+        "twatt": "Terawatt",         "watt": "Watt",
+    },
+    "pressure": {
+        "atm": "Atmosfer",         "bar": "Bar",
+        "pa": "Pascal",         "psi": "Psi",
+        "torr": "Torr",
+    },
+    "radiation": {
+        "bq": "Becquerel",         "ci": "Curie",
+        "rad": "Rad",
+    },
+    "speed": {
+        "fps": "Kaki/Detik",         "km/h": "Kilometer/Jam",
+        "knot": "Simpul",         "ls": "Kecepatan Cahaya",
+        "m/s": "Meter/Detik",         "mph": "Mil/Jam",
+    },
+    "square": {
+        "acre": "Acre",         "are": "Are",
+        "barn": "Barn",         "centimetre^2": "Sentimeter Persegi",
+        "foot^2": "Kaki Persegi",         "hectare": "Hektar",
+        "inch^2": "Inch Persegi",         "metre^2": "Meter Persegi",
+        "mile^2": "Mil Persegi",         "milimetre^2": "Milimeter Persegi",
+        "verst^2": "Versta Persegi",
+    },
+    "temperature": {
+        "c": "Celsius (°C)",         "de": "Delisle (°De)",
+        "f": "Fahrenheit (°F)",         "k": "Kelvin (K)",
+        "n": "Newton (°N)",         "r": "Rankine (°R)",
+        "re": "Reaumur (°Re)",         "ro": "Römer (°Ro)",
+    },
+    "time": {
+        "day": "Hari",         "hour": "Jam",
+        "minute": "Menit",         "month": "Bulan",
+        "second": "Detik",         "week": "Minggu",
+        "year": "Tahun",
+    },
+    "volume": {
+        "bushel": "Bushel Inggris",         "drybarrel": "Barel Kering",
+        "fluidbarrel": "Barel Cair",         "foot^3": "Kaki Kubik",
+        "gallon": "Galon Inggris",         "inch^3": "Inch Kubik",
+        "litre": "Liter",         "metre^3": "Meter Kubik",
+        "mililitre": "Mililiter",         "oilbarrel": "Barel Minyak",
+        "ounce": "Ons Inggris",         "pint": "Pint Inggris",
+        "quart": "Quart Inggris",         "usbushel": "Bushel AS",
+        "usgallon": "Galon AS",         "usounce": "Ons AS",
+        "uspint": "Pint AS",         "usquart": "Quart AS",
+    },
+    "weight": {
+        "carat": "Karat",         "g": "Gram",
+        "kg": "Kilogram",         "lb": "Pon",
+        "lbt": "Pon Troy",         "oz": "Ons",
+        "ozt": "Ons Troy",         "pd": "Pud",
+        "ton": "Ton",
+    },
 }
 
 # Prefixes -> (English, Russian) for the units whose comment is a bare
@@ -202,7 +310,7 @@ def main():
             # nama Rusia-only dari komentar: pakai yang ada
             if ru in (ru_only := RU_ONLY.values()) and key in RU_ONLY:
                 ru = RU_ONLY[key]
-            out[cat][key] = [en, ru]
+            out[cat][key] = [en, ru, ID_NAMES.get(cat, {}).get(key, en)]
 
     if problems:
         print("unit tanpa nama:", problems, file=sys.stderr)

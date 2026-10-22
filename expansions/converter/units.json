@@ -2,581 +2,719 @@
  "angle": {
   "degree": [
    "Degree",
-   "Градус °"
+   "Градус °",
+   "Derajat"
   ],
   "gon": [
    "Gradian",
-   "Градон"
+   "Градон",
+   "Gon"
   ],
   "minute": [
    "Arc Minute",
-   "Угловая Минута"
+   "Угловая Минута",
+   "Menit Busur"
   ],
   "rad": [
    "Radians",
-   "Радиан"
+   "Радиан",
+   "Radian"
   ],
   "second": [
    "Arc Second",
-   "Угловая Секунда"
+   "Угловая Секунда",
+   "Detik Busur"
   ],
   "turn": [
    "Turn",
-   "Оборот"
+   "Оборот",
+   "Putaran"
   ]
  },
  "distance": {
   "angstrom": [
    "Angström",
-   "Ангстрём"
+   "Ангстрём",
+   "Angstrom"
   ],
   "au": [
    "Astronomical Unit",
-   "Астрономическая Единица (средний радиус земной орбиты)"
+   "Астрономическая Единица (средний радиус земной орбиты)",
+   "Unit Astronomi"
   ],
   "centimetre": [
    "Centimetre",
-   "Сантиметр"
+   "Сантиметр",
+   "Sentimeter"
   ],
   "decimetre": [
    "Decimetre",
-   "Дециметр"
+   "Дециметр",
+   "Desimeter"
   ],
   "foot": [
    "Foot",
-   "Фут"
+   "Фут",
+   "Kaki"
   ],
   "inch": [
    "Inch",
-   "Дюйм"
+   "Дюйм",
+   "Inch"
   ],
   "kilometre": [
    "Kilometre",
-   "Километр"
+   "Километр",
+   "Kilometer"
   ],
   "league": [
    "League",
-   "Лига"
+   "Лига",
+   "Liga"
   ],
   "ly": [
    "Light-Year",
-   "Световой Год"
+   "Световой Год",
+   "Tahun Cahaya"
   ],
   "metre": [
    "Metre",
-   "Метр"
+   "Метр",
+   "Meter"
   ],
   "micrometre": [
    "Micrometre",
-   "Микрометр"
+   "Микрометр",
+   "Mikrometer"
   ],
   "milimetre": [
    "Millimetre",
-   "Миллиметр"
+   "Миллиметр",
+   "Milimeter"
   ],
   "mille": [
    "Mile",
-   "Миля"
+   "Миля",
+   "Mil"
   ],
   "nanometre": [
    "Nanometre",
-   "Нанометр"
+   "Нанометр",
+   "Nanometer"
   ],
   "pc": [
    "Parsec",
-   "Парсек"
+   "Парсек",
+   "Parsec"
   ],
   "seamile": [
    "Sea Mile",
-   "Морская Миля"
+   "Морская Миля",
+   "Mil Laut"
   ],
   "verst": [
    "Verst",
-   "Верста"
+   "Верста",
+   "Versta"
   ],
   "yard": [
    "Yard",
-   "Ярд"
+   "Ярд",
+   "Yard"
   ]
  },
  "energy": {
   "btu": [
    "British Thermal Unit",
-   "Британская Термическая Единица"
+   "Британская Термическая Единица",
+   "BTU"
   ],
   "cal": [
    "Calorie",
-   "Калория"
+   "Калория",
+   "Kalori"
   ],
   "erg": [
    "Erg",
-   "Эрг"
+   "Эрг",
+   "Erg"
   ],
   "ev": [
    "Electronvolt",
-   "Электронвольт"
+   "Электронвольт",
+   "Elektronvolt"
   ],
   "joule": [
    "Joule (Watt per Second)",
-   "Джоуль (Ватт Секунда)"
+   "Джоуль (Ватт Секунда)",
+   "Joule"
   ],
   "kcal": [
    "KiloCalorie",
-   "Килокалория"
+   "Килокалория",
+   "Kilokalori"
   ],
   "kwatt/h": [
    "KiloWatt per Hour",
-   "Киловатт Час"
+   "Киловатт Час",
+   "Kilowatt/Jam"
   ],
   "mbtu": [
    "Million British Thermal Unit",
-   "Миллион Британских Термических Единиц"
+   "Миллион Британских Термических Единиц",
+   "Juta BTU"
   ],
   "watt/h": [
    "Watt per Hour",
-   "Ватт Час"
+   "Ватт Час",
+   "Watt/Jam"
   ]
  },
  "info": {
   "bit": [
    "Bit",
-   "Бит"
+   "Бит",
+   "Bit"
   ],
   "byte": [
    "Byte",
-   "Байт"
+   "Байт",
+   "Bita"
   ],
   "ebit": [
    "Exabit",
-   "Эксабит"
+   "Эксабит",
+   "Exabit"
   ],
   "ebyte": [
    "Exabyte",
-   "Эксабайт"
+   "Эксабайт",
+   "Exabita"
   ],
   "gbit": [
    "Gigabit",
-   "Гигабит"
+   "Гигабит",
+   "Gigabit"
   ],
   "gbyte": [
    "Gigabyte",
-   "Гигабайт"
+   "Гигабайт",
+   "Gigabita"
   ],
   "kbit": [
    "Kilobit",
-   "Килобит"
+   "Килобит",
+   "Kilobit"
   ],
   "kbyte": [
    "Kilobyte",
-   "Килобайт"
+   "Килобайт",
+   "Kilobita"
   ],
   "mbit": [
    "Megabit",
-   "Мегабит"
+   "Мегабит",
+   "Megabit"
   ],
   "mbyte": [
    "Megabyte",
-   "Мегабайт"
+   "Мегабайт",
+   "Megabita"
   ],
   "pbit": [
    "Petabit",
-   "Петабит"
+   "Петабит",
+   "Petabit"
   ],
   "pbyte": [
    "Petabyte",
-   "Петабайт"
+   "Петабайт",
+   "Petabita"
   ],
   "tbit": [
    "Terabit",
-   "Терабит"
+   "Терабит",
+   "Terabit"
   ],
   "tbyte": [
    "Terabyte",
-   "Терабайт"
+   "Терабайт",
+   "Terabita"
   ],
   "ybit": [
    "Yottabit",
-   "Йоттабит"
+   "Йоттабит",
+   "Yottabit"
   ],
   "ybyte": [
    "Yottabyte",
-   "Йоттабайт"
+   "Йоттабайт",
+   "Yottabita"
   ],
   "zbit": [
    "Zettabit",
-   "Зеттабит"
+   "Зеттабит",
+   "Zettabit"
   ],
   "zbyte": [
    "Zettabyte",
-   "Зеттабайт"
+   "Зеттабайт",
+   "Zettabita"
   ]
  },
  "magnetics": {
   "etesla": [
    "Exatesla",
-   "Эксатесла"
+   "Эксатесла",
+   "Exatesla"
   ],
   "gauss": [
    "Gauss",
-   "Ггаусс (G; Гс)"
+   "Ггаусс (G; Гс)",
+   "Gauss"
   ],
   "gtesla": [
    "Gigatesla",
-   "Гигатесла"
+   "Гигатесла",
+   "Gigatesla"
   ],
   "ktesla": [
    "Kilotesla",
-   "Килотесла"
+   "Килотесла",
+   "Kilotesla"
   ],
   "microtesla": [
    "Microtesla",
-   "Микротесла"
+   "Микротесла",
+   "Mikrotesla"
   ],
   "militesla": [
    "Millitesla",
-   "Миллитесла"
+   "Миллитесла",
+   "Militesla"
   ],
   "mtesla": [
    "Megatesla",
-   "Мегатесла"
+   "Мегатесла",
+   "Megatesla"
   ],
   "nanotesla": [
    "Nanotesla",
-   "Нанотесла"
+   "Нанотесла",
+   "Nanotesla"
   ],
   "picotesla": [
    "Picotesla",
-   "Пикотесла"
+   "Пикотесла",
+   "Pikotesla"
   ],
   "ptesla": [
    "Petatesla",
-   "Петатесла"
+   "Петатесла",
+   "Petatesla"
   ],
   "tesla": [
    "Tesla",
-   "Тесла (T; Тл)"
+   "Тесла (T; Тл)",
+   "Tesla"
   ],
   "ttesla": [
    "Teratesla",
-   "Тератесла"
+   "Тератесла",
+   "Teratesla"
   ],
   "ytesla": [
    "Yotatesla",
-   "Йоттатесла"
+   "Йоттатесла",
+   "Yotatesla"
   ],
   "ztesla": [
    "Zetatesla",
-   "Зеттатесла"
+   "Зеттатесла",
+   "Zetatesla"
   ]
  },
  "power": {
   "gwatt": [
    "Gigawatt",
-   "Гигаватт"
+   "Гигаватт",
+   "Gigawatt"
   ],
   "hpwr": [
    "Horse Power",
-   "Лошадиная Сила"
+   "Лошадиная Сила",
+   "Tenaga Kuda"
   ],
   "kwatt": [
    "Kilowatt",
-   "Киловатт"
+   "Киловатт",
+   "Kilowatt"
   ],
   "mwatt": [
    "Megawatt",
-   "Мегаватт"
+   "Мегаватт",
+   "Megawatt"
   ],
   "twatt": [
    "Terawatt",
-   "Тераватт"
+   "Тераватт",
+   "Terawatt"
   ],
   "watt": [
    "Watt",
-   "Ватт (W; Вт)"
+   "Ватт (W; Вт)",
+   "Watt"
   ]
  },
  "pressure": {
   "atm": [
    "Standard Atmosphere",
-   "Атмосферное Давление (atm; атм)"
+   "Атмосферное Давление (atm; атм)",
+   "Atmosfer"
   ],
   "bar": [
    "bar",
-   "бар"
+   "бар",
+   "Bar"
   ],
   "pa": [
    "Pascal",
-   "Паскаль (Pa; Па)"
+   "Паскаль (Pa; Па)",
+   "Pascal"
   ],
   "psi": [
    "Pound per Square Inch",
-   "Фунт на Квадратный Дюйм"
+   "Фунт на Квадратный Дюйм",
+   "Psi"
   ],
   "torr": [
    "Torr",
-   "Миллиметр Ртутного Столба"
+   "Миллиметр Ртутного Столба",
+   "Torr"
   ]
  },
  "radiation": {
   "bq": [
    "Becquerel",
-   "Беккерель (Bq; Бк)"
+   "Беккерель (Bq; Бк)",
+   "Becquerel"
   ],
   "ci": [
    "Curie",
-   "Кюри (Ci; Ки)"
+   "Кюри (Ci; Ки)",
+   "Curie"
   ],
   "rad": [
    "Radiation Absorbed Dose",
-   "Рад"
+   "Рад",
+   "Rad"
   ]
  },
  "speed": {
   "fps": [
    "Feet per Second",
-   "Футы в Секунду"
+   "Футы в Секунду",
+   "Kaki/Detik"
   ],
   "km/h": [
    "KiloMetres per Hour",
-   "Километры в Час"
+   "Километры в Час",
+   "Kilometer/Jam"
   ],
   "knot": [
    "Sea Miles per Hour",
-   "Морские Мили в Час (Knot; Узел)"
+   "Морские Мили в Час (Knot; Узел)",
+   "Simpul"
   ],
   "ls": [
    "Light-Speed",
-   "Скорость Света"
+   "Скорость Света",
+   "Kecepatan Cahaya"
   ],
   "m/s": [
    "Metres per Second",
-   "Метры в Секунду"
+   "Метры в Секунду",
+   "Meter/Detik"
   ],
   "mph": [
    "Miles per Hour",
-   "Мили в Час"
+   "Мили в Час",
+   "Mil/Jam"
   ]
  },
  "square": {
   "acre": [
    "Acre",
-   "Акр"
+   "Акр",
+   "Acre"
   ],
   "are": [
    "Are",
-   "Ар"
+   "Ар",
+   "Are"
   ],
   "barn": [
    "Barn",
-   "Барн"
+   "Барн",
+   "Barn"
   ],
   "centimetre^2": [
    "Square CentiMetre",
-   "Квадратный Сантиметр"
+   "Квадратный Сантиметр",
+   "Sentimeter Persegi"
   ],
   "foot^2": [
    "Square Foot",
-   "Квадратный Фут"
+   "Квадратный Фут",
+   "Kaki Persegi"
   ],
   "hectare": [
    "Hectare",
-   "Гектар"
+   "Гектар",
+   "Hektar"
   ],
   "inch^2": [
    "Square Inch",
-   "Квадратный Дюйм"
+   "Квадратный Дюйм",
+   "Inch Persegi"
   ],
   "metre^2": [
    "Square Metre",
-   "Квадратный Метр"
+   "Квадратный Метр",
+   "Meter Persegi"
   ],
   "mile^2": [
    "Square Mile",
-   "Квадратная Миля"
+   "Квадратная Миля",
+   "Mil Persegi"
   ],
   "milimetre^2": [
    "Square MilliMetre",
-   "Квадратный Миллиметр"
+   "Квадратный Миллиметр",
+   "Milimeter Persegi"
   ],
   "verst^2": [
    "Square Verst",
-   "Квадратная Верста"
+   "Квадратная Верста",
+   "Versta Persegi"
   ]
  },
  "temperature": {
   "c": [
    "Celsius (°C)",
-   "Цельсий (°C)"
+   "Цельсий (°C)",
+   "Celsius (°C)"
   ],
   "de": [
    "Delisle (°De)",
-   "Делиль (°De)"
+   "Делиль (°De)",
+   "Delisle (°De)"
   ],
   "f": [
    "Fahrenheit (°F)",
-   "Фаренгейт (°F)"
+   "Фаренгейт (°F)",
+   "Fahrenheit (°F)"
   ],
   "k": [
    "Kelvin (K)",
-   "Кельвин (K)"
+   "Кельвин (K)",
+   "Kelvin (K)"
   ],
   "n": [
    "Newton (°N)",
-   "Ньютон (°N)"
+   "Ньютон (°N)",
+   "Newton (°N)"
   ],
   "r": [
    "Rankine (°R)",
-   "Ранкин (°R)"
+   "Ранкин (°R)",
+   "Rankine (°R)"
   ],
   "re": [
    "Réaumur (°Re)",
-   "Реомюр (°Re)"
+   "Реомюр (°Re)",
+   "Reaumur (°Re)"
   ],
   "ro": [
    "Römer (°Ro)",
-   "Рёмер (°Ro)"
+   "Рёмер (°Ro)",
+   "Römer (°Ro)"
   ]
  },
  "time": {
   "day": [
    "Day",
-   "День"
+   "День",
+   "Hari"
   ],
   "hour": [
    "Hour",
-   "Час"
+   "Час",
+   "Jam"
   ],
   "minute": [
    "Minute",
-   "Минута"
+   "Минута",
+   "Menit"
   ],
   "month": [
    "Month",
-   "Месяц"
+   "Месяц",
+   "Bulan"
   ],
   "second": [
    "Second",
-   "Секунда"
+   "Секунда",
+   "Detik"
   ],
   "week": [
    "Week",
-   "Неделя"
+   "Неделя",
+   "Minggu"
   ],
   "year": [
    "Year",
-   "Год"
+   "Год",
+   "Tahun"
   ]
  },
  "volume": {
   "bushel": [
    "U.K. Bushel",
-   "Имперский Бушель"
+   "Имперский Бушель",
+   "Bushel Inggris"
   ],
   "drybarrel": [
    "Dry Barrel",
-   "Сухой Баррель"
+   "Сухой Баррель",
+   "Barel Kering"
   ],
   "fluidbarrel": [
    "Fluid Barrel",
-   "Жидкий Баррель"
+   "Жидкий Баррель",
+   "Barel Cair"
   ],
   "foot^3": [
    "Cubic Foot",
-   "Кубический Фут"
+   "Кубический Фут",
+   "Kaki Kubik"
   ],
   "gallon": [
    "U.K. Gallon",
-   "Имперский Галлон"
+   "Имперский Галлон",
+   "Galon Inggris"
   ],
   "inch^3": [
    "Cubic Inch",
-   "Кубический Дюйм"
+   "Кубический Дюйм",
+   "Inch Kubik"
   ],
   "litre": [
    "Litre",
-   "Литр"
+   "Литр",
+   "Liter"
   ],
   "metre^3": [
    "Cubic Metre",
-   "Кубический Метр"
+   "Кубический Метр",
+   "Meter Kubik"
   ],
   "mililitre": [
    "MiliLitre",
-   "Милилитр"
+   "Милилитр",
+   "Mililiter"
   ],
   "oilbarrel": [
    "Oil Barrel",
-   "Нефтяной Баррель"
+   "Нефтяной Баррель",
+   "Barel Minyak"
   ],
   "ounce": [
    "U.K. Ounce",
-   "Имперская Унция"
+   "Имперская Унция",
+   "Ons Inggris"
   ],
   "pint": [
    "U.K. Pint",
-   "Имперская Пинта"
+   "Имперская Пинта",
+   "Pint Inggris"
   ],
   "quart": [
    "U.K. Quart",
-   "Имперская Кварта"
+   "Имперская Кварта",
+   "Quart Inggris"
   ],
   "usbushel": [
    "U.S. Bushel",
-   "Американский Бушель"
+   "Американский Бушель",
+   "Bushel AS"
   ],
   "usgallon": [
    "U.S. Gallon",
-   "Американский Галлон"
+   "Американский Галлон",
+   "Galon AS"
   ],
   "usounce": [
    "U.S. Ounce",
-   "Американская Унция"
+   "Американская Унция",
+   "Ons AS"
   ],
   "uspint": [
    "U.S. Pint",
-   "Американская Пинта"
+   "Американская Пинта",
+   "Pint AS"
   ],
   "usquart": [
    "U.S. Quart",
-   "Американская Кварта"
+   "Американская Кварта",
+   "Quart AS"
   ]
  },
  "weight": {
   "carat": [
    "Carat",
-   "Карат"
+   "Карат",
+   "Karat"
   ],
   "g": [
    "Gram",
-   "Грамм"
+   "Грамм",
+   "Gram"
   ],
   "kg": [
    "KiloGram",
-   "Килограмм"
+   "Килограмм",
+   "Kilogram"
   ],
   "lb": [
    "Pound",
-   "Фунт"
+   "Фунт",
+   "Pon"
   ],
   "lbt": [
    "Troyes Pound",
-   "Тройский Фунт"
+   "Тройский Фунт",
+   "Pon Troy"
   ],
   "oz": [
    "Ounce",
-   "Унция"
+   "Унция",
+   "Ons"
   ],
   "ozt": [
    "Troyes Ounce",
-   "Тройская Унция"
+   "Тройская Унция",
+   "Ons Troy"
   ],
   "pd": [
    "Russian Pood",
-   "Пуд"
+   "Пуд",
+   "Pud"
   ],
   "ton": [
    "Ton",
-   "Тонна"
+   "Тонна",
+   "Ton"
   ]
  }
 }

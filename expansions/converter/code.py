@@ -15,15 +15,28 @@ except Exception:
 	LocalizationContext = None
 
 
-def _unit_lang():
-	"""Bahasa aktif untuk nama unit (English / Russian)."""
-	if LocalizationContext is not None:
+def _unit_lang(answers=None):
+	"""Bahasa aktif untuk nama unit (en / ru / id).
+
+	`LocalizationContext.get()` tidak bisa dipakai di sini: bahasa disimpan
+	per-thread, tapi command dieksekusi di thread BARU (sThread), jadi
+	context thread-local sudah hilang. Yang benar adalah bahasa dari
+	LocalizedAnswers yang dipakai - instance-nya shared dan di-update
+	setiap kali context dipasang.
+	"""
+	lang = None
+	if answers is not None:
+		lang = getattr(answers, "_lang", None)
+	if not lang and LocalizationContext is not None:
 		try:
 			lang = LocalizationContext.get()
 		except Exception:
-			lang = "en"
-		if lang and lang.lower() in ("ru", "ua"):
-			return "ru"
+			lang = None
+	lang = (lang or "en").lower()
+	if lang in ("ru", "ua"):
+		return "ru"
+	if lang == "id":
+		return "id"
 	return "en"
 
 
@@ -255,13 +268,14 @@ class expansion_temp(expansion):
 					# bukan dari parsing komentar source yang fragile.
 					units = UNITS.get(Desc, {})
 					if units:
-						lang = "ru" if _unit_lang() == "ru" else "en"
+						lang = _unit_lang(self.AnsBase)
+						col = {"en": 0, "ru": 1, "id": 2}[lang]
 						rows = [Desc + ":"]
 						for unit_key in self.CrDesc[Desc]:
 							pair = units.get(unit_key)
 							if not pair:
 								continue
-							rows.append("%s - %s" % (unit_key, pair[1 if lang == "ru" else 0]))
+							rows.append("%s - %s" % (unit_key, pair[col]))
 						answer = "\n".join(rows)
 					else:
 						answer = self.AnsBase[5] % Desc
