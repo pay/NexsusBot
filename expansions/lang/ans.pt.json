@@ -6,5 +6,8 @@
   "4": "ℹ️ Volte à detecção automática — ':lang auto' faz o bot ler de novo a tag <lang> do seu cliente.",
   "5": "📋 Idiomas nesta sala:\n%s",
   "6": "ℹ️ Ainda ninguém escolheu um idioma aqui.",
-  "7": "❌ Falha ao ler o banco de dados de idiomas."
+  "7": "❌ Falha ao ler o banco de dados de idiomas.",
+  "8": "📌 escolhido manualmente",
+  "9": "📌 automático (pelo seu cliente)",
+  "10": "  🔍 %s — automático"
 }

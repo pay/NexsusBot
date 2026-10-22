@@ -6,5 +6,8 @@
   "4": "ℹ️ Zurück zur automatischen Erkennung — ':lang auto' lässt den Bot das <lang>-Tag deines Clients wieder lesen.",
   "5": "📋 Sprachen in diesem Raum:\n%s",
   "6": "ℹ️ Hier hat noch niemand eine Sprache gewählt.",
-  "7": "❌ Sprachdatenbank konnte nicht gelesen werden."
+  "7": "❌ Sprachdatenbank konnte nicht gelesen werden.",
+  "8": "📌 manuell gewählt",
+  "9": "📌 automatisch (von deinem Client)",
+  "10": "  🔍 %s — automatisch"
 }

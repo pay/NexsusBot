@@ -6,5 +6,8 @@
   "4": "ℹ️ Kembali ke deteksi otomatis — :lang auto bikin bot baca tag <lang> dari client lo lagi.",
   "5": "📋 Bahasa di room ini:\n%s",
   "6": "ℹ️ Belum ada yang pilih bahasa di sini.",
-  "7": "❌ Gagal baca database bahasa."
+  "7": "❌ Gagal baca database bahasa.",
+  "8": "📌 dipilih manual",
+  "9": "📌 otomatis (dari client lo)",
+  "10": "  🔍 %s — otomatis"
 }

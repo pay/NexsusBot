@@ -1,10 +1,13 @@
 {
- "0": "📋 Bieżący język: %s\n📄 Dostępne: %s\n🔍 Kody: %s\n💡 można też użyć nazwy: %s",
- "1": "✅ Twój język to teraz: %s.",
- "2": "❌ Nieznany kod języka: %s.\n🔍 Kody: %s",
- "3": "❌ Nie udało się zapisać wyboru języka.",
- "4": "ℹ️ Powrót do wykrywania automatycznego — ':lang auto' sprawia, że bot znów czyta tag <lang> z Twojego klienta.",
- "5": "📋 Języki w tym pokoju:\n%s",
- "6": "ℹ️ Nikt jeszcze nie wybrał tu języka.",
- "7": "❌ Nie udało się odczytać bazy języków."
+  "0": "📋 Bieżący język: %s\n📄 Dostępne: %s\n🔍 Kody: %s\n💡 można też użyć nazwy: %s",
+  "1": "✅ Twój język to teraz: %s.",
+  "2": "❌ Nieznany kod języka: %s.\n🔍 Kody: %s",
+  "3": "❌ Nie udało się zapisać wyboru języka.",
+  "4": "ℹ️ Powrót do wykrywania automatycznego — ':lang auto' sprawia, że bot znów czyta tag <lang> z Twojego klienta.",
+  "5": "📋 Języki w tym pokoju:\n%s",
+  "6": "ℹ️ Nikt jeszcze nie wybrał tu języka.",
+  "7": "❌ Nie udało się odczytać bazy języków.",
+  "8": "📌 wybrane ręcznie",
+  "9": "📌 automatycznie (z twojego klienta)",
+  "10": "  🔍 %s — automatycznie"
 }

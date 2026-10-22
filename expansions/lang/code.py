@@ -31,6 +31,9 @@ class expansion_temp(expansion):
 		"\U0001f4cb Languages in this room:\n%s",                                                  # 5
 		"\u2139\ufe0f Nobody here has picked a language yet.",                                  # 6
 		"\u274c Could not read the language database.",                                                 # 7
+		"\U0001f4cc picked manually",                                                              # 8
+		"\U0001f4cc automatic (from your client)",                                                 # 9
+		"  \U0001f50d %s — automatic",                                                        # 10
 	)
 
 	# ── helpers ────────────────────────────────────────────────
@@ -82,9 +85,9 @@ class expansion_temp(expansion):
 			eff = self._effective(source)
 			chosen = _get_user_lang(source[1], source[2])
 			if chosen:
-				mode = "\U0001f4cc dipilih manual"
+				mode = self.AnsBase[8]
 			else:
-				mode = "\U0001f4cc otomatis (dari client lo)"
+				mode = self.AnsBase[9]
 			used = ", ".join(c for c, _ in avail)
 			names = self._alias_hint() or ", ".join(n for _, n in avail)
 			return Answer(self.AnsBase[0] % (
@@ -100,9 +103,9 @@ class expansion_temp(expansion):
 			lines = []
 			for nick, lang in rows:
 				if not lang or lang == "auto":
-					lines.append("  \U0001f50d %s \u2014 otomatis" % nick)
+					lines.append(self.AnsBase[10] % nick)
 				else:
-					lines.append("  \U0001f4cc %s \u2014 %s"
+					lines.append("  \U0001f4cc %s — %s"
 					             % (nick, nxs_lang.describe(lang)))
 			return Answer(self.AnsBase[5] % "\n".join(lines), stype, source, disp)
 

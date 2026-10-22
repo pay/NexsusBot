@@ -249,7 +249,7 @@ class expansion_temp(expansion):
         "All Groq models are rate limited. Try again later.",                 # 49
         "Key OK",                                                             # 50
         "Key not set",                                                        # 51
-        "\nRoom ini : %s",                                                    # 52
+        "\nThis room : %s",                                                    # 52
         "Cuplikan obrolan room terakhir (buat referensi konteks saja, "      # 53
         "jangan dibalas satu-satu):",
     )

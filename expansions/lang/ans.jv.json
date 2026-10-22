@@ -6,5 +6,8 @@
   "4": "ℹ️ Bali menyang deteksi otomatis — ':lang auto' nggawe bot maca tag <lang> saka client sampeyan maneh.",
   "5": "📋 Basa ing ruang iki:\n%s",
   "6": "ℹ️ Durung ana sing milih basa ing kene.",
-  "7": "❌ Gagal maca basis data basa."
+  "7": "❌ Gagal maca basis data basa.",
+  "8": "📌 dipilih manual",
+  "9": "📌 otomatis (saka client lo)",
+  "10": "  🔍 %s — otomatis"
 }

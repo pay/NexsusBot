@@ -6,5 +6,8 @@
   "4": "ℹ️ Retour à la détection automatique — ':lang auto' fait relire la balise <lang> de ton client.",
   "5": "📋 Langue dans ce salon :\n%s",
   "6": "ℹ️ Personne n'a encore choisi de langue ici.",
-  "7": "❌ Impossible de lire la base de données des langues."
+  "7": "❌ Impossible de lire la base de données des langues.",
+  "8": "📌 choisi manuellement",
+  "9": "📌 automatique (d'après ton client)",
+  "10": "  🔍 %s — automatique"
 }

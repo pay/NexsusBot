@@ -6,5 +6,8 @@
   "4": "ℹ️ Otomatik algılamaya dön — ':lang auto', botun istemcinin <lang> etiketini tekrar okumasını sağlar.",
   "5": "📋 Bu odadaki diller:\n%s",
   "6": "ℹ️ Burada henüz kimse dil seçmedi.",
-  "7": "❌ Dil veritabanı okunamadı."
+  "7": "❌ Dil veritabanı okunamadı.",
+  "8": "📌 elle seçildi",
+  "9": "📌 otomatik (isteminden)",
+  "10": "  🔍 %s — otomatik"
 }
