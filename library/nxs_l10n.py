@@ -63,6 +63,19 @@ class LocalizationContext(object):
         return getattr(LocalizationContext._local, "lang", "en")
 
     @staticmethod
+    def get_explicit():
+        """Bahasa yang di-set eksplisit di thread ini, atau None.
+
+        `get()` selalu mengembalikan "en" kalau thread belum pernah
+        memasang bahasa, jadi tidak bisa dipakai untuk membedakan
+        "thread ini tidak punya bahasa" dari "thread ini memakai en".
+        Untuk baca string reply, itu perbedaan yang penting: string
+        harus dibaca dari bahasa PEMINTA, bukan dari bahasa terakhir
+        yang kebetulan di-set thread lain.
+        """
+        return getattr(LocalizationContext._local, "lang", None)
+
+    @staticmethod
     def set(lang):
         """Pasang bahasa untuk thread ini dan seluruh AnsBase terdaftar."""
         lang = (lang or "en").lower()

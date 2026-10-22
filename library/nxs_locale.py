@@ -89,12 +89,37 @@ class LocalizedAnswers(object):
         """Pasang bahasa context aktif."""
         self._lang = (lang or "en").lower()
 
+    def _thread_lang(self):
+        """Bahasa milik thread pemanggil, atau None.
+
+        Penting: instance LocalizedAnswers itu SHARED antar thread (satu
+        per expansion), jadi `self._lang` cuma nyimpan bahasa terakhir
+        yang di-set. Kalau dua user dengan bahasa berbeda command-nya
+        jalan paralel, satu bisa dapat string milik yang lain.
+
+        Karena itu pembacaan string selalu memakai bahasa thread
+        pemanggil dulu (thread-local), dan `self._lang` cuma fallback
+        untuk pemanggil yang memang tidak memasang bahasa.
+        """
+        try:
+            from nxs_l10n import LocalizationContext
+            return LocalizationContext.get_explicit()
+        except Exception:
+            return None
+
+    def current_lang(self):
+        """Bahasa aktif untuk pemanggil (thread-local, fallback shared)."""
+        lang = self._thread_lang()
+        return (lang or self._lang or "en").lower()
+
     def pick(self, idx, lang=None):
         """String untuk indeks tertentu pada bahasa tertentu."""
         i = self._resolve(idx)
         if i is None:
             raise IndexError("AnsBase index out of range")
-        table = self.load(lang or self._lang)
+        if lang is None:
+            lang = self._thread_lang() or self._lang
+        table = self.load(lang)
         return table.get(i, self._defaults[i])
 
     def _resolve(self, idx):
@@ -110,7 +135,8 @@ class LocalizedAnswers(object):
         i = self._resolve(idx)
         if i is None:
             raise IndexError("AnsBase index out of range")
-        table = self.load(self._lang)
+        lang = self._thread_lang() or self._lang
+        table = self.load(lang)
         return table.get(i, self._defaults[i])
 
     def __len__(self):

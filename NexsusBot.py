@@ -781,10 +781,13 @@ def Time2Text(secs):
     translated sentence. Kept as a module-level function because expansions
     import it directly.
     """
-    from library.nxs_time import duration_text
+    from nxs_time import duration_text
     try:
-        from library.nxs_l10n import LocalizationContext
-        lang = LocalizationContext.get()
+        from nxs_l10n import LocalizationContext
+        # get_explicit(): bahasa thread ini. get() selalu mengembalikan
+        # "en" kalau thread belum pernah memasang bahasa, jadi tidak bisa
+        # dipakai di sini - string harus mengikuti bahasa peminta.
+        lang = LocalizationContext.get_explicit() or "en"
     except Exception:
         lang = "en"
     return duration_text(secs, lang)
@@ -923,8 +926,17 @@ def collectExc(inst, command=None):
 _aCounter = AtomicNumber()
 
 
-def composeThr(handler, name, lst=(), command=None):
+def composeThr(handler, name, lst=(), command=None, lang=None):
     def runner():
+        # Bahasa reply harus ikut ke thread ini. Thread pesan memasang
+        # bahasa di thread-nya sendiri, tapi command dieksekusi di thread
+        # BARU - tanpa ini, thread command tidak punya bahasa dan string
+        # reply akan memakai fallback shared yang bisa milik user lain.
+        if lang and LocalizationContext is not None:
+            try:
+                LocalizationContext.set(lang)
+            except Exception:
+                pass
         try:
             handler(*lst)
         except SystemExit:
@@ -1051,8 +1063,8 @@ def _schedule_reconn(disp, delay, token):
                     disp, delay, token)
 
 
-def sThread(name, inst, lst=(), command=None):
-    composeThr(inst, name, lst, command).start()
+def sThread(name, inst, lst=(), command=None, lang=None):
+    composeThr(inst, name, lst, command, lang).start()
 
 
 def call_sfunctions(ls, lst=()):
@@ -2536,8 +2548,15 @@ class Command:
             if self.isAvailable and self.handler:
                 Info["cmd"].plus()
                 _Log("cmd %s dari %s di %s" % (self.name, source[2], source[1]), logging.INFO)
+                # Bahasa peminta ikut ke thread command. Tanpa ini, thread
+                # baru tidak punya bahasa dan reply pakai fallback shared -
+                # yang bisa milik user lain yang command-nya jalan paralel.
+                try:
+                    lang = getLang(source)
+                except Exception:
+                    lang = None
                 sThread("command", self.handler,
-                        (self.exp, stype, source, body, disp), self.name)
+                        (self.exp, stype, source, body, disp), self.name, lang)
                 self.numb.plus()
                 src = get_source(source[1], source[2])
                 if src:

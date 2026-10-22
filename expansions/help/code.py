@@ -23,12 +23,18 @@ def _active_help_lang(answers=None):
 	"""
 	lang = None
 	try:
-		from library.nxs_l10n import LocalizationContext
-		lang = LocalizationContext.get()
+		from nxs_l10n import LocalizationContext
+		lang = LocalizationContext.get_explicit()
 	except Exception:
 		lang = None
 	if answers is not None:
-		shared = getattr(answers, "_lang", None)
+		# `current_lang()` pakai bahasa thread pemanggil dulu, baru
+		# fallback ke bahasa shared. `_lang` alone bisa milik user lain
+		# yang command-nya jalan paralel.
+		try:
+			shared = answers.current_lang()
+		except Exception:
+			shared = getattr(answers, "_lang", None)
 		if shared:
 			lang = shared
 	return lang.lower() if lang else None

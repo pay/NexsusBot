@@ -10,7 +10,7 @@ import json
 import re
 
 try:
-	from library.nxs_l10n import LocalizationContext
+	from nxs_l10n import LocalizationContext
 except Exception:
 	LocalizationContext = None
 
@@ -26,10 +26,16 @@ def _unit_lang(answers=None):
 	"""
 	lang = None
 	if answers is not None:
-		lang = getattr(answers, "_lang", None)
+		# `current_lang()` memakai bahasa thread pemanggil dulu, baru
+		# fallback ke bahasa shared - instance AnsBase di-share antar
+		# thread, jadi `_lang` saja bisa milik user lain.
+		try:
+			lang = answers.current_lang()
+		except Exception:
+			lang = getattr(answers, "_lang", None)
 	if not lang and LocalizationContext is not None:
 		try:
-			lang = LocalizationContext.get()
+			lang = LocalizationContext.get_explicit()
 		except Exception:
 			lang = None
 	lang = (lang or "en").lower()
